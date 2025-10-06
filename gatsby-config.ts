@@ -6,7 +6,7 @@ const config: GatsbyConfig = {
     description: "これは Gatsby + TypeScript の学習用サイトです",
   },
   graphqlTypegen: true,
-  plugins: [],
+  plugins: [`gatsby-plugin-sass`],
 };
 
 export default config;
