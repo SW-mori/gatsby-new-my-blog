@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
 export type LayoutProps = {
-  pageTitle: string;
+  pageTitle?: string;
   children: ReactNode;
 };

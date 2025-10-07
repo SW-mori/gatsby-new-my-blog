@@ -1,14 +1,14 @@
 import * as React from "react";
-import type { PageProps } from "gatsby";
 import { Layout, SEO } from "../components";
+import * as styles from "@styles/index.module.scss";
 
-const IndexPage: React.FC<PageProps> = () => {
-  return (
-    <Layout pageTitle="ホーム">
-      <p>Gatsby + TypeScript で作ったトップページです。</p>
-    </Layout>
-  );
-};
+const IndexPage = () => (
+  <Layout>
+    <div className={styles.container}>
+      <h1 className={styles.intro}>ホーム画面へようこそ</h1>
+    </div>
+  </Layout>
+);
 
 export default IndexPage;
 
@@ -16,7 +16,6 @@ export const Head = () => (
   <SEO
     title="Home Page"
     description="Gatsby サイトのトップページです"
-    image=""
     pathname="/"
   />
 );
