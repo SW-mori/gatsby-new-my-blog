@@ -26,6 +26,17 @@ const config: GatsbyConfig = {
         path: `${__dirname}/content`,
       },
     },
+    {
+      resolve: "gatsby-plugin-alias-imports",
+      options: {
+        alias: {
+          "@components": "src/components",
+          "@styles": "src/styles",
+          "@images": "src/images",
+        },
+        extensions: ["ts", "tsx"],
+      },
+    },
   ],
 };
 

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Layout, SEO } from "../components";
-import * as styles from "./styles/index.module.scss";
+import * as styles from "@styles/index.module.scss";
 
 const IndexPage = () => (
   <Layout>

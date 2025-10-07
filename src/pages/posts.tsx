@@ -1,8 +1,8 @@
 import * as React from "react";
-import { QueryData } from "./types";
+import { QueryData } from "../types";
 import { Layout, SEO } from "../components";
 import { graphql, type PageProps } from "gatsby";
-import * as styles from "./styles/posts.module.scss";
+import * as styles from "@styles/posts.module.scss";
 
 const PostsPage: React.FC<PageProps<QueryData>> = ({ data }) => {
   const posts = data.allMarkdownRemark.nodes;

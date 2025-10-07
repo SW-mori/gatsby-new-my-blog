@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Layout, SEO } from "../components";
 import { StaticImage } from "gatsby-plugin-image";
-import * as styles from "./styles/images.module.scss";
+import * as styles from "@styles/images.module.scss";
 
 const ImagesPage = () => (
   <Layout pageTitle="画像最適化">
