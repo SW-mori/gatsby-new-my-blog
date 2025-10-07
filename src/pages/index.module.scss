@@ -1,0 +1,47 @@
+.container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.intro {
+  font-size: 16px;
+  margin-bottom: 32px;
+  color: #333;
+}
+
+.image {
+  display: block;
+  margin: 0 auto 40px auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.postList {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.post {
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 24px;
+}
+
+.postTitle {
+  font-size: 22px;
+  color: #222;
+  margin-bottom: 8px;
+}
+
+.postDate {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 12px;
+}
+
+.postExcerpt {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #444;
+}
