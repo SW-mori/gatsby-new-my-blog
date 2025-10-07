@@ -25,10 +25,16 @@ export const Layout: React.FC<LayoutProps> = ({ pageTitle, children }) => {
         <p>{description}</p>
         <nav className={styles.nav}>
           <Link to="/" className={styles.link}>
-            Home
+            ホームへ
           </Link>
           <Link to="/about" className={styles.link}>
-            About
+            サンプルページへ
+          </Link>
+          <Link to="/images" className={styles.link}>
+            画像最適化ページへ
+          </Link>
+          <Link to="/posts" className={styles.link}>
+            記事一覧ページへ
           </Link>
         </nav>
       </header>
