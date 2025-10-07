@@ -10,6 +10,7 @@ const IndexPage: React.FC<PageProps<QueryData>> = ({ data }) => {
   return (
     <Layout pageTitle="ホーム">
       <div className={styles.container}>
+        <h1>画像最適化</h1>
         <p className={styles.intro}>
           Gatsbyで画像最適化と記事一覧を試してみましょう。
         </p>
@@ -21,6 +22,8 @@ const IndexPage: React.FC<PageProps<QueryData>> = ({ data }) => {
           placeholder="blurred"
           className={styles.image}
         />
+
+        <h1>ブログ一覧</h1>
         <div className={styles.postList}>
           {posts.map((post) => (
             <article key={post.id} className={styles.post}>
