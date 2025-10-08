@@ -27,9 +27,6 @@ export const Layout: React.FC<LayoutProps> = ({ pageTitle, children }) => {
           <Link to="/" className={styles.link}>
             ホームへ
           </Link>
-          <Link to="/about" className={styles.link}>
-            サンプルページへ
-          </Link>
           <Link to="/images" className={styles.link}>
             画像最適化ページへ
           </Link>
