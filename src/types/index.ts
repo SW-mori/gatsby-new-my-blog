@@ -5,6 +5,9 @@ type MarkdownPost = {
     title: string;
     date: string;
   };
+  fields: {
+    slug: string;
+  };
 };
 
 export type QueryData = {
