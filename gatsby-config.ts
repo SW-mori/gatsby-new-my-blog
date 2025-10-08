@@ -22,8 +22,8 @@ const config: GatsbyConfig = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        name: `content`,
-        path: `${__dirname}/content`,
+        name: `posts`,
+        path: `${__dirname}/src/posts`,
       },
     },
     {
