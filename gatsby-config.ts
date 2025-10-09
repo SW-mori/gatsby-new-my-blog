@@ -4,6 +4,7 @@ const config: GatsbyConfig = {
   siteMetadata: {
     title: "My Gatsby Site",
     description: "これは Gatsby + TypeScript の学習用サイトです",
+    siteUrl: "https://example.com",
   },
   graphqlTypegen: true,
   plugins: [
@@ -35,6 +36,13 @@ const config: GatsbyConfig = {
           "@images": "src/images",
         },
         extensions: ["ts", "tsx"],
+      },
+    },
+    {
+      resolve: `gatsby-plugin-sitemap`,
+      options: {
+        output: `/sitemap/`,
+        createLinkInHead: true,
       },
     },
   ],
