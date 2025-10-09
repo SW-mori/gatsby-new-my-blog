@@ -57,6 +57,12 @@ const config: GatsbyConfig = {
         icon: `src/images/icon.png`,
       },
     },
+    {
+      resolve: `gatsby-plugin-offline`,
+      options: {
+        precachePages: [`/posts/*`, `/tags/*`],
+      },
+    },
   ],
 };
 
