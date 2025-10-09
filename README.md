@@ -180,3 +180,39 @@ Gatsby には公式・非公式合わせて数千のプラグインが存在す�
 ・ヘッドレス CMS と組み合わせたメディアサイト
 
 ・高速な静的 LP（ランディングページ）
+
+## パフォーマンス計測
+
+- Lighthouse を用いてパフォーマンス・SEO・アクセシビリティをチェック
+  - 指標例：
+    - FCP（First Contentful Paint）
+    - LCP（Largest Contentful Paint）
+    - CLS（Cumulative Layout Shift）
+- 画像最適化やキャッシュ設定によってスコアが改善される
+
+## Incremental Build（増分ビルド）
+
+- 変更があったページだけを再ビルドする仕組み
+  - 大規模サイトでのビルド時間短縮に有効
+- Gatsby Cloud が提供する機能で、GitHub 連携で自動ビルド可能
+- 差分ビルドの流れ：
+  1. Markdown やコンテンツを更新
+  2. 更新されたページだけ再生成
+  3. ビルド時間が短縮され、即座にプレビュー可能
+
+## Gatsby Cloud の特徴
+
+- GitHub 連携で自動ビルド
+- Incremental Build 対応
+- ビルドログでどのページが更新されたかを確認可能
+- 開発効率の向上、CI/CD に近い運用が可能
+
+## 知っておくと便利なポイント
+
+- ビルド後の `/public` を直接見ると生成結果を確認できる
+- ビルドの高速化には
+  - 画像最適化
+  - キャッシュ利用
+  - Incremental Build
+    が重要
+- Gatsby Cloud を使うとローカルでのビルド時間の課題を解消可能
