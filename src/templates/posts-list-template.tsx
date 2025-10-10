@@ -10,12 +10,18 @@ const PostsListTemplate: React.FC<PageProps<QueryData, PageContext>> = ({
   const posts = data.allMarkdownRemark.nodes;
   const { currentPage, numPages } = pageContext;
 
+  // ページネーション用パス
+  const prevPage = currentPage === 2 ? `/posts` : `/posts/${currentPage - 1}`;
+  const nextPage = `/posts/${currentPage + 1}`;
+  const hasPrev = currentPage > 1;
+  const hasNext = currentPage < numPages;
+
   return (
     <Layout pageTitle={`記事一覧 - ページ ${currentPage}`}>
       <SEO
         title={`記事一覧 - ページ ${currentPage}`}
         description={`Gatsbyで作ったブログのページ ${currentPage} です`}
-        pathname={`/posts/${currentPage === 1 ? "" : currentPage}`}
+        pathname={currentPage === 1 ? `/posts` : `/posts/${currentPage}`}
       />
 
       <div>
@@ -31,19 +37,17 @@ const PostsListTemplate: React.FC<PageProps<QueryData, PageContext>> = ({
           </article>
         ))}
 
-        {/* ページネーションリンク */}
-        <div>
-          {currentPage > 1 && (
-            <Link
-              to={currentPage === 2 ? `/posts` : `/posts/${currentPage - 1}`}
-            >
-              前へ
-            </Link>
-          )}
-          {currentPage < numPages && (
-            <Link to={`/posts/${currentPage + 1}`}>次へ</Link>
-          )}
-        </div>
+        {/* ページネーション */}
+        <nav
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginTop: "2rem",
+          }}
+        >
+          {hasPrev ? <Link to={prevPage}>← 前へ</Link> : <span />}
+          {hasNext ? <Link to={nextPage}>次へ →</Link> : <span />}
+        </nav>
       </div>
     </Layout>
   );
@@ -60,6 +64,7 @@ export const query = graphql`
     ) {
       nodes {
         id
+        excerpt(pruneLength: 100)
         frontmatter {
           title
           date(formatString: "YYYY/MM/DD")
