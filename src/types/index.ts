@@ -1,20 +1,17 @@
-export type MarkdownFrontmatter = {
-  title: string;
-  date: string;
-};
-
-export type MarkdownPost = {
+export type ContentfulPost = {
   id: string;
-  excerpt: string;
-  frontmatter: MarkdownFrontmatter;
-  fields: {
-    slug: string;
+  title: string;
+  slug: string;
+  date: string;
+  body?: {
+    raw: string;
   };
+  tags?: string[];
 };
 
 export type QueryData = {
-  allMarkdownRemark: {
-    nodes: MarkdownPost[];
+  allContentfulGatsbyBlog: {
+    nodes: ContentfulPost[];
   };
 };
 
@@ -25,9 +22,13 @@ export type PageContext = {
   numPages: number;
 };
 
-export type MarkdownData = {
-  markdownRemark: {
-    frontmatter: MarkdownFrontmatter;
-    html: string;
+export type ContentfulPostData = {
+  contentfulGatsbyBlog: {
+    title: string;
+    slug: string;
+    date: string;
+    body?: {
+      raw: string;
+    };
   } | null;
 };
