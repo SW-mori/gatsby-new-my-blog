@@ -26,13 +26,6 @@ const config: GatsbyConfig = {
       },
     },
     {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        name: `posts`,
-        path: `${__dirname}/src/posts`,
-      },
-    },
-    {
       resolve: "gatsby-plugin-alias-imports",
       options: {
         alias: {
