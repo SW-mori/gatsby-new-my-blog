@@ -1,4 +1,3 @@
-// gatsby-node.ts
 import path from "path";
 import type { GatsbyNode } from "gatsby";
 
@@ -16,55 +15,47 @@ export const createPages: GatsbyNode["createPages"] = async ({
   );
   const tagTemplate = path.resolve("./src/templates/tag-template.tsx");
 
-  // Markdown記事をGraphQLで取得
+  // Contentful から記事を取得
   const result = await graphql<{
-    allMarkdownRemark: {
+    allContentfulGatsbyBlog: {
       nodes: {
         id: string;
-        frontmatter: { title: string; date: string; tags?: string[] };
-        fields?: { slug: string };
+        slug: string;
+        tags?: string[];
       }[];
     };
   }>(`
     {
-      allMarkdownRemark(sort: { frontmatter: { date: DESC } }) {
+      allContentfulGatsbyBlog(sort: { date: DESC }) {
         nodes {
           id
-          frontmatter {
-            title
-            date
-            tags
-          }
-          fields {
-            slug
-          }
+          slug
+          tags
         }
       }
     }
   `);
 
   if (result.errors || !result.data) {
-    reporter.panic("Error loading Markdown files", result.errors);
+    reporter.panic("Error loading Contentful posts", result.errors);
     return;
   }
 
-  const posts = result.data.allMarkdownRemark.nodes;
+  const posts = result.data.allContentfulGatsbyBlog.nodes;
 
   // ----- 個別記事ページ -----
   posts.forEach((post) => {
-    if (!post.fields?.slug) return;
     createPage({
-      path: `/posts${post.fields.slug}`,
+      path: `/posts/${post.slug}`,
       component: postTemplate,
       context: {
-        id: post.id,
-        slug: post.fields.slug,
+        slug: post.slug,
       },
     });
   });
 
   // ----- ページネーション -----
-  const postsPerPage = 5; // 1ページに表示する記事数
+  const postsPerPage = 5;
   const numPages = Math.ceil(posts.length / postsPerPage);
 
   Array.from({ length: numPages }).forEach((_, i) => {
@@ -81,9 +72,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
   });
 
   // ----- タグ別ページ -----
-  const tags = Array.from(
-    new Set(posts.flatMap((post) => post.frontmatter.tags || []))
-  );
+  const tags = Array.from(new Set(posts.flatMap((post) => post.tags || [])));
 
   tags.forEach((tag) => {
     createPage({
@@ -92,30 +81,4 @@ export const createPages: GatsbyNode["createPages"] = async ({
       context: { tag },
     });
   });
-};
-
-// ----- Markdown ノードに slug を追加 -----
-export const onCreateNode: GatsbyNode["onCreateNode"] = ({
-  node,
-  actions,
-  getNode,
-}) => {
-  const { createNodeField } = actions;
-
-  if (node.internal.type === "MarkdownRemark") {
-    const parentNode = getNode(node.parent!);
-
-    // fileNode の型を安全にキャスト
-    const fileNode = parentNode as { relativePath?: string } | null;
-
-    if (!fileNode?.relativePath) return;
-
-    const slug = `/${fileNode.relativePath.replace(/\.md$/, "")}`;
-
-    createNodeField({
-      node,
-      name: "slug",
-      value: slug,
-    });
-  }
 };
