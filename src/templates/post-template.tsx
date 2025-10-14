@@ -1,37 +1,48 @@
 import * as React from "react";
 import { graphql, PageProps } from "gatsby";
 import { Layout, SEO } from "../components";
-import { MarkdownData } from "types";
+import { ContentfulPostData } from "../types";
+import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 
-const PostTemplate: React.FC<PageProps<MarkdownData>> = ({ data }) => {
-  const post = data.markdownRemark;
+const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
+  const post = data.contentfulGatsbyBlog;
 
-  if (!post) return <Layout pageTitle="記事が見つかりません" />;
+  if (!post) {
+    return (
+      <Layout pageTitle="記事が見つかりません">
+        <p>指定された記事は存在しません。</p>
+      </Layout>
+    );
+  }
 
   return (
-    <Layout pageTitle={post.frontmatter.title}>
-      <p>{post.frontmatter.date}</p>
-      <div dangerouslySetInnerHTML={{ __html: post.html }} />
+    <Layout pageTitle={post.title}>
+      <SEO
+        title={post.title}
+        description={post.title}
+        pathname={`/posts/${post.slug}`}
+      />
+
+      <article>
+        <p>{post.date}</p>
+        {/* リッチテキストをReact要素としてレンダリング */}
+        {post.body && documentToReactComponents(JSON.parse(post.body.raw))}
+      </article>
     </Layout>
   );
 };
 
 export default PostTemplate;
 
-export const Head: React.FC<PageProps<MarkdownData>> = ({ data }) => {
-  const title =
-    data.markdownRemark?.frontmatter.title ?? "記事が見つかりません";
-  return <SEO title={title} />;
-};
-
 export const query = graphql`
-  query ($id: String!) {
-    markdownRemark(id: { eq: $id }) {
-      frontmatter {
-        title
-        date(formatString: "YYYY/MM/DD")
+  query ($slug: String!) {
+    contentfulGatsbyBlog(slug: { eq: $slug }) {
+      title
+      slug
+      date(formatString: "YYYY/MM/DD")
+      body {
+        raw
       }
-      html
     }
   }
 `;

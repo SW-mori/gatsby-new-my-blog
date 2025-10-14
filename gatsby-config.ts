@@ -1,10 +1,15 @@
 import type { GatsbyConfig } from "gatsby";
+import "dotenv/config";
+
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV}`,
+});
 
 const config: GatsbyConfig = {
   siteMetadata: {
-    title: "My Gatsby Site",
+    title: "My Gatsby + Contentful Blog",
     description: "これは Gatsby + TypeScript の学習用サイトです",
-    siteUrl: "https://example.com",
+    siteUrl: "https://my-gatsby-blogs.netlify.app",
   },
   graphqlTypegen: true,
   plugins: [
@@ -18,13 +23,6 @@ const config: GatsbyConfig = {
       options: {
         name: `images`,
         path: `${__dirname}/src/images`,
-      },
-    },
-    {
-      resolve: `gatsby-source-filesystem`,
-      options: {
-        name: `posts`,
-        path: `${__dirname}/src/posts`,
       },
     },
     {
@@ -61,6 +59,13 @@ const config: GatsbyConfig = {
       resolve: `gatsby-plugin-offline`,
       options: {
         precachePages: [`/posts/*`, `/tags/*`],
+      },
+    },
+    {
+      resolve: `gatsby-source-contentful`,
+      options: {
+        spaceId: process.env.CONTENTFUL_SPACE_ID!,
+        accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
       },
     },
   ],
