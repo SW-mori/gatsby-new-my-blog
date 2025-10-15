@@ -1,12 +1,12 @@
 import * as React from "react";
 import { PageProps, graphql, Link } from "gatsby";
 import { Layout, SEO } from "../components";
-import { QueryData, PageContext } from "../types";
+import { AllContentfulPostQuery, PageContext } from "../types";
+import { PostCard } from "../components/PostCard";
 
-const PostsListTemplate: React.FC<PageProps<QueryData, PageContext>> = ({
-  data,
-  pageContext,
-}) => {
+const PostsListTemplate: React.FC<
+  PageProps<AllContentfulPostQuery, PageContext>
+> = ({ data, pageContext }) => {
   const posts = data?.allContentfulGatsbyBlog?.nodes ?? [];
   const { currentPage, numPages } = pageContext;
 
@@ -25,15 +25,9 @@ const PostsListTemplate: React.FC<PageProps<QueryData, PageContext>> = ({
 
       <div>
         {posts.map((post) => (
-          <article key={post.id}>
-            <h3>
-              <Link to={`/posts/${post.slug}`}>{post.title}</Link>
-            </h3>
-            <p>{post.date}</p>
-          </article>
+          <PostCard key={post.id} post={post} />
         ))}
 
-        {/* ページネーション */}
         <nav
           style={{
             display: "flex",
@@ -53,12 +47,17 @@ export default PostsListTemplate;
 
 export const query = graphql`
   query ($skip: Int!, $limit: Int!) {
-    allContentfulGatsbyBlog(sort: { date: DESC }, skip: $skip, limit: $limit) {
+    allContentfulGatsbyBlog(
+      sort: { createdAt: DESC }
+      skip: $skip
+      limit: $limit
+    ) {
       nodes {
         id
-        title
         slug
+        title
         date(formatString: "YYYY/MM/DD")
+        tags
       }
     }
   }

@@ -3,13 +3,13 @@ export type ContentfulPost = {
   title: string;
   slug: string;
   date: string;
+  tags?: string[];
   body?: {
     raw: string;
   };
-  tags?: string[];
 };
 
-export type QueryData = {
+export type AllContentfulPostQuery = {
   allContentfulGatsbyBlog: {
     nodes: ContentfulPost[];
   };
@@ -22,13 +22,18 @@ export type PageContext = {
   numPages: number;
 };
 
+export type ContentfulRichText = {
+  raw: string;
+};
+
+export type ContentfulPostNode = {
+  title: string;
+  slug: string;
+  date: string;
+  body?: ContentfulRichText;
+  tags?: string[];
+};
+
 export type ContentfulPostData = {
-  contentfulGatsbyBlog: {
-    title: string;
-    slug: string;
-    date: string;
-    body?: {
-      raw: string;
-    };
-  } | null;
+  contentfulGatsbyBlog: ContentfulPostNode | null;
 };

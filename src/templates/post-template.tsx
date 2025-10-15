@@ -10,7 +10,7 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
   if (!post) {
     return (
       <Layout pageTitle="記事が見つかりません">
-        <p>指定された記事は存在しません。</p>
+        <p>記事が存在しません。</p>
       </Layout>
     );
   }
@@ -22,11 +22,16 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
         description={post.title}
         pathname={`/posts/${post.slug}`}
       />
-
       <article>
         <p>{post.date}</p>
-        {/* リッチテキストをReact要素としてレンダリング */}
         {post.body && documentToReactComponents(JSON.parse(post.body.raw))}
+        {Array.isArray(post.tags) && post.tags.length > 0 && (
+          <div>
+            {post.tags.map((tag) => (
+              <span key={tag}>#{tag} </span>
+            ))}
+          </div>
+        )}
       </article>
     </Layout>
   );
@@ -40,6 +45,7 @@ export const query = graphql`
       title
       slug
       date(formatString: "YYYY/MM/DD")
+      tags
       body {
         raw
       }
