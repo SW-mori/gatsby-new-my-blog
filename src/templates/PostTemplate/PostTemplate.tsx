@@ -1,8 +1,9 @@
 import * as React from "react";
 import { graphql, PageProps } from "gatsby";
-import { Layout, SEO } from "../components";
-import { ContentfulPostData } from "../types";
+import { Layout, SEO } from "../../components";
+import { ContentfulPostData } from "../../types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import * as styles from "./PostTemplate.module.scss";
 
 const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
   const post = data.contentfulGatsbyBlog;
@@ -24,9 +25,17 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
       />
 
       <article>
-        <p>{post.date}</p>
-        {/* リッチテキストをReact要素としてレンダリング */}
+        <p className={styles.date}>{post.date}</p>
         {post.body && documentToReactComponents(JSON.parse(post.body.raw))}
+        {Array.isArray(post.tags) && post.tags.length > 0 && (
+          <div className={styles.tags}>
+            {post.tags.map((tag) => (
+              <span key={tag} className={styles.tag}>
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )}
       </article>
     </Layout>
   );
@@ -43,6 +52,7 @@ export const query = graphql`
       body {
         raw
       }
+      tags
     }
   }
 `;
