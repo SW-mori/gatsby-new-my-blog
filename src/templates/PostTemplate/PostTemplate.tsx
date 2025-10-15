@@ -1,8 +1,9 @@
 import * as React from "react";
 import { graphql, PageProps } from "gatsby";
-import { Layout, SEO } from "../components";
-import { ContentfulPostData } from "../types";
+import { Layout, SEO } from "../../components";
+import { ContentfulPostData } from "../../types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import * as styles from "./PostTemplate.module.scss";
 
 const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
   const post = data.contentfulGatsbyBlog;
@@ -10,7 +11,7 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
   if (!post) {
     return (
       <Layout pageTitle="記事が見つかりません">
-        <p>記事が存在しません。</p>
+        <p>指定された記事は存在しません。</p>
       </Layout>
     );
   }
@@ -22,13 +23,16 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
         description={post.title}
         pathname={`/posts/${post.slug}`}
       />
+
       <article>
-        <p>{post.date}</p>
+        <p className={styles.date}>{post.date}</p>
         {post.body && documentToReactComponents(JSON.parse(post.body.raw))}
         {Array.isArray(post.tags) && post.tags.length > 0 && (
-          <div>
+          <div className={styles.tags}>
             {post.tags.map((tag) => (
-              <span key={tag}>#{tag} </span>
+              <span key={tag} className={styles.tag}>
+                #{tag}
+              </span>
             ))}
           </div>
         )}
@@ -45,10 +49,10 @@ export const query = graphql`
       title
       slug
       date(formatString: "YYYY/MM/DD")
-      tags
       body {
         raw
       }
+      tags
     }
   }
 `;
