@@ -8,12 +8,17 @@ export const createPages: GatsbyNode["createPages"] = async ({
 }) => {
   const { createPage } = actions;
 
-  const postTemplate = path.resolve("./src/templates/post-template.tsx");
-  const postsListTemplate = path.resolve(
-    "./src/templates/posts-list-template.tsx"
+  const postTemplate = path.resolve(
+    "./src/templates/PostTemplate/PostTemplate.tsx"
   );
-  const tagTemplate = path.resolve("./src/templates/tag-template.tsx");
+  const postsListTemplate = path.resolve(
+    "./src/templates/PostsListTemplate/PostsListTemplate.tsx"
+  );
+  const tagTemplate = path.resolve(
+    "./src/templates/TagTemplate/TagTemplate.tsx"
+  );
 
+  // --- 名前付きクエリに変更 ---
   const result = await graphql<{
     allContentfulGatsbyBlog: {
       nodes: {
@@ -25,7 +30,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
       }[];
     };
   }>(`
-    {
+    query AllContentfulPostsForGatsbyNode {
       allContentfulGatsbyBlog(sort: { createdAt: DESC }) {
         nodes {
           id
@@ -45,7 +50,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
 
   const posts = result.data.allContentfulGatsbyBlog.nodes;
 
-  // 個別記事ページ
+  // --- 個別記事ページ ---
   posts.forEach((post) => {
     createPage({
       path: `/posts/${post.slug}`,
@@ -54,9 +59,10 @@ export const createPages: GatsbyNode["createPages"] = async ({
     });
   });
 
-  // ページネーション
+  // --- ページネーション ---
   const postsPerPage = 5;
   const numPages = Math.ceil(posts.length / postsPerPage);
+
   Array.from({ length: numPages }).forEach((_, i) => {
     createPage({
       path: i === 0 ? `/posts` : `/posts/${i + 1}`,
@@ -70,7 +76,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
     });
   });
 
-  // タグ別ページ
+  // --- タグ別ページ ---
   const tags = Array.from(new Set(posts.flatMap((p) => p.tags || [])));
   tags.forEach((tag) => {
     createPage({
