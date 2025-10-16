@@ -1,0 +1,11 @@
+{
+  "seo": {
+    "home": {
+      "title": "ホームページ",
+      "description": "Gatsby サイトのトップページです"
+    }
+  },
+  "home": "ホーム画面へようこそ",
+  "posts": "記事一覧",
+  "read_more": "続きを読む"
+}

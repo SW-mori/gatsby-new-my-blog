@@ -1,0 +1,14 @@
+{
+  "home": "Welcome to Home",
+  "seo": {
+    "home": {
+      "title": "Home Page",
+      "description": "This is the top page of the Gatsby site"
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "posts": "Posts",
+    "images": "Images"
+  }
+}
