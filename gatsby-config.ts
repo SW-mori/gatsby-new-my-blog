@@ -68,6 +68,28 @@ const config: GatsbyConfig = {
         accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
       },
     },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        name: `locales`,
+        path: `${__dirname}/src/locales`,
+      },
+    },
+    {
+      resolve: `gatsby-plugin-react-i18next`,
+      options: {
+        localeJsonSourceName: `locales`,
+        languages: [`ja`, `en`],
+        defaultLanguage: `ja`,
+        siteUrl: `https://my-gatsby-blogs.netlify.app`,
+        i18nextOptions: {
+          interpolation: { escapeValue: false },
+          keySeparator: false,
+          nsSeparator: false,
+        },
+        redirect: true,
+      },
+    },
   ],
 };
 
