@@ -81,7 +81,7 @@ const config: GatsbyConfig = {
         localeJsonSourceName: `locales`,
         languages: ["ja", "en"],
         defaultLanguage: "ja",
-        redirect: true,
+        redirect: false,
         siteUrl: `https://my-gatsby-blogs.netlify.app`,
         i18nextOptions: {
           interpolation: { escapeValue: false },

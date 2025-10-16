@@ -57,6 +57,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
   createPage({
     path: `/`,
     component: homeTemplate,
+    context: {},
   });
 
   // --- 個別記事ページ ---
@@ -70,6 +71,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
 
   const postsPerPage = 5;
   const numPages = Math.ceil(posts.length / postsPerPage);
+
   // --- ページネーション ---
   Array.from({ length: numPages }).forEach((_, i) => {
     createPage({
