@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Layout, SEO } from "../../components";
 import { useTranslation } from "gatsby-plugin-react-i18next";
+import { graphql } from "gatsby";
 import * as styles from "./HomeTemplate.module.scss";
 
 const HomeTemplate: React.FC = () => {
@@ -9,9 +10,9 @@ const HomeTemplate: React.FC = () => {
   return (
     <Layout>
       <SEO
-        title={t("seo.home.title")}
-        description={t("seo.home.description")}
-        pathname={`/`}
+        title={t("seo_home_title")}
+        description={t("seo_home_description")}
+        pathname="/"
       />
       <div className={styles.container}>
         <h1 className={styles.intro}>{t("home")}</h1>
@@ -21,3 +22,17 @@ const HomeTemplate: React.FC = () => {
 };
 
 export default HomeTemplate;
+
+export const query = graphql`
+  query {
+    locales: allLocale {
+      edges {
+        node {
+          ns
+          data
+          language
+        }
+      }
+    }
+  }
+`;
