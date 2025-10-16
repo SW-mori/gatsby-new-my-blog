@@ -1,0 +1,23 @@
+{
+  "site_name": "マイ Gatsby サイト",
+  "home": "ホーム画面へようこそ",
+  "seo_home_title": "ホームページ",
+  "seo_home_description": "Gatsby サイトのトップページです",
+  "images_page": "画像最適化ページ",
+  "images_page_description": "Gatsby 画像最適化ページです",
+  "posts": "記事一覧",
+  "page": "ページ",
+  "read_more": "続きを読む",
+  "post_not_found": "記事が見つかりません",
+  "post_not_found_message": "指定された記事は存在しません。",
+  "search_placeholder": "記事を検索...",
+  "all_tags": "すべてのタグ",
+  "no_matching_posts": "該当する記事がありません。",
+  "prev": "前へ",
+  "next": "次へ",
+  "posts_list_description": "Gatsby + Contentful の記事一覧ページ {{page}}",
+  "tag": "タグ",
+  "tag_posts_description": "Gatsby + Contentful でタグ「{{tag}}」に関連する記事の一覧ページです",
+  "no_posts_for_tag": "タグ「{{tag}}」に関連する記事はありません。",
+  "back_to_posts": "記事一覧に戻る"
+}

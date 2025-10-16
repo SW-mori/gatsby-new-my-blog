@@ -3,24 +3,29 @@ import { graphql, PageProps } from "gatsby";
 import { Layout, SEO } from "../../components";
 import { ContentfulPostData } from "../../types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import { useTranslation } from "gatsby-plugin-react-i18next";
 import * as styles from "./PostTemplate.module.scss";
 
 const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
+  const { t } = useTranslation("common");
   const post = data.contentfulGatsbyBlog;
 
   if (!post) {
     return (
-      <Layout pageTitle="記事が見つかりません">
-        <p>指定された記事は存在しません。</p>
+      <Layout pageTitle={t("post_not_found")}>
+        <p>{t("post_not_found_message")}</p>
       </Layout>
     );
   }
 
+  const seoTitle = `${post.title} | ${t("site_name")}`;
+  const seoDescription = post.body ? post.body.raw.slice(0, 120) : post.title;
+
   return (
     <Layout pageTitle={post.title}>
       <SEO
-        title={post.title}
-        description={post.title}
+        title={seoTitle}
+        description={seoDescription}
         pathname={`/posts/${post.slug}`}
       />
 
@@ -53,6 +58,15 @@ export const query = graphql`
         raw
       }
       tags
+    }
+    locales: allLocale {
+      edges {
+        node {
+          ns
+          data
+          language
+        }
+      }
     }
   }
 `;

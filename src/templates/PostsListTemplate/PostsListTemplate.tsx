@@ -2,11 +2,14 @@ import * as React from "react";
 import { PageProps, graphql, Link } from "gatsby";
 import { Layout, SEO, PostCard } from "../../components";
 import { AllContentfulPostQuery, PageContext } from "../../types";
+import { useTranslation } from "gatsby-plugin-react-i18next";
 import * as styles from "./PostsListTemplate.module.scss";
 
 const PostsListTemplate: React.FC<
   PageProps<AllContentfulPostQuery, PageContext>
 > = ({ data, pageContext }) => {
+  const { t } = useTranslation("common");
+
   const allPosts = data?.allContentfulGatsbyBlog?.nodes ?? [];
   const { currentPage, numPages } = pageContext;
 
@@ -35,10 +38,10 @@ const PostsListTemplate: React.FC<
   const hasNext = currentPage < numPages;
 
   return (
-    <Layout pageTitle={`記事一覧 - ページ ${currentPage}`}>
+    <Layout pageTitle={`${t("posts")} - ${t("page")} ${currentPage}`}>
       <SEO
-        title={`記事一覧 - ページ ${currentPage}`}
-        description={`Gatsby + Contentful の記事一覧ページ ${currentPage}`}
+        title={`${t("posts")} - ${t("page")} ${currentPage}`}
+        description={t("posts_list_description", { page: currentPage })}
         pathname={currentPage === 1 ? `/posts` : `/posts/${currentPage}`}
       />
 
@@ -46,7 +49,7 @@ const PostsListTemplate: React.FC<
         <div className={styles.filters}>
           <input
             type="text"
-            placeholder="記事を検索..."
+            placeholder={t("search_placeholder")}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -54,7 +57,7 @@ const PostsListTemplate: React.FC<
             value={selectedTag}
             onChange={(e) => setSelectedTag(e.target.value)}
           >
-            <option value="">すべてのタグ</option>
+            <option value="">{t("all_tags")}</option>
             {allTags.map((tag) => (
               <option key={tag} value={tag}>
                 {tag}
@@ -72,13 +75,13 @@ const PostsListTemplate: React.FC<
               />
             ))
           ) : (
-            <p>該当する記事がありません。</p>
+            <p>{t("no_matching_posts")}</p>
           )}
         </div>
 
         <nav className={styles.pagination}>
-          {hasPrev ? <Link to={prevPage}>← 前へ</Link> : <span />}
-          {hasNext ? <Link to={nextPage}>次へ →</Link> : <span />}
+          {hasPrev ? <Link to={prevPage}>← {t("prev")}</Link> : <span />}
+          {hasNext ? <Link to={nextPage}>{t("next")} →</Link> : <span />}
         </nav>
       </div>
     </Layout>
@@ -100,6 +103,15 @@ export const query = graphql`
         slug
         date(formatString: "YYYY/MM/DD")
         tags
+      }
+    }
+    locales: allLocale {
+      edges {
+        node {
+          ns
+          data
+          language
+        }
       }
     }
   }

@@ -1,0 +1,23 @@
+{
+  "site_name": "My Gatsby Site",
+  "home": "Welcome to Home",
+  "seo_home_title": "Home Page",
+  "seo_home_description": "Top page of Gatsby site",
+  "images_page": "Image Optimization Page",
+  "images_page_description": "Gatsby Image Optimization Page",
+  "posts": "Posts",
+  "page": "Page",
+  "read_more": "Read more",
+  "post_not_found": "Post not found",
+  "post_not_found_message": "The requested post does not exist.",
+  "search_placeholder": "Search posts...",
+  "all_tags": "All Tags",
+  "no_matching_posts": "No matching posts found.",
+  "prev": "Previous",
+  "next": "Next",
+  "posts_list_description": "Gatsby + Contentful posts list page {{page}}",
+  "tag": "Tag",
+  "tag_posts_description": "Gatsby + Contentful posts related to tag '{{tag}}'",
+  "no_posts_for_tag": "No posts found for tag '{{tag}}'.",
+  "back_to_posts": "Back to Posts"
+}

@@ -8,6 +8,9 @@ export const createPages: GatsbyNode["createPages"] = async ({
 }) => {
   const { createPage } = actions;
 
+  const homeTemplate = path.resolve(
+    "./src/templates/HomeTemplate/HomeTemplate.tsx"
+  );
   const postTemplate = path.resolve(
     "./src/templates/PostTemplate/PostTemplate.tsx"
   );
@@ -18,7 +21,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
     "./src/templates/TagTemplate/TagTemplate.tsx"
   );
 
-  // --- 名前付きクエリに変更 ---
+  // --- Contentful から記事取得 ---
   const result = await graphql<{
     allContentfulGatsbyBlog: {
       nodes: {
@@ -50,6 +53,13 @@ export const createPages: GatsbyNode["createPages"] = async ({
 
   const posts = result.data.allContentfulGatsbyBlog.nodes;
 
+  // --- ホームページ ---
+  createPage({
+    path: `/`,
+    component: homeTemplate,
+    context: {},
+  });
+
   // --- 個別記事ページ ---
   posts.forEach((post) => {
     createPage({
@@ -59,10 +69,10 @@ export const createPages: GatsbyNode["createPages"] = async ({
     });
   });
 
-  // --- ページネーション ---
   const postsPerPage = 5;
   const numPages = Math.ceil(posts.length / postsPerPage);
 
+  // --- ページネーション ---
   Array.from({ length: numPages }).forEach((_, i) => {
     createPage({
       path: i === 0 ? `/posts` : `/posts/${i + 1}`,

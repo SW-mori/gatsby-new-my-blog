@@ -1,26 +1,28 @@
 import * as React from "react";
 import { PageProps, graphql, Link } from "gatsby";
 import { Layout, SEO, PostCard } from "../../components";
-import { AllContentfulPostQuery } from "types";
+import { AllContentfulPostQuery } from "../../types";
+import { useTranslation } from "gatsby-plugin-react-i18next";
 import * as styles from "./TagTemplate.module.scss";
 
 const TagTemplate: React.FC<
   PageProps<AllContentfulPostQuery, { tag: string }>
 > = ({ data, pageContext }) => {
+  const { t } = useTranslation("common");
   const posts = data?.allContentfulGatsbyBlog?.nodes ?? [];
   const { tag } = pageContext;
 
   return (
-    <Layout pageTitle={`タグ: ${tag}`}>
+    <Layout pageTitle={`${t("tag")}: ${tag}`}>
       <SEO
-        title={`タグ: ${tag} の記事一覧`}
-        description={`Gatsby + Contentful でタグ「${tag}」に関連する記事の一覧ページです`}
+        title={`${t("tag")}: ${tag} - ${t("posts")}`}
+        description={t("tag_posts_description", { tag })}
         pathname={`/tags/${tag}`}
       />
 
       <div>
         {posts.length === 0 ? (
-          <p>タグ「{tag}」に関連する記事はありません。</p>
+          <p>{t("no_posts_for_tag", { tag })}</p>
         ) : (
           <div className={styles.grid}>
             {posts.map((post) => (
@@ -29,7 +31,7 @@ const TagTemplate: React.FC<
           </div>
         )}
         <Link to="/posts" className={styles.back}>
-          ← 記事一覧に戻る
+          ← {t("back_to_posts")}
         </Link>
       </div>
     </Layout>
@@ -50,6 +52,15 @@ export const query = graphql`
         slug
         date(formatString: "YYYY/MM/DD")
         tags
+      }
+    }
+    locales: allLocale {
+      edges {
+        node {
+          ns
+          data
+          language
+        }
       }
     }
   }
