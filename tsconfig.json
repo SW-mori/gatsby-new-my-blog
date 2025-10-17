@@ -17,5 +17,12 @@
       "@components/*": ["components/*"]
     }
   },
-  "include": ["src"]
+  "include": [
+    "src",
+    "gatsby-config.ts",
+    "gatsby-node.ts",
+    "gatsby-browser.ts",
+    "gatsby-ssr.ts"
+  ],
+  "exclude": ["node_modules", ".cache", "public"]
 }
