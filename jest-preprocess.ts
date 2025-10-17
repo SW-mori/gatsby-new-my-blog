@@ -1,7 +1,5 @@
+// jest-preprocess.ts
 import { createTransformer } from "babel-jest";
+import babelConfig from "./babel.config.js"; // ESM で読み込む場合
 
-const babelOptions = {
-  presets: ["babel-preset-gatsby"],
-};
-
-export default createTransformer(babelOptions);
+export default createTransformer(babelConfig);
