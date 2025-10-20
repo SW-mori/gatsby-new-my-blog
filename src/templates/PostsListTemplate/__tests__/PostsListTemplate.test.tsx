@@ -10,11 +10,17 @@ jest.mock("../../../components", () => ({
   Layout: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
   ),
-  SEO: ({ title, description, pathname }: any) => (
+  SEO: ({ title, description, pathname, alternateLangs }: any) => (
     <div data-testid="seo">
       <span>{title}</span>
       <span>{description}</span>
       <span>{pathname}</span>
+      {alternateLangs &&
+        alternateLangs.map((alt: any) => (
+          <span key={alt.hreflang} data-testid={`alt-${alt.hreflang}`}>
+            {alt.href}
+          </span>
+        ))}
     </div>
   ),
   PostCard: ({ post }: any) => <div data-testid="post">{post.title}</div>,
@@ -35,6 +41,7 @@ jest.mock("gatsby-plugin-react-i18next", () => ({
       };
       return translations[key] || key;
     },
+    i18n: { language: "ja" },
   }),
 }));
 
@@ -67,7 +74,6 @@ describe("PostsListTemplate コンポーネント", () => {
     skip: 0,
   };
 
-  // Gatsby PageProps の location 型に合わせたモック
   const mockLocation: PageProps["location"] = {
     hash: "",
     key: "test",
@@ -98,13 +104,17 @@ describe("PostsListTemplate コンポーネント", () => {
     serverData: {},
   };
 
-  it("SEO とページタイトルが表示される", () => {
+  it("SEO コンポーネントが正しく表示される", () => {
     render(<PostsListTemplate {...mockProps} />);
-
     const seo = screen.getByTestId("seo");
     expect(seo).toHaveTextContent("Posts - Page 1");
     expect(seo).toHaveTextContent("Posts list page 1");
     expect(seo).toHaveTextContent("/posts");
+
+    const altJa = screen.getByTestId("alt-ja");
+    const altEn = screen.getByTestId("alt-en");
+    expect(altJa).toHaveTextContent("/posts");
+    expect(altEn).toHaveTextContent("/en/posts");
   });
 
   it("全てのポストがレンダリングされる", () => {
@@ -115,39 +125,32 @@ describe("PostsListTemplate コンポーネント", () => {
 
   it("検索でポストをフィルタできる", () => {
     render(<PostsListTemplate {...mockProps} />);
-
-    const searchInput = screen.getByPlaceholderText("Search");
-    fireEvent.change(searchInput, { target: { value: "React" } });
-
+    const input = screen.getByPlaceholderText("Search");
+    fireEvent.change(input, { target: { value: "React" } });
     expect(screen.getByText("React記事")).toBeInTheDocument();
     expect(screen.queryByText("Gatsby記事")).not.toBeInTheDocument();
   });
 
   it("タグ選択でポストをフィルタできる", () => {
     render(<PostsListTemplate {...mockProps} />);
-
     const select = screen.getByRole("combobox");
     fireEvent.change(select, { target: { value: "Gatsby" } });
-
     expect(screen.getByText("Gatsby記事")).toBeInTheDocument();
     expect(screen.queryByText("React記事")).not.toBeInTheDocument();
   });
 
-  it("ページネーションリンクが表示される", () => {
+  it("ページネーションリンクが正しく表示される", () => {
     render(<PostsListTemplate {...mockProps} />);
-
     const nextLink = screen.getByText("Next →");
     expect(nextLink).toHaveAttribute("href", "/posts/2");
-
     const prevLink = screen.queryByText("← Prev");
     expect(prevLink).not.toBeInTheDocument();
   });
 
   it("フィルタ結果が0の場合、no matching posts が表示される", () => {
     render(<PostsListTemplate {...mockProps} />);
-    const searchInput = screen.getByPlaceholderText("Search");
-    fireEvent.change(searchInput, { target: { value: "存在しないタイトル" } });
-
+    const input = screen.getByPlaceholderText("Search");
+    fireEvent.change(input, { target: { value: "存在しないタイトル" } });
     expect(screen.getByText("No matching posts")).toBeInTheDocument();
   });
 });
