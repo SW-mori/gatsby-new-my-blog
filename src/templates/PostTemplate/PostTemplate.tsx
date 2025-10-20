@@ -7,7 +7,7 @@ import { useTranslation } from "gatsby-plugin-react-i18next";
 import * as styles from "./PostTemplate.module.scss";
 
 const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
-  const { t } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
   const post = data.contentfulGatsbyBlog;
 
   if (!post) {
@@ -21,12 +21,31 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
   const seoTitle = `${post.title} | ${t("site_name")}`;
   const seoDescription = post.body ? post.body.raw.slice(0, 120) : post.title;
 
+  const siteUrl = "https://my-gatsby-blogs.netlify.app";
+  const alternateLangs = [
+    {
+      hreflang: "ja",
+      href: `${siteUrl}/posts/${post.slug}`,
+    },
+    {
+      hreflang: "en",
+      href: `${siteUrl}/en/posts/${post.slug}`,
+    },
+  ];
+
   return (
     <Layout pageTitle={post.title}>
       <SEO
         title={seoTitle}
         description={seoDescription}
         pathname={`/posts/${post.slug}`}
+        image={"/images/sample.png"}
+        articleData={{
+          author: "tatsu mori",
+          datePublished: new Date(post.date).toISOString(),
+        }}
+        lang={i18n.language}
+        alternateLangs={alternateLangs}
       />
 
       <article>
@@ -53,7 +72,7 @@ export const query = graphql`
     contentfulGatsbyBlog(slug: { eq: $slug }) {
       title
       slug
-      date(formatString: "YYYY/MM/DD")
+      date(formatString: "YYYY-MM-DDTHH:mm:ssZ")
       body {
         raw
       }

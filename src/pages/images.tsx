@@ -6,10 +6,27 @@ import * as styles from "@styles/images.module.scss";
 import { graphql } from "gatsby";
 
 const ImagesPage: React.FC = () => {
-  const { t } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
+
+  const siteUrl = "https://my-gatsby-blogs.netlify.app";
+
+  const alternateLangs = [
+    { hreflang: "ja", href: `${siteUrl}/images` },
+    { hreflang: "en", href: `${siteUrl}/en/images` },
+  ];
 
   return (
     <Layout pageTitle={t("images_page")}>
+      <SEO
+        title={t("images_page")}
+        description={
+          t("images_page_description") || "Gatsby 画像最適化ページです"
+        }
+        pathname="/images"
+        lang={i18n.language}
+        alternateLangs={alternateLangs}
+      />
+
       <div className={styles.container}>
         <h1>{t("images_page")}</h1>
         <StaticImage
@@ -26,20 +43,6 @@ const ImagesPage: React.FC = () => {
 };
 
 export default ImagesPage;
-
-export const Head: React.FC = () => {
-  const { t } = useTranslation("common");
-
-  return (
-    <SEO
-      title={t("images_page")}
-      description={
-        t("images_page_description") || "Gatsby 画像最適化ページです"
-      }
-      pathname="/images"
-    />
-  );
-};
 
 export const query = graphql`
   query {

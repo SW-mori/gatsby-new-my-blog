@@ -1,84 +1,93 @@
 import React from "react";
 import { render } from "@testing-library/react";
+import { Helmet } from "react-helmet";
 import { SEO } from "../Seo";
+import { useStaticQuery, graphql } from "gatsby";
+
+jest.mock("gatsby", () => {
+  const actualGatsby = jest.requireActual("gatsby");
+  return {
+    ...actualGatsby,
+    graphql: jest.fn(),
+    useStaticQuery: jest.fn(),
+  };
+});
 
 describe("SEOコンポーネント", () => {
   const props = {
     title: "テストタイトル",
     description: "テスト説明",
-    image: "https://example.com/image.png",
+    image: "/test-image.png",
     pathname: "/test-path",
+    lang: "ja",
+    alternateLangs: [
+      { hreflang: "ja", href: "/ja/test-path" },
+      { hreflang: "en", href: "/en/test-path" },
+    ],
   };
 
-  it("titleとmetaタグが正しくレンダリングされる", () => {
-    const { container } = render(<SEO {...props} />);
+  beforeEach(() => {
+    (useStaticQuery as jest.Mock).mockReturnValue({
+      site: {
+        siteMetadata: {
+          title: "デフォルトタイトル",
+          description: "デフォルト説明",
+          siteUrl: "https://example.com",
+        },
+      },
+    });
+  });
 
-    // title
-    const title = container.querySelector("title");
-    expect(title).not.toBeNull();
-    expect(title?.textContent).toBe(props.title);
+  it("title, meta, og, twitter, link, scriptタグが正しくレンダリングされる", () => {
+    render(<SEO {...props} />);
+    const helmet = Helmet.peek();
 
-    // meta[name="description"]
-    const metaDescription = container.querySelector<HTMLMetaElement>(
-      'meta[name="description"]'
+    expect(helmet.title).toBe(props.title);
+
+    const metaDescription = helmet.metaTags.find(
+      (m: any) => m.name === "description"
     );
-    expect(metaDescription).not.toBeNull();
     expect(metaDescription?.content).toBe(props.description);
 
-    // meta[property="og:title"]
-    const metaOgTitle = container.querySelector<HTMLMetaElement>(
-      'meta[property="og:title"]'
-    );
-    expect(metaOgTitle).not.toBeNull();
-    expect(metaOgTitle?.content).toBe(props.title);
+    expect(
+      helmet.metaTags.find((m: any) => m.property === "og:title")?.content
+    ).toBe(props.title);
+    expect(
+      helmet.metaTags.find((m: any) => m.property === "og:description")?.content
+    ).toBe(props.description);
+    expect(
+      helmet.metaTags.find((m: any) => m.property === "og:image")?.content
+    ).toBe(`https://example.com${props.image}`);
+    expect(
+      helmet.metaTags.find((m: any) => m.property === "og:url")?.content
+    ).toBe(`https://example.com${props.pathname}`);
 
-    // meta[property="og:description"]
-    const metaOgDescription = container.querySelector<HTMLMetaElement>(
-      'meta[property="og:description"]'
-    );
-    expect(metaOgDescription).not.toBeNull();
-    expect(metaOgDescription?.content).toBe(props.description);
+    expect(
+      helmet.metaTags.find((m: any) => m.name === "twitter:card")?.content
+    ).toBe("summary_large_image");
+    expect(
+      helmet.metaTags.find((m: any) => m.name === "twitter:title")?.content
+    ).toBe(props.title);
+    expect(
+      helmet.metaTags.find((m: any) => m.name === "twitter:description")
+        ?.content
+    ).toBe(props.description);
+    expect(
+      helmet.metaTags.find((m: any) => m.name === "twitter:image")?.content
+    ).toBe(`https://example.com${props.image}`);
 
-    // meta[property="og:image"]
-    const metaOgImage = container.querySelector<HTMLMetaElement>(
-      'meta[property="og:image"]'
+    const scriptTag = helmet.scriptTags.find(
+      (s: any) => s.type === "application/ld+json"
     );
-    expect(metaOgImage).not.toBeNull();
-    expect(metaOgImage?.content).toBe(props.image);
-
-    // meta[property="og:url"]
-    const metaOgUrl = container.querySelector<HTMLMetaElement>(
-      'meta[property="og:url"]'
-    );
-    expect(metaOgUrl).not.toBeNull();
-    expect(metaOgUrl?.content).toBe(props.pathname);
-
-    // meta[name="twitter:card"]
-    const metaTwitterCard = container.querySelector<HTMLMetaElement>(
-      'meta[name="twitter:card"]'
-    );
-    expect(metaTwitterCard).not.toBeNull();
-    expect(metaTwitterCard?.content).toBe("summary_large_image");
-
-    // meta[name="twitter:title"]
-    const metaTwitterTitle = container.querySelector<HTMLMetaElement>(
-      'meta[name="twitter:title"]'
-    );
-    expect(metaTwitterTitle).not.toBeNull();
-    expect(metaTwitterTitle?.content).toBe(props.title);
-
-    // meta[name="twitter:description"]
-    const metaTwitterDescription = container.querySelector<HTMLMetaElement>(
-      'meta[name="twitter:description"]'
-    );
-    expect(metaTwitterDescription).not.toBeNull();
-    expect(metaTwitterDescription?.content).toBe(props.description);
-
-    // meta[name="twitter:image"]
-    const metaTwitterImage = container.querySelector<HTMLMetaElement>(
-      'meta[name="twitter:image"]'
-    );
-    expect(metaTwitterImage).not.toBeNull();
-    expect(metaTwitterImage?.content).toBe(props.image);
+    expect(scriptTag).toBeDefined();
+    const json = scriptTag ? JSON.parse(scriptTag.innerHTML) : null;
+    expect(json).toMatchObject({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: props.title,
+      description: props.description,
+      image: `https://example.com${props.image}`,
+      url: `https://example.com${props.pathname}`,
+    });
   });
 });
