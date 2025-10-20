@@ -9,6 +9,8 @@ export const SEO: React.FC<SEOProps> = ({
   image,
   pathname,
   articleData,
+  lang = "ja",
+  alternateLangs,
 }) => {
   const { site } = useStaticQuery(graphql`
     query {
@@ -70,7 +72,7 @@ export const SEO: React.FC<SEOProps> = ({
       };
 
   return (
-    <Helmet>
+    <Helmet htmlAttributes={{ lang }}>
       <title>{seo.title}</title>
       <meta name="description" content={seo.description} />
       <link rel="canonical" href={seo.url} />
@@ -87,6 +89,16 @@ export const SEO: React.FC<SEOProps> = ({
       <meta name="twitter:image" content={seo.image} />
 
       <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+
+      {alternateLangs &&
+        alternateLangs.map(({ href, hreflang }) => (
+          <link
+            key={hreflang}
+            rel="alternate"
+            hrefLang={hreflang}
+            href={href}
+          />
+        ))}
     </Helmet>
   );
 };

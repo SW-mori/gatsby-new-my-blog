@@ -8,7 +8,7 @@ import * as styles from "./PostsListTemplate.module.scss";
 const PostsListTemplate: React.FC<
   PageProps<AllContentfulPostQuery, PageContext>
 > = ({ data, pageContext }) => {
-  const { t } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
 
   const allPosts = data?.allContentfulGatsbyBlog?.nodes ?? [];
   const { currentPage, numPages } = pageContext;
@@ -37,12 +37,34 @@ const PostsListTemplate: React.FC<
   const hasPrev = currentPage > 1;
   const hasNext = currentPage < numPages;
 
+  const siteUrl = "https://my-gatsby-blogs.netlify.app";
+  const pathname = currentPage === 1 ? `/posts` : `/posts/${currentPage}`;
+
+  const alternateLangs = [
+    {
+      hreflang: "ja",
+      href:
+        currentPage === 1
+          ? `${siteUrl}/posts`
+          : `${siteUrl}/posts/${currentPage}`,
+    },
+    {
+      hreflang: "en",
+      href:
+        currentPage === 1
+          ? `${siteUrl}/en/posts`
+          : `${siteUrl}/en/posts/${currentPage}`,
+    },
+  ];
+
   return (
     <Layout pageTitle={`${t("posts")} - ${t("page")} ${currentPage}`}>
       <SEO
         title={`${t("posts")} - ${t("page")} ${currentPage}`}
         description={t("posts_list_description", { page: currentPage })}
-        pathname={currentPage === 1 ? `/posts` : `/posts/${currentPage}`}
+        pathname={pathname}
+        lang={i18n.language}
+        alternateLangs={alternateLangs}
       />
 
       <div>

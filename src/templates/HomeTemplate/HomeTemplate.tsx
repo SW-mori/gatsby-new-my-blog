@@ -5,7 +5,14 @@ import { graphql } from "gatsby";
 import * as styles from "./HomeTemplate.module.scss";
 
 const HomeTemplate: React.FC = () => {
-  const { t } = useTranslation("common");
+  const { t, i18n } = useTranslation("common");
+
+  const siteUrl = "https://my-gatsby-blogs.netlify.app";
+
+  const alternateLangs = [
+    { hreflang: "ja", href: `${siteUrl}/` },
+    { hreflang: "en", href: `${siteUrl}/en/` },
+  ];
 
   return (
     <Layout>
@@ -13,6 +20,8 @@ const HomeTemplate: React.FC = () => {
         title={t("seo_home_title")}
         description={t("seo_home_description")}
         pathname="/"
+        lang={i18n.language}
+        alternateLangs={alternateLangs}
       />
       <div className={styles.container}>
         <h1 className={styles.intro}>{t("home")}</h1>

@@ -7,4 +7,6 @@ export type SEOProps = {
     author?: string;
     datePublished?: string;
   };
+  lang?: string;
+  alternateLangs?: { href: string; hreflang: string }[];
 };
