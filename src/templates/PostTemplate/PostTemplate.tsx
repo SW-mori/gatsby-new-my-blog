@@ -27,6 +27,11 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
         title={seoTitle}
         description={seoDescription}
         pathname={`/posts/${post.slug}`}
+        image={"/images/sample.png"}
+        articleData={{
+          author: "tatsu mori",
+          datePublished: new Date(post.date).toISOString(),
+        }}
       />
 
       <article>
@@ -53,7 +58,7 @@ export const query = graphql`
     contentfulGatsbyBlog(slug: { eq: $slug }) {
       title
       slug
-      date(formatString: "YYYY/MM/DD")
+      date(formatString: "YYYY-MM-DDTHH:mm:ssZ")
       body {
         raw
       }
