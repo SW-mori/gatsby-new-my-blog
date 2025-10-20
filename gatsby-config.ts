@@ -43,6 +43,34 @@ const config: GatsbyConfig = {
       options: {
         output: `/sitemap/`,
         createLinkInHead: true,
+        excludes: ["/404", "/404.html", "/dev-404-page"],
+        query: `
+          {
+            allSitePage {
+              nodes {
+                path
+              }
+            }
+            site {
+              siteMetadata {
+                siteUrl
+              }
+            }
+          }
+        `,
+        resolveSiteUrl: ({ site }: any) => site.siteMetadata.siteUrl,
+        resolvePages: ({ allSitePage: { nodes } }: any) => {
+          return nodes.map((node: any) => ({
+            path: node.path,
+            changefreq: "weekly",
+            priority: node.path === "/" ? 1.0 : 0.7,
+          }));
+        },
+        serialize: ({ path, changefreq, priority }: any) => ({
+          url: path,
+          changefreq,
+          priority,
+        }),
       },
     },
     {
