@@ -4,6 +4,7 @@ import { Layout, SEO, PostCard } from "../../components";
 import { AllContentfulPostQuery, PageContext } from "../../types";
 import { useTranslation } from "gatsby-plugin-react-i18next";
 import * as styles from "./PostsListTemplate.module.scss";
+import { documentToPlainTextString } from "@contentful/rich-text-plain-text-renderer";
 
 const PostsListTemplate: React.FC<
   PageProps<AllContentfulPostQuery, PageContext>
@@ -23,13 +24,20 @@ const PostsListTemplate: React.FC<
 
   // 検索とタグフィルタ適用
   const filteredPosts = allPosts.filter((post) => {
-    const matchesSearch = post.title
+    const titleMatch = post.title
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
+
+    const bodyText = post.body?.raw
+      ? documentToPlainTextString(JSON.parse(post.body.raw))
+      : "";
+    const bodyMatch = bodyText.toLowerCase().includes(searchTerm.toLowerCase());
+
     const matchesTag = selectedTag
       ? (post.tags ?? []).includes(selectedTag)
       : true;
-    return matchesSearch && matchesTag;
+
+    return (titleMatch || bodyMatch) && matchesTag;
   });
 
   const prevPage = currentPage === 2 ? `/posts` : `/posts/${currentPage - 1}`;
@@ -125,6 +133,9 @@ export const query = graphql`
         slug
         date(formatString: "YYYY/MM/DD")
         tags
+        body {
+          raw
+        }
       }
     }
     locales: allLocale {
