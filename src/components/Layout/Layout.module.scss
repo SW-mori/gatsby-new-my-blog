@@ -48,9 +48,9 @@
   right: 16px;
   z-index: 10;
 
-  a {
+  .languageLink,
+  .activeLanguage {
     text-decoration: none;
-    color: #333;
     font-weight: 500;
     padding: 6px 10px;
     border-radius: 4px;
@@ -61,13 +61,23 @@
     }
   }
 
+  .languageLink {
+    color: #007acc;
+  }
+
+  .activeLanguage {
+    background-color: #007acc;
+    color: white;
+  }
+
   // スマホ（幅 600px 以下）では縦並びにする
   @media (max-width: 600px) {
     flex-direction: column;
     top: 12px;
     right: 12px;
 
-    a {
+    .languageLink,
+    .activeLanguage {
       padding: 8px 12px;
       text-align: center;
     }
