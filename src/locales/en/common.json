@@ -19,5 +19,13 @@
   "tag": "Tag",
   "tag_posts_description": "Gatsby + Contentful posts related to tag '{{tag}}'",
   "no_posts_for_tag": "No posts found for tag '{{tag}}'.",
-  "back_to_posts": "Back to Posts"
+  "back_to_posts": "Back to Posts",
+  "comments": "Comments",
+  "contact_author": "Contact the Author",
+  "name": "Name",
+  "email": "Email",
+  "message": "Message",
+  "send": "Send",
+  "form_success_message": "Your message has been sent successfully. Thank you!",
+  "form_error_message": "Failed to send your message. Please try again."
 }

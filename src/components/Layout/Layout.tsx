@@ -6,10 +6,20 @@ import { LayoutProps } from "./types";
 
 export const Layout: React.FC<LayoutProps> = ({ pageTitle, children }) => {
   const { t } = useTranslation("common");
-  const { language, originalPath, languages } = useI18next();
+  const { language, originalPath } = useI18next();
 
-  // 現在の言語以外のリンク
-  const otherLanguages = languages.filter((lng) => lng !== language);
+  const languages = ["ja", "en"];
+
+  const getPathForLanguage = (lng: string) => {
+    if (lng === "ja") {
+      // デフォルト言語は / に置換
+      const path = originalPath.replace(/^\/en/, "");
+      return path === "/en/" ? "/" : path;
+    } else {
+      // 英語は /en/... の形式
+      return originalPath === "/" ? `/${lng}/` : `/${lng}${originalPath}`;
+    }
+  };
 
   return (
     <div className={styles.container}>
@@ -28,26 +38,18 @@ export const Layout: React.FC<LayoutProps> = ({ pageTitle, children }) => {
           </Link>
         </nav>
 
-        {/* 言語切替リンク */}
+        {/* 言語切替ボタン */}
         <div className={styles.languageSwitcher}>
-          {otherLanguages.map((lng) => {
-            let newPath: string;
+          {languages.map((lng) => {
+            const path = getPathForLanguage(lng);
+            const isActive = lng === language;
 
-            if (lng === "ja") {
-              // デフォルト言語は / に置換
-              newPath = originalPath.replace(/^\/en/, "");
-              if (originalPath === "/en/") newPath = "/";
-            } else {
-              // デフォルト以外の言語は /en/... の形式
-              if (originalPath === "/") {
-                newPath = `/${lng}/`;
-              } else {
-                newPath = `/${lng}${originalPath}`;
-              }
-            }
-
-            return (
-              <Link key={lng} to={newPath}>
+            return isActive ? (
+              <span key={lng} className={styles.activeLanguage}>
+                {lng.toUpperCase()}
+              </span>
+            ) : (
+              <Link key={lng} to={path} className={styles.languageLink}>
                 {lng.toUpperCase()}
               </Link>
             );
