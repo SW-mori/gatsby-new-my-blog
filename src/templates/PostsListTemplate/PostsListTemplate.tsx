@@ -65,6 +65,30 @@ const PostsListTemplate: React.FC<
     },
   ];
 
+  const pushEvent = (event: string, data: Record<string, any> = {}) => {
+    if (typeof window !== "undefined" && (window as any).dataLayer) {
+      (window as any).dataLayer.push({ event, ...data });
+    }
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    pushEvent("search_input", {
+      search_term: value,
+      page_path: window.location.pathname,
+    });
+  };
+
+  const handleTagChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const tag = e.target.value;
+    setSelectedTag(tag);
+    pushEvent("tag_filter", {
+      tag_name: tag || "all",
+      page_path: window.location.pathname,
+    });
+  };
+
   return (
     <Layout pageTitle={`${t("posts")} - ${t("page")} ${currentPage}`}>
       <SEO
@@ -81,12 +105,9 @@ const PostsListTemplate: React.FC<
             type="text"
             placeholder={t("search_placeholder")}
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleSearchChange}
           />
-          <select
-            value={selectedTag}
-            onChange={(e) => setSelectedTag(e.target.value)}
-          >
+          <select value={selectedTag} onChange={handleTagChange}>
             <option value="">{t("all_tags")}</option>
             {allTags.map((tag) => (
               <option key={tag} value={tag}>
@@ -110,8 +131,26 @@ const PostsListTemplate: React.FC<
         </div>
 
         <nav className={styles.pagination}>
-          {hasPrev ? <Link to={prevPage}>← {t("prev")}</Link> : <span />}
-          {hasNext ? <Link to={nextPage}>{t("next")} →</Link> : <span />}
+          {hasPrev ? (
+            <Link
+              to={prevPage}
+              onClick={() => pushEvent("pagination_prev", { page: prevPage })}
+            >
+              ← {t("prev")}
+            </Link>
+          ) : (
+            <span />
+          )}
+          {hasNext ? (
+            <Link
+              to={nextPage}
+              onClick={() => pushEvent("pagination_next", { page: nextPage })}
+            >
+              {t("next")} →
+            </Link>
+          ) : (
+            <span />
+          )}
         </nav>
       </div>
     </Layout>

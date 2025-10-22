@@ -28,15 +28,12 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
   const seoTitle = `${post.title} | ${t("site_name")}`;
   const seoDescription = post.body ? post.body.raw.slice(0, 120) : post.title;
 
+  const postPath =
+    i18n.language === "en" ? `/en/posts/${post.slug}` : `/posts/${post.slug}`;
+
   const alternateLangs = [
-    {
-      hreflang: "ja",
-      href: `${siteUrl}/posts/${post.slug}`,
-    },
-    {
-      hreflang: "en",
-      href: `${siteUrl}/en/posts/${post.slug}`,
-    },
+    { hreflang: "ja", href: `${siteUrl}/posts/${post.slug}` },
+    { hreflang: "en", href: `${siteUrl}/en/posts/${post.slug}` },
   ];
 
   const disqusConfig = {
@@ -44,11 +41,11 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
     config: {
       identifier: post.slug,
       title: post.title,
-      url: `${siteUrl}/posts/${post.slug}`,
+      url: `${siteUrl}${postPath}`,
     },
   };
 
-  // Netlifyフォーム送信処理
+  // ✅ Netlifyフォーム送信処理 + GA4イベント
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFormStatus("submitting");
@@ -66,6 +63,14 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
       if (response.ok) {
         setFormStatus("success");
         form.reset();
+
+        if (typeof window !== "undefined" && (window as any).dataLayer) {
+          (window as any).dataLayer.push({
+            event: "form_submit",
+            form_name: form.getAttribute("name") || "unknown",
+            page_path: window.location.pathname,
+          });
+        }
       } else {
         setFormStatus("error");
       }
@@ -74,12 +79,22 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
     }
   };
 
+  const handleTagClick = (tag: string) => {
+    if (typeof window !== "undefined" && (window as any).dataLayer) {
+      (window as any).dataLayer.push({
+        event: "tag_click",
+        tag_name: tag,
+        page_path: window.location.pathname,
+      });
+    }
+  };
+
   return (
     <Layout pageTitle={post.title}>
       <SEO
         title={seoTitle}
         description={seoDescription}
-        pathname={`/posts/${post.slug}`}
+        pathname={postPath}
         image={"/images/sample.png"}
         articleData={{
           author: "tatsu mori",
@@ -95,7 +110,11 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
         {Array.isArray(post.tags) && post.tags.length > 0 && (
           <div className={styles.tags}>
             {post.tags.map((tag) => (
-              <span key={tag} className={styles.tag}>
+              <span
+                key={tag}
+                className={styles.tag}
+                onClick={() => handleTagClick(tag)}
+              >
                 #{tag}
               </span>
             ))}
@@ -141,7 +160,6 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
           </button>
         </form>
 
-        {/* 送信ステータスメッセージ */}
         {formStatus === "success" && (
           <p className={styles.formMessageSuccess}>
             {t("form_success_message")}
