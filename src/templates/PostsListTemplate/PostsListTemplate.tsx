@@ -1,29 +1,27 @@
 import * as React from "react";
 import { PageProps, graphql, Link } from "gatsby";
 import { Layout, SEO, PostCard } from "../../components";
-import {
-  AllContentfulPostQuery,
-  PageContext,
-  RelatedArticle,
-} from "../../types";
+import { AllContentfulPostQuery, PageContext } from "../../types";
 import { useTranslation } from "gatsby-plugin-react-i18next";
 import * as styles from "./PostsListTemplate.module.scss";
 import { documentToPlainTextString } from "@contentful/rich-text-plain-text-renderer";
+import { usePostListTemplate } from "./hooks";
 
 const PostsListTemplate: React.FC<
   PageProps<AllContentfulPostQuery, PageContext>
 > = ({ data, pageContext }) => {
   const { t, i18n } = useTranslation("common");
+  const {
+    searchTerm,
+    selectedTag,
+    relatedArticles,
+    handleSearchChange,
+    handleTagChange,
+    pushEvent,
+  } = usePostListTemplate();
 
   const allPosts = data?.allContentfulGatsbyBlog?.nodes ?? [];
   const { currentPage, numPages } = pageContext;
-
-  const [searchTerm, setSearchTerm] = React.useState<string>("");
-  const [selectedTag, setSelectedTag] = React.useState<string>("");
-
-  const [relatedArticles, setRelatedArticles] = React.useState<
-    RelatedArticle[]
-  >([]);
 
   // タグ一覧を取得
   const allTags = Array.from(
@@ -72,46 +70,6 @@ const PostsListTemplate: React.FC<
           : `${siteUrl}/en/posts/${currentPage}`,
     },
   ];
-
-  const pushEvent = (event: string, data: Record<string, any> = {}) => {
-    if (typeof window !== "undefined" && (window as any).dataLayer) {
-      (window as any).dataLayer.push({ event, ...data });
-    }
-  };
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    pushEvent("search_input", {
-      search_term: value,
-      page_path: window.location.pathname,
-    });
-  };
-
-  const handleTagChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const tag = e.target.value;
-    setSelectedTag(tag);
-    pushEvent("tag_filter", {
-      tag_name: tag || "all",
-      page_path: window.location.pathname,
-    });
-  };
-
-  // ✅ BeeceptorモックAPIから関連記事を取得
-  React.useEffect(() => {
-    const fetchRelated = async () => {
-      try {
-        const res = await fetch("https://gatsby-related.free.beeceptor.com/");
-        if (!res.ok) throw new Error("APIエラー");
-        const data = await res.json();
-        setRelatedArticles(data);
-      } catch (err) {
-        console.error("関連記事の取得に失敗しました:", err);
-      }
-    };
-
-    fetchRelated();
-  }, []);
 
   return (
     <Layout pageTitle={`${t("posts")} - ${t("page")} ${currentPage}`}>
