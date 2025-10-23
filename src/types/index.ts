@@ -37,3 +37,9 @@ export type ContentfulPostNode = {
 export type ContentfulPostData = {
   contentfulGatsbyBlog: ContentfulPostNode | null;
 };
+
+export type RelatedArticle = {
+  id: string;
+  title: string;
+  url: string;
+};
