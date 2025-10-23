@@ -1,10 +1,8 @@
 {
   "site_name": "My Gatsby Site",
-  "home": "Welcome to Home",
+  "home": "Home",
   "seo_home_title": "Home Page",
   "seo_home_description": "Top page of Gatsby site",
-  "images_page": "Image Optimization Page",
-  "images_page_description": "Gatsby Image Optimization Page",
   "posts": "Posts",
   "page": "Page",
   "read_more": "Read more",
@@ -27,5 +25,6 @@
   "message": "Message",
   "send": "Send",
   "form_success_message": "Your message has been sent successfully. Thank you!",
-  "form_error_message": "Failed to send your message. Please try again."
+  "form_error_message": "Failed to send your message. Please try again.",
+  "article": "Related Articles"
 }
