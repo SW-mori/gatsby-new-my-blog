@@ -2,6 +2,7 @@ import * as React from "react";
 import { graphql, PageProps } from "gatsby";
 import { usePostTemplate } from "./hooks";
 import { Layout, SEO } from "../../components";
+import { LANGUAGES, SITE_URL } from "../../constants";
 import { ContentfulPostData } from "../../types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { useTranslation } from "gatsby-plugin-react-i18next";
@@ -22,17 +23,20 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
     );
   }
 
-  const siteUrl = "https://my-gatsby-blogs.netlify.app";
-
   const seoTitle = `${post.title} | ${t("site_name")}`;
   const seoDescription = post.body ? post.body.raw.slice(0, 120) : post.title;
 
   const postPath =
-    i18n.language === "en" ? `/en/posts/${post.slug}` : `/posts/${post.slug}`;
+    i18n.language === LANGUAGES.EN
+      ? `/${LANGUAGES.EN}/posts/${post.slug}`
+      : `/posts/${post.slug}`;
 
   const alternateLangs = [
-    { hreflang: "ja", href: `${siteUrl}/posts/${post.slug}` },
-    { hreflang: "en", href: `${siteUrl}/en/posts/${post.slug}` },
+    { hreflang: LANGUAGES.JA, href: `${SITE_URL}/posts/${post.slug}` },
+    {
+      hreflang: LANGUAGES.EN,
+      href: `${SITE_URL}/${LANGUAGES.EN}/posts/${post.slug}`,
+    },
   ];
 
   const disqusConfig = {
@@ -40,7 +44,7 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
     config: {
       identifier: post.slug,
       title: post.title,
-      url: `${siteUrl}${postPath}`,
+      url: `${SITE_URL}${postPath}`,
     },
   };
 

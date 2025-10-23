@@ -1,17 +1,16 @@
 import * as React from "react";
-import { Layout, SEO } from "../../components";
 import { useTranslation } from "gatsby-plugin-react-i18next";
 import { graphql } from "gatsby";
+import { Layout, SEO } from "../../components";
+import { LANGUAGES, SITE_URL } from "../../constants";
 import * as styles from "./HomeTemplate.module.scss";
 
 const HomeTemplate: React.FC = () => {
   const { t, i18n } = useTranslation("common");
 
-  const siteUrl = "https://my-gatsby-blogs.netlify.app";
-
   const alternateLangs = [
-    { hreflang: "ja", href: `${siteUrl}/` },
-    { hreflang: "en", href: `${siteUrl}/en/` },
+    { hreflang: LANGUAGES.JA, href: `${SITE_URL}/` },
+    { hreflang: LANGUAGES.EN, href: `${SITE_URL}/${LANGUAGES.EN}/` },
   ];
 
   return (

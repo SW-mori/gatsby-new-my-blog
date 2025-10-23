@@ -1,11 +1,12 @@
 import * as React from "react";
-import { PageProps, graphql, Link } from "gatsby";
-import { Layout, SEO, PostCard } from "../../components";
-import { AllContentfulPostQuery, PageContext } from "../../types";
-import { useTranslation } from "gatsby-plugin-react-i18next";
-import * as styles from "./PostsListTemplate.module.scss";
 import { documentToPlainTextString } from "@contentful/rich-text-plain-text-renderer";
+import { PageProps, graphql, Link } from "gatsby";
+import { useTranslation } from "gatsby-plugin-react-i18next";
 import { usePostListTemplate } from "./hooks";
+import { Layout, SEO, PostCard } from "../../components";
+import { LANGUAGES, SITE_URL } from "../../constants";
+import { AllContentfulPostQuery, PageContext } from "../../types";
+import * as styles from "./PostsListTemplate.module.scss";
 
 const PostsListTemplate: React.FC<
   PageProps<AllContentfulPostQuery, PageContext>
@@ -23,12 +24,10 @@ const PostsListTemplate: React.FC<
   const allPosts = data?.allContentfulGatsbyBlog?.nodes ?? [];
   const { currentPage, numPages } = pageContext;
 
-  // タグ一覧を取得
   const allTags = Array.from(
     new Set(allPosts.flatMap((post) => post.tags ?? []))
   );
 
-  // 検索とタグフィルタ適用
   const filteredPosts = allPosts.filter((post) => {
     const titleMatch = post.title
       .toLowerCase()
@@ -51,23 +50,22 @@ const PostsListTemplate: React.FC<
   const hasPrev = currentPage > 1;
   const hasNext = currentPage < numPages;
 
-  const siteUrl = "https://my-gatsby-blogs.netlify.app";
   const pathname = currentPage === 1 ? `/posts` : `/posts/${currentPage}`;
 
   const alternateLangs = [
     {
-      hreflang: "ja",
+      hreflang: LANGUAGES.JA,
       href:
         currentPage === 1
-          ? `${siteUrl}/posts`
-          : `${siteUrl}/posts/${currentPage}`,
+          ? `${SITE_URL}/posts`
+          : `${SITE_URL}/posts/${currentPage}`,
     },
     {
-      hreflang: "en",
+      hreflang: LANGUAGES.EN,
       href:
         currentPage === 1
-          ? `${siteUrl}/en/posts`
-          : `${siteUrl}/en/posts/${currentPage}`,
+          ? `${SITE_URL}/${LANGUAGES.EN}/posts`
+          : `${SITE_URL}/${LANGUAGES.EN}/posts/${currentPage}`,
     },
   ];
 
@@ -137,7 +135,7 @@ const PostsListTemplate: React.FC<
 
         {relatedArticles.length > 0 && (
           <section className={styles.relatedSection}>
-            <h2 className={styles.relatedTitle}>{t("関連記事")}</h2>
+            <h2 className={styles.relatedTitle}>{t("article")}</h2>
             <ul className={styles.relatedList}>
               {relatedArticles.map((a) => (
                 <li key={a.id} className={styles.relatedItem}>
