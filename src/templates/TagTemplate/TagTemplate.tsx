@@ -1,8 +1,9 @@
 import * as React from "react";
 import { PageProps, graphql, Link } from "gatsby";
-import { Layout, SEO, PostCard } from "../../components";
-import { AllContentfulPostQuery } from "../../types";
 import { useTranslation } from "gatsby-plugin-react-i18next";
+import { Layout, SEO, PostCard } from "../../components";
+import { LANGUAGES, SITE_URL } from "../../constants";
+import { AllContentfulPostQuery } from "../../types";
 import * as styles from "./TagTemplate.module.scss";
 
 const TagTemplate: React.FC<
@@ -12,11 +13,9 @@ const TagTemplate: React.FC<
   const posts = data?.allContentfulGatsbyBlog?.nodes ?? [];
   const { tag } = pageContext;
 
-  const siteUrl = "https://my-gatsby-blogs.netlify.app";
-
   const alternateLangs = [
-    { hreflang: "ja", href: `${siteUrl}/tags/${tag}` },
-    { hreflang: "en", href: `${siteUrl}/en/tags/${tag}` },
+    { hreflang: LANGUAGES.JA, href: `${SITE_URL}/tags/${tag}` },
+    { hreflang: LANGUAGES.EN, href: `${SITE_URL}/${LANGUAGES.EN}/tags/${tag}` },
   ];
 
   return (

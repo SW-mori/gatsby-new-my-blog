@@ -1,6 +1,8 @@
 import * as React from "react";
 import { graphql, PageProps } from "gatsby";
+import { usePostTemplate } from "./hooks";
 import { Layout, SEO } from "../../components";
+import { LANGUAGES, SITE_URL } from "../../constants";
 import { ContentfulPostData } from "../../types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { useTranslation } from "gatsby-plugin-react-i18next";
@@ -9,11 +11,9 @@ import * as styles from "./PostTemplate.module.scss";
 
 const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
   const { t, i18n } = useTranslation("common");
-  const post = data.contentfulGatsbyBlog;
+  const { formStatus, handleSubmit, handleTagClick } = usePostTemplate();
 
-  const [formStatus, setFormStatus] = React.useState<
-    "idle" | "submitting" | "success" | "error"
-  >("idle");
+  const post = data.contentfulGatsbyBlog;
 
   if (!post) {
     return (
@@ -23,17 +23,20 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
     );
   }
 
-  const siteUrl = "https://my-gatsby-blogs.netlify.app";
-
   const seoTitle = `${post.title} | ${t("site_name")}`;
   const seoDescription = post.body ? post.body.raw.slice(0, 120) : post.title;
 
   const postPath =
-    i18n.language === "en" ? `/en/posts/${post.slug}` : `/posts/${post.slug}`;
+    i18n.language === LANGUAGES.EN
+      ? `/${LANGUAGES.EN}/posts/${post.slug}`
+      : `/posts/${post.slug}`;
 
   const alternateLangs = [
-    { hreflang: "ja", href: `${siteUrl}/posts/${post.slug}` },
-    { hreflang: "en", href: `${siteUrl}/en/posts/${post.slug}` },
+    { hreflang: LANGUAGES.JA, href: `${SITE_URL}/posts/${post.slug}` },
+    {
+      hreflang: LANGUAGES.EN,
+      href: `${SITE_URL}/${LANGUAGES.EN}/posts/${post.slug}`,
+    },
   ];
 
   const disqusConfig = {
@@ -41,52 +44,8 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
     config: {
       identifier: post.slug,
       title: post.title,
-      url: `${siteUrl}${postPath}`,
+      url: `${SITE_URL}${postPath}`,
     },
-  };
-
-  // ✅ Netlifyフォーム送信処理 + GA4イベント
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setFormStatus("submitting");
-
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-
-    try {
-      const response = await fetch("/", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(formData as any).toString(),
-      });
-
-      if (response.ok) {
-        setFormStatus("success");
-        form.reset();
-
-        if (typeof window !== "undefined" && (window as any).dataLayer) {
-          (window as any).dataLayer.push({
-            event: "form_submit",
-            form_name: form.getAttribute("name") || "unknown",
-            page_path: window.location.pathname,
-          });
-        }
-      } else {
-        setFormStatus("error");
-      }
-    } catch {
-      setFormStatus("error");
-    }
-  };
-
-  const handleTagClick = (tag: string) => {
-    if (typeof window !== "undefined" && (window as any).dataLayer) {
-      (window as any).dataLayer.push({
-        event: "tag_click",
-        tag_name: tag,
-        page_path: window.location.pathname,
-      });
-    }
   };
 
   return (
@@ -97,7 +56,7 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
         pathname={postPath}
         image={"/images/sample.png"}
         articleData={{
-          author: "tatsu mori",
+          author: "test user",
           datePublished: new Date(post.date).toISOString(),
         }}
         lang={i18n.language}
@@ -122,13 +81,11 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
         )}
       </article>
 
-      {/* コメントセクション */}
       <section className={styles.comments}>
         <h2>{t("comments")}</h2>
         <DiscussionEmbed {...disqusConfig} />
       </section>
 
-      {/* お問い合わせフォーム */}
       <section className={styles.form}>
         <h2>{t("contact_author")}</h2>
         <form

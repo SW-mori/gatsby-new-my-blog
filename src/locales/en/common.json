@@ -1,10 +1,8 @@
 {
   "site_name": "My Gatsby Site",
-  "home": "Welcome to Home",
+  "home": "Home",
   "seo_home_title": "Home Page",
   "seo_home_description": "Top page of Gatsby site",
-  "images_page": "Image Optimization Page",
-  "images_page_description": "Gatsby Image Optimization Page",
   "posts": "Posts",
   "page": "Page",
   "read_more": "Read more",
@@ -21,11 +19,14 @@
   "no_posts_for_tag": "No posts found for tag '{{tag}}'.",
   "back_to_posts": "Back to Posts",
   "comments": "Comments",
-  "contact_author": "Contact the Author",
+  "contact_author": "Contact",
   "name": "Name",
   "email": "Email",
   "message": "Message",
   "send": "Send",
   "form_success_message": "Your message has been sent successfully. Thank you!",
-  "form_error_message": "Failed to send your message. Please try again."
+  "form_error_message": "Failed to send your message. Please try again.",
+  "article": "Related Articles",
+  "404_title": "404 Page",
+  "404_description": "This is the 404 page for your Gatsby site."
 }
