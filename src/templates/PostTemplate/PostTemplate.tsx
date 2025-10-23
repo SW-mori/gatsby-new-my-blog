@@ -1,5 +1,6 @@
 import * as React from "react";
 import { graphql, PageProps } from "gatsby";
+import { usePostTemplate } from "./hooks";
 import { Layout, SEO } from "../../components";
 import { ContentfulPostData } from "../../types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
@@ -9,11 +10,9 @@ import * as styles from "./PostTemplate.module.scss";
 
 const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
   const { t, i18n } = useTranslation("common");
-  const post = data.contentfulGatsbyBlog;
+  const { formStatus, handleSubmit, handleTagClick } = usePostTemplate();
 
-  const [formStatus, setFormStatus] = React.useState<
-    "idle" | "submitting" | "success" | "error"
-  >("idle");
+  const post = data.contentfulGatsbyBlog;
 
   if (!post) {
     return (
@@ -45,50 +44,6 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
     },
   };
 
-  // ✅ Netlifyフォーム送信処理 + GA4イベント
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setFormStatus("submitting");
-
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-
-    try {
-      const response = await fetch("/", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams(formData as any).toString(),
-      });
-
-      if (response.ok) {
-        setFormStatus("success");
-        form.reset();
-
-        if (typeof window !== "undefined" && (window as any).dataLayer) {
-          (window as any).dataLayer.push({
-            event: "form_submit",
-            form_name: form.getAttribute("name") || "unknown",
-            page_path: window.location.pathname,
-          });
-        }
-      } else {
-        setFormStatus("error");
-      }
-    } catch {
-      setFormStatus("error");
-    }
-  };
-
-  const handleTagClick = (tag: string) => {
-    if (typeof window !== "undefined" && (window as any).dataLayer) {
-      (window as any).dataLayer.push({
-        event: "tag_click",
-        tag_name: tag,
-        page_path: window.location.pathname,
-      });
-    }
-  };
-
   return (
     <Layout pageTitle={post.title}>
       <SEO
@@ -97,7 +52,7 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
         pathname={postPath}
         image={"/images/sample.png"}
         articleData={{
-          author: "tatsu mori",
+          author: "test user",
           datePublished: new Date(post.date).toISOString(),
         }}
         lang={i18n.language}
@@ -122,13 +77,11 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
         )}
       </article>
 
-      {/* コメントセクション */}
       <section className={styles.comments}>
         <h2>{t("comments")}</h2>
         <DiscussionEmbed {...disqusConfig} />
       </section>
 
-      {/* お問い合わせフォーム */}
       <section className={styles.form}>
         <h2>{t("contact_author")}</h2>
         <form
