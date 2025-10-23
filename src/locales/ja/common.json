@@ -1,8 +1,8 @@
 {
-  "site_name": "マイ Gatsby サイト",
+  "site_name": "マイGatsbyサイト",
   "home": "ホーム画面",
   "seo_home_title": "ホームページ",
-  "seo_home_description": "Gatsby サイトのトップページです",
+  "seo_home_description": "Gatsbyサイトのトップページです",
   "posts": "記事一覧",
   "page": "ページ",
   "read_more": "続きを読む",
@@ -26,5 +26,7 @@
   "send": "送信",
   "form_success_message": "送信が完了しました！ありがとうございます。",
   "form_error_message": "送信に失敗しました。もう一度お試しください。",
-  "article": "関連記事"
+  "article": "関連記事",
+  "404_title": "404ページ",
+  "404_description": "Gatsbyサイトの404ページです"
 }

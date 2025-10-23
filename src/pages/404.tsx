@@ -1,22 +1,22 @@
 import * as React from "react";
 import { PageProps } from "gatsby";
-import { NotFound, SEO } from "../components";
 import { useTranslation } from "gatsby-plugin-react-i18next";
+import { NotFound, SEO } from "../components";
+import { LANGUAGES, SITE_URL } from "../constants";
 
 const NotFoundPage: React.FC<PageProps> = () => {
   const { t, i18n } = useTranslation("common");
-  const siteUrl = "https://my-gatsby-blogs.netlify.app";
 
   const alternateLangs = [
-    { hreflang: "ja", href: `${siteUrl}/404` },
-    { hreflang: "en", href: `${siteUrl}/en/404` },
+    { hreflang: LANGUAGES.JA, href: `${SITE_URL}/404` },
+    { hreflang: LANGUAGES.EN, href: `${SITE_URL}/${LANGUAGES.EN}/404` },
   ];
 
   return (
     <>
       <SEO
         title={t("404_title") || "404 Page"}
-        description={t("404_description") || "Gatsby サイトの404ページです"}
+        description={t("404_description")}
         pathname="/404"
         lang={i18n.language}
         alternateLangs={alternateLangs}

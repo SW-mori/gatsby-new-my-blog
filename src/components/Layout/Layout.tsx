@@ -1,20 +1,21 @@
 import * as React from "react";
 import { Link } from "gatsby";
 import { useTranslation, useI18next } from "gatsby-plugin-react-i18next";
-import * as styles from "./Layout.module.scss";
 import { LayoutProps } from "./types";
+import { LANGUAGES } from "../../constants";
+import * as styles from "./Layout.module.scss";
+
+const languages = [LANGUAGES.JA, LANGUAGES.EN];
 
 export const Layout: React.FC<LayoutProps> = ({ pageTitle, children }) => {
   const { t } = useTranslation("common");
   const { language, originalPath } = useI18next();
 
-  const languages = ["ja", "en"];
-
   const getPathForLanguage = (lng: string) => {
-    if (lng === "ja") {
+    if (lng === LANGUAGES.JA) {
       // デフォルト言語は / に置換
       const path = originalPath.replace(/^\/en/, "");
-      return path === "/en/" ? "/" : path;
+      return path === `/${LANGUAGES.EN}/` ? "/" : path;
     } else {
       // 英語は /en/... の形式
       return originalPath === "/" ? `/${lng}/` : `/${lng}${originalPath}`;
