@@ -30,15 +30,11 @@ export const Layout: React.FC<LayoutProps> = ({ pageTitle, children }) => {
           <Link to="/" className={styles.link}>
             {t("home")}
           </Link>
-          <Link to="/images" className={styles.link}>
-            {t("images_page") || "画像最適化ページ"}
-          </Link>
           <Link to="/posts" className={styles.link}>
             {t("posts")}
           </Link>
         </nav>
 
-        {/* 言語切替ボタン */}
         <div className={styles.languageSwitcher}>
           {languages.map((lng) => {
             const path = getPathForLanguage(lng);
