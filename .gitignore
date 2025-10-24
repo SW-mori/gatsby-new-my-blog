@@ -1,4 +1,13 @@
+# Dependencies
 node_modules/
+
+# Gatsby build artifacts
 .cache/
-public
+public/
+
+# Type definitions
 src/gatsby-types.d.ts
+
+# Environment variables
+.env
+.env.*
