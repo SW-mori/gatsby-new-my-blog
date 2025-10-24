@@ -1,6 +1,7 @@
 import * as React from "react";
 import { graphql, PageProps } from "gatsby";
 import { usePostTemplate } from "./hooks";
+import { safeParse, safePlainText } from "./utils";
 import { Layout, SEO, PostCard } from "../../components";
 import { LANGUAGES, SITE_URL } from "../../constants";
 import { ContentfulPostData } from "../../types";
@@ -9,27 +10,6 @@ import { documentToPlainTextString } from "@contentful/rich-text-plain-text-rend
 import { useTranslation } from "gatsby-plugin-react-i18next";
 import { DiscussionEmbed } from "disqus-react";
 import * as styles from "./PostTemplate.module.scss";
-
-const safeParse = (raw?: string) => {
-  if (!raw) return null;
-  try {
-    return JSON.parse(raw);
-  } catch (e) {
-    console.warn("Failed to parse Contentful rich text:", e);
-    return null;
-  }
-};
-
-const safePlainText = (raw?: string) => {
-  const parsed = safeParse(raw);
-  if (!parsed) return "";
-  try {
-    return documentToPlainTextString(parsed);
-  } catch (e) {
-    console.warn("Failed to convert Contentful rich text to plain text:", e);
-    return "";
-  }
-};
 
 const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
   const { t, i18n } = useTranslation("common");
