@@ -4,6 +4,7 @@ import "@testing-library/jest-dom";
 import { PageProps } from "gatsby";
 import PostTemplate from "../PostTemplate";
 import { ContentfulPostData } from "types";
+import { documentToPlainTextString } from "@contentful/rich-text-plain-text-renderer";
 
 jest.mock("../../../components", () => ({
   __esModule: true,
@@ -20,6 +21,7 @@ jest.mock("../../../components", () => ({
       <span>{pathname}</span>
     </div>
   ),
+  PostCard: ({ post }: any) => <div data-testid="post-card">{post.title}</div>,
 }));
 
 jest.mock("gatsby-plugin-react-i18next", () => ({
@@ -29,6 +31,16 @@ jest.mock("gatsby-plugin-react-i18next", () => ({
         site_name: "My Blog",
         post_not_found: "Post not found",
         post_not_found_message: "The post could not be found.",
+        comments: "Comments",
+        contact_author: "Contact",
+        name: "Name",
+        email: "Email",
+        message: "Message",
+        send: "Send",
+        form_success_message: "Message sent successfully",
+        form_error_message: "Message failed to send",
+        share: "Share",
+        related_posts: "Related Articles",
       };
       return translations[key] || key;
     },
@@ -38,7 +50,7 @@ jest.mock("gatsby-plugin-react-i18next", () => ({
 
 jest.mock("@contentful/rich-text-react-renderer", () => ({
   documentToReactComponents: (doc: any) => (
-    <div data-testid="rich-text">{JSON.stringify(doc)}</div>
+    <div data-testid="rich-text">{doc.content[0].content[0].value}</div>
   ),
 }));
 
@@ -58,17 +70,17 @@ describe("PostTemplate コンポーネント", () => {
       }),
     },
     tags: ["React", "Gatsby"],
+    id: "1",
   };
 
   const mockData: ContentfulPostData = {
     contentfulGatsbyBlog: mockPost,
+    allContentfulGatsbyBlog: { nodes: [mockPost] },
   };
-
-  const mockPageContext: {} = {};
 
   const mockProps: PageProps<ContentfulPostData> = {
     data: mockData,
-    pageContext: mockPageContext,
+    pageContext: {},
     path: "/posts/test-post",
     location: {
       pathname: "/posts/test-post",
@@ -98,8 +110,12 @@ describe("PostTemplate コンポーネント", () => {
     render(<PostTemplate {...mockProps} />);
 
     const seo = screen.getByTestId("seo");
+
+    const parsedBody = JSON.parse(mockPost.body.raw);
+    const plainText = documentToPlainTextString(parsedBody).slice(0, 120);
+
     expect(seo).toHaveTextContent("テスト記事 | My Blog");
-    expect(seo).toHaveTextContent(mockPost.body.raw.slice(0, 120));
+    expect(seo).toHaveTextContent(plainText);
     expect(seo).toHaveTextContent("/posts/test-post");
 
     expect(screen.getByText("テスト記事")).toBeInTheDocument();
@@ -118,7 +134,10 @@ describe("PostTemplate コンポーネント", () => {
   });
 
   it("post が null の場合、not found が表示される", () => {
-    const nullData: ContentfulPostData = { contentfulGatsbyBlog: null };
+    const nullData: ContentfulPostData = {
+      contentfulGatsbyBlog: null,
+      allContentfulGatsbyBlog: { nodes: [] },
+    };
     render(<PostTemplate {...mockProps} data={nullData} />);
     expect(screen.getByText("Post not found")).toBeInTheDocument();
     expect(
