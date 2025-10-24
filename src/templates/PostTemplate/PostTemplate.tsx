@@ -1,19 +1,42 @@
 import * as React from "react";
 import { graphql, PageProps } from "gatsby";
 import { usePostTemplate } from "./hooks";
-import { Layout, SEO } from "../../components";
+import { Layout, SEO, PostCard } from "../../components";
 import { LANGUAGES, SITE_URL } from "../../constants";
 import { ContentfulPostData } from "../../types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
+import { documentToPlainTextString } from "@contentful/rich-text-plain-text-renderer";
 import { useTranslation } from "gatsby-plugin-react-i18next";
 import { DiscussionEmbed } from "disqus-react";
 import * as styles from "./PostTemplate.module.scss";
+
+const safeParse = (raw?: string) => {
+  if (!raw) return null;
+  try {
+    return JSON.parse(raw);
+  } catch (e) {
+    console.warn("Failed to parse Contentful rich text:", e);
+    return null;
+  }
+};
+
+const safePlainText = (raw?: string) => {
+  const parsed = safeParse(raw);
+  if (!parsed) return "";
+  try {
+    return documentToPlainTextString(parsed);
+  } catch (e) {
+    console.warn("Failed to convert Contentful rich text to plain text:", e);
+    return "";
+  }
+};
 
 const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
   const { t, i18n } = useTranslation("common");
   const { formStatus, handleSubmit, handleTagClick } = usePostTemplate();
 
   const post = data.contentfulGatsbyBlog;
+  const allPosts = data.allContentfulGatsbyBlog?.nodes ?? [];
 
   if (!post) {
     return (
@@ -24,7 +47,8 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
   }
 
   const seoTitle = `${post.title} | ${t("site_name")}`;
-  const seoDescription = post.body ? post.body.raw.slice(0, 120) : post.title;
+  const seoDescription =
+    safePlainText(post.body?.raw).slice(0, 120) || post.title;
 
   const postPath =
     i18n.language === LANGUAGES.EN
@@ -48,6 +72,19 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
     },
   };
 
+  const relatedArticles = allPosts
+    .filter(
+      (p) =>
+        p.slug !== post.slug &&
+        Array.isArray(p.tags) &&
+        Array.isArray(post.tags) &&
+        p.tags.some((tag) => post.tags?.includes(tag))
+    )
+    .slice(0, 3);
+
+  const shareUrl = `${SITE_URL}${postPath}`;
+  const shareText = encodeURIComponent(post.title);
+
   return (
     <Layout pageTitle={post.title}>
       <SEO
@@ -65,7 +102,10 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
 
       <article>
         <p className={styles.date}>{post.date}</p>
-        {post.body && documentToReactComponents(JSON.parse(post.body.raw))}
+        {post.body &&
+          safeParse(post.body.raw) &&
+          documentToReactComponents(safeParse(post.body.raw)!)}
+
         {Array.isArray(post.tags) && post.tags.length > 0 && (
           <div className={styles.tags}>
             {post.tags.map((tag) => (
@@ -80,6 +120,49 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
           </div>
         )}
       </article>
+
+      <div className={styles.shareButtons}>
+        <span>{t("share")}: </span>
+        <a
+          href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Twitter
+        </a>
+        <a
+          href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Facebook
+        </a>
+        <a
+          href={`https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${shareText}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          LinkedIn
+        </a>
+      </div>
+
+      {relatedArticles.length > 0 && (
+        <section className={styles.relatedSection}>
+          <h2>{t("related_posts")}</h2>
+          <div className={styles.relatedPosts}>
+            {relatedArticles.map((p) => (
+              <PostCard
+                key={p.id}
+                post={{
+                  ...p,
+                  tags: p.tags ?? [],
+                  excerpt: safePlainText(p.body?.raw).slice(0, 120) + "...",
+                }}
+              />
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className={styles.comments}>
         <h2>{t("comments")}</h2>
@@ -142,6 +225,17 @@ export const query = graphql`
         raw
       }
       tags
+    }
+    allContentfulGatsbyBlog(sort: { createdAt: DESC }) {
+      nodes {
+        id
+        title
+        slug
+        tags
+        body {
+          raw
+        }
+      }
     }
     locales: allLocale {
       edges {

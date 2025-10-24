@@ -38,4 +38,7 @@ export type ContentfulPostNode = {
 
 export type ContentfulPostData = {
   contentfulGatsbyBlog: ContentfulPostNode | null;
+  allContentfulGatsbyBlog: {
+    nodes: ContentfulPost[];
+  };
 };
