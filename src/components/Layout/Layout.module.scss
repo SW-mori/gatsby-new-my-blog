@@ -37,7 +37,7 @@
 }
 
 .header {
-  position: relative; // 言語切替の absolute に対応
+  position: relative;
 }
 
 .languageSwitcher {
@@ -70,7 +70,6 @@
     color: white;
   }
 
-  // スマホ（幅 600px 以下）では縦並びにする
   @media (max-width: 600px) {
     flex-direction: column;
     top: 12px;
@@ -81,5 +80,31 @@
       padding: 8px 12px;
       text-align: center;
     }
+  }
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  button {
+    background-color: #007acc;
+    color: #fff;
+    border: none;
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #005fa3;
+    }
+  }
+
+  span {
+    font-size: 0.875rem;
+    color: #333;
   }
 }

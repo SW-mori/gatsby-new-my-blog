@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Link } from "gatsby";
 import { useTranslation, useI18next } from "gatsby-plugin-react-i18next";
+import { LoginButton } from "../Login";
 import { LayoutProps } from "./types";
 import { LANGUAGES } from "../../constants";
 import * as styles from "./Layout.module.scss";
@@ -13,11 +14,9 @@ export const Layout: React.FC<LayoutProps> = ({ pageTitle, children }) => {
 
   const getPathForLanguage = (lng: string) => {
     if (lng === LANGUAGES.JA) {
-      // デフォルト言語は / に置換
       const path = originalPath.replace(/^\/en/, "");
       return path === `/${LANGUAGES.EN}/` ? "/" : path;
     } else {
-      // 英語は /en/... の形式
       return originalPath === "/" ? `/${lng}/` : `/${lng}${originalPath}`;
     }
   };
@@ -35,7 +34,9 @@ export const Layout: React.FC<LayoutProps> = ({ pageTitle, children }) => {
             {t("posts")}
           </Link>
         </nav>
-
+        <div className={styles.right}>
+          <LoginButton />
+        </div>
         <div className={styles.languageSwitcher}>
           {languages.map((lng) => {
             const path = getPathForLanguage(lng);
