@@ -31,6 +31,13 @@ export const usePostListTemplate = () => {
     });
   };
 
+  const handleTagClick = (tag: string) => {
+    const event = {
+      target: { value: tag },
+    } as React.ChangeEvent<HTMLSelectElement>;
+    handleTagChange(event);
+  };
+
   useEffect(() => {
     const fetchRelated = async () => {
       try {
@@ -50,6 +57,7 @@ export const usePostListTemplate = () => {
     relatedArticles,
     handleSearchChange,
     handleTagChange,
+    handleTagClick,
     pushEvent,
   };
 };

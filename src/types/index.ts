@@ -7,6 +7,8 @@ export type ContentfulPost = {
   body?: {
     raw: string;
   };
+  excerpt?: string;
+  featuredImage?: any;
 };
 
 export type AllContentfulPostQuery = {

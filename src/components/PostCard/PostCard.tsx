@@ -10,6 +10,7 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
         {post.title}
       </Link>
       <p className={styles.date}>{post.date}</p>
+      {post.excerpt && <p className={styles.excerpt}>{post.excerpt}</p>}
       {Array.isArray(post.tags) && post.tags.length > 0 && (
         <div className={styles.tags}>
           {post.tags.map((tag) => (

@@ -18,6 +18,33 @@
   }
 }
 
+.tagCloud {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+
+  .tagButton {
+    background-color: #f3f4f6;
+    border: none;
+    border-radius: 0.3rem;
+    padding: 0.3rem 0.6rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #d1d5db;
+    }
+  }
+
+  .activeTag {
+    background-color: #3b82f6;
+    color: #fff;
+  }
+}
+
 .posts {
   display: grid;
   grid-template-columns: 1fr;
@@ -34,23 +61,36 @@
 
 .pagination {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 1rem;
   margin-top: 2rem;
 
-  a {
-    color: #007acc;
+  a,
+  span {
+    padding: 0.5rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
     text-decoration: none;
+    color: #2563eb;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
 
-    &:hover {
-      text-decoration: underline;
-    }
+  a:hover {
+    background-color: #2563eb;
+    color: #ffffff;
+  }
+
+  span {
+    color: #9ca3af;
+    cursor: default;
   }
 }
 
 .relatedSection {
   margin-top: 3rem;
   padding-top: 2rem;
-  border-top: 1px solid #e5e7eb; // 薄いグレー
+  border-top: 1px solid #e5e7eb;
 }
 
 .relatedTitle {
@@ -64,10 +104,13 @@
   list-style: none;
   padding-left: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .relatedItem {
-  margin-bottom: 0.75rem;
+  margin: 0;
 }
 
 .relatedLink {
