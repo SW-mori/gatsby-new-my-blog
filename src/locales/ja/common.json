@@ -27,6 +27,11 @@
   "form_success_message": "送信が完了しました！ありがとうございます。",
   "form_error_message": "送信に失敗しました。もう一度お試しください。",
   "article": "関連記事",
+  "related_posts": "関連記事",
+  "share": "シェア",
+  "share_twitter": "Twitterでシェア",
+  "share_facebook": "Facebookでシェア",
+  "share_linkedin": "LinkedInでシェア",
   "404_title": "404ページ",
   "404_description": "Gatsbyサイトの404ページです"
 }

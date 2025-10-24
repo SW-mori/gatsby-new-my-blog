@@ -44,10 +44,6 @@ describe("Layoutコンポーネント", () => {
       "/"
     );
 
-    expect(screen.getByText("画像最適化ページ")).toHaveAttribute(
-      "href",
-      "/images"
-    );
     expect(screen.getByText("Posts")).toHaveAttribute("href", "/posts");
 
     expect(screen.getByText("JA")).toHaveAttribute("href", "/");

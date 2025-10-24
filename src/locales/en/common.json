@@ -27,6 +27,11 @@
   "form_success_message": "Your message has been sent successfully. Thank you!",
   "form_error_message": "Failed to send your message. Please try again.",
   "article": "Related Articles",
+  "related_posts": "Related Posts",
+  "share": "Share",
+  "share_twitter": "Share on Twitter",
+  "share_facebook": "Share on Facebook",
+  "share_linkedin": "Share on LinkedIn",
   "404_title": "404 Page",
   "404_description": "This is the 404 page for your Gatsby site."
 }

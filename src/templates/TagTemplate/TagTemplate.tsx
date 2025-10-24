@@ -18,6 +18,9 @@ const TagTemplate: React.FC<
     { hreflang: LANGUAGES.EN, href: `${SITE_URL}/${LANGUAGES.EN}/tags/${tag}` },
   ];
 
+  const shareUrl = `${SITE_URL}/tags/${tag}`;
+  const shareText = encodeURIComponent(`${t("tag")}: ${tag}`);
+
   return (
     <Layout pageTitle={`${t("tag")}: ${tag}`}>
       <SEO
@@ -28,20 +31,43 @@ const TagTemplate: React.FC<
         alternateLangs={alternateLangs}
       />
 
-      <div>
-        {posts.length === 0 ? (
-          <p>{t("no_posts_for_tag", { tag })}</p>
-        ) : (
-          <div className={styles.grid}>
-            {posts.map((post) => (
-              <PostCard key={post.id} post={post} />
-            ))}
-          </div>
-        )}
-        <Link to="/posts" className={styles.back}>
-          ← {t("back_to_posts")}
-        </Link>
+      <div className={styles.shareButtons}>
+        <span>{t("share")}: </span>
+        <a
+          href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Twitter
+        </a>
+        <a
+          href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Facebook
+        </a>
+        <a
+          href={`https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${shareText}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          LinkedIn
+        </a>
       </div>
+
+      {posts.length === 0 ? (
+        <p>{t("no_posts_for_tag", { tag })}</p>
+      ) : (
+        <div className={styles.grid}>
+          {posts.map((post) => (
+            <PostCard key={post.id} post={post} />
+          ))}
+        </div>
+      )}
+      <Link to="/posts" className={styles.back}>
+        ← {t("back_to_posts")}
+      </Link>
     </Layout>
   );
 };

@@ -7,6 +7,8 @@ export type ContentfulPost = {
   body?: {
     raw: string;
   };
+  excerpt?: string;
+  featuredImage?: any;
 };
 
 export type AllContentfulPostQuery = {
@@ -36,4 +38,7 @@ export type ContentfulPostNode = {
 
 export type ContentfulPostData = {
   contentfulGatsbyBlog: ContentfulPostNode | null;
+  allContentfulGatsbyBlog: {
+    nodes: ContentfulPost[];
+  };
 };
