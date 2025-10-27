@@ -33,5 +33,11 @@
   "share_facebook": "Facebookでシェア",
   "share_linkedin": "LinkedInでシェア",
   "404_title": "404ページ",
-  "404_description": "Gatsbyサイトの404ページです"
+  "404_description": "Gatsbyサイトの404ページです",
+  "login": "ログイン",
+  "loadingLogin": "ログイン中...",
+  "password": "パスワード",
+  "email_format": "メールアドレスの形式が正しくありません。",
+  "email_wrong": "メールアドレスまたはパスワードが間違っています。",
+  "login_failed": "ログインに失敗しました。"
 }
