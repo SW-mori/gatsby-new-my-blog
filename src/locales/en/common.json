@@ -33,5 +33,11 @@
   "share_facebook": "Share on Facebook",
   "share_linkedin": "Share on LinkedIn",
   "404_title": "404 Page",
-  "404_description": "This is the 404 page for your Gatsby site."
+  "404_description": "This is the 404 page for your Gatsby site.",
+  "login": "Login",
+  "loadingLogin": "Logging in...",
+  "password": "Password",
+  "email_format": "The email address format is incorrect.",
+  "email_wrong": "The email address or password is incorrect.",
+  "login_failed": "Login failed."
 }
