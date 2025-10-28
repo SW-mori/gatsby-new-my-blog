@@ -26,7 +26,7 @@ export const useLogin = () => {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/");
+      navigate("/dashboard");
     } catch (err: any) {
       switch (err.code) {
         case "auth/invalid-email":

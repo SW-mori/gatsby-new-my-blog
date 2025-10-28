@@ -39,5 +39,8 @@
   "password": "パスワード",
   "email_format": "メールアドレスの形式が正しくありません。",
   "email_wrong": "メールアドレスまたはパスワードが間違っています。",
-  "login_failed": "ログインに失敗しました。"
+  "login_failed": "ログインに失敗しました。",
+  "dashboard": "ダッシュボード",
+  "loginUser": "ログイン中のユーザー：",
+  "logout": "ログアウト"
 }
