@@ -1,3 +1,6 @@
+import { AuthProvider } from "./src/context/AuthContext";
+import React from "react";
+
 declare global {
   interface Window {
     dataLayer: Record<string, any>[];
@@ -19,4 +22,8 @@ export const onRouteUpdate = ({ location }: { location: Location }) => {
   if (process.env.NODE_ENV === "development") {
     console.log("[GTM] page_view sent:", location.pathname);
   }
+};
+
+export const wrapRootElement = ({ element }: { element: React.ReactNode }) => {
+  return <AuthProvider>{element}</AuthProvider>;
 };
