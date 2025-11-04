@@ -41,10 +41,14 @@
   "email_wrong": "The email address or password is incorrect.",
   "login_failed": "Login failed.",
   "user_not_found": "User not found.",
-  "dashboard": "Dashboard",
-  "loginUser": "Currently logged-in user:",
-  "logout": "Logout",
   "validate_input": "Please enter your email address and password.",
   "validate_email": "The email address format is incorrect.",
-  "validate_password": "Please enter a password of 6 characters or more."
+  "validate_password": "Please enter a password of 6 characters or more.",
+  "dashboard": "My Page",
+  "loginUser": "Currently logged in user: ",
+  "logout": "Logout",
+  "loading": "Loading...",
+  "noUser": "No user information found.",
+  "createdAt": "Registration date and time",
+  "lastLogin": "Last login"
 }

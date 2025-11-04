@@ -25,7 +25,7 @@ export const Header: React.FC = () => {
         </Link>
         <nav className={styles.nav}>
           {loading ? (
-            <span className={styles.loading}>読み込み中...</span>
+            <span className={styles.loading}>{t("loading")}</span>
           ) : isAuthenticated ? (
             <>
               <Link to="/dashboard" className={styles.link}>
