@@ -1,6 +1,6 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { navigate } from "gatsby";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { auth } from "../../../firebase";
 
@@ -9,7 +9,7 @@ export const useLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   const onChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -19,9 +19,22 @@ export const useLogin = () => {
     setPassword(e.target.value);
   };
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const validate = (): string | null => {
+    if (!email || !password) return t("validate_input");
+    if (!/\S+@\S+\.\S+/.test(email)) return t("validate_email");
+    if (password.length < 6) return t("validate_password");
+    return null;
+  };
+
+  const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
-    setError("");
+    const validationError = validate();
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
+    setError(null);
     setLoading(true);
 
     try {
@@ -33,6 +46,8 @@ export const useLogin = () => {
           setError(t("email_format"));
           break;
         case "auth/user-not-found":
+          setError(t(""));
+          break;
         case "auth/wrong-password":
           setError(t("email_wrong"));
           break;

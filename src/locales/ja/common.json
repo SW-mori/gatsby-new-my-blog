@@ -40,7 +40,11 @@
   "email_format": "メールアドレスの形式が正しくありません。",
   "email_wrong": "メールアドレスまたはパスワードが間違っています。",
   "login_failed": "ログインに失敗しました。",
+  "user_not_found": "ユーザーが見つかりません。",
   "dashboard": "ダッシュボード",
   "loginUser": "ログイン中のユーザー：",
-  "logout": "ログアウト"
+  "logout": "ログアウト",
+  "validate_input": "メールアドレスとパスワードを入力してください。",
+  "validate_email": "メールアドレスの形式が正しくありません。",
+  "validate_password": "パスワードは6文字以上で入力してください。"
 }

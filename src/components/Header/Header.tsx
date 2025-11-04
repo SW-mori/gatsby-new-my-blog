@@ -29,7 +29,7 @@ export const Header: React.FC = () => {
           ) : isAuthenticated ? (
             <>
               <Link to="/dashboard" className={styles.link}>
-                マイページ
+                {t("dashboard")}
               </Link>
               <Link to="/posts" className={styles.link}>
                 {t("posts")}
