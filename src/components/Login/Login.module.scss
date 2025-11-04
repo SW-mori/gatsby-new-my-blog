@@ -56,13 +56,25 @@
 }
 
 .errorMessage {
-  color: #e53e3e;
+  background-color: #ffe3e3;
+  color: #d8000c;
+  border: 1px solid #d8000c;
+  padding: 0.8rem;
+  border-radius: 6px;
   font-size: 0.9rem;
-  text-align: center;
-  margin-top: -0.5rem;
-  margin-bottom: 0.5rem;
+  animation: fadeIn 0.3s ease-in;
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 button {
   background-color: #4f46e5;
   color: #fff;

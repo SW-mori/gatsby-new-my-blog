@@ -33,9 +33,7 @@ export const Login = () => {
               required
             />
           </div>
-
           {error && <p className={styles.errorMessage}>{error}</p>}
-
           <button type="submit" disabled={loading}>
             {loading ? t("loadingLogin") : t("login")}
           </button>

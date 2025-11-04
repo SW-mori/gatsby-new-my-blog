@@ -2,11 +2,10 @@ import * as React from "react";
 import { graphql, PageProps } from "gatsby";
 import { usePostTemplate } from "./hooks";
 import { safeParse, safePlainText } from "./utils";
-import { Layout, SEO, PostCard } from "../../components";
+import { Layout, SEO, PostCard, PrivateRoute } from "../../components";
 import { LANGUAGES, SITE_URL } from "../../constants";
 import { ContentfulPostData } from "../../types";
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
-import { documentToPlainTextString } from "@contentful/rich-text-plain-text-renderer";
 import { useTranslation } from "gatsby-plugin-react-i18next";
 import { DiscussionEmbed } from "disqus-react";
 import * as styles from "./PostTemplate.module.scss";
@@ -66,130 +65,132 @@ const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
   const shareText = encodeURIComponent(post.title);
 
   return (
-    <Layout pageTitle={post.title}>
-      <SEO
-        title={seoTitle}
-        description={seoDescription}
-        pathname={postPath}
-        image={"/images/sample.png"}
-        articleData={{
-          author: "test user",
-          datePublished: new Date(post.date).toISOString(),
-        }}
-        lang={i18n.language}
-        alternateLangs={alternateLangs}
-      />
+    <PrivateRoute>
+      <Layout pageTitle={post.title}>
+        <SEO
+          title={seoTitle}
+          description={seoDescription}
+          pathname={postPath}
+          image={"/images/sample.png"}
+          articleData={{
+            author: "test user",
+            datePublished: new Date(post.date).toISOString(),
+          }}
+          lang={i18n.language}
+          alternateLangs={alternateLangs}
+        />
 
-      <article>
-        <p className={styles.date}>{post.date}</p>
-        {post.body &&
-          safeParse(post.body.raw) &&
-          documentToReactComponents(safeParse(post.body.raw)!)}
+        <article>
+          <p className={styles.date}>{post.date}</p>
+          {post.body &&
+            safeParse(post.body.raw) &&
+            documentToReactComponents(safeParse(post.body.raw)!)}
 
-        {Array.isArray(post.tags) && post.tags.length > 0 && (
-          <div className={styles.tags}>
-            {post.tags.map((tag) => (
-              <span
-                key={tag}
-                className={styles.tag}
-                onClick={() => handleTagClick(tag)}
-              >
-                #{tag}
-              </span>
-            ))}
-          </div>
+          {Array.isArray(post.tags) && post.tags.length > 0 && (
+            <div className={styles.tags}>
+              {post.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className={styles.tag}
+                  onClick={() => handleTagClick(tag)}
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </article>
+
+        <div className={styles.shareButtons}>
+          <span>{t("share")}: </span>
+          <a
+            href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Twitter
+          </a>
+          <a
+            href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Facebook
+          </a>
+          <a
+            href={`https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${shareText}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            LinkedIn
+          </a>
+        </div>
+
+        {relatedArticles.length > 0 && (
+          <section className={styles.relatedSection}>
+            <h2>{t("related_posts")}</h2>
+            <div className={styles.relatedPosts}>
+              {relatedArticles.map((p) => (
+                <PostCard
+                  key={p.id}
+                  post={{
+                    ...p,
+                    tags: p.tags ?? [],
+                    excerpt: safePlainText(p.body?.raw).slice(0, 120) + "...",
+                  }}
+                />
+              ))}
+            </div>
+          </section>
         )}
-      </article>
 
-      <div className={styles.shareButtons}>
-        <span>{t("share")}: </span>
-        <a
-          href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Twitter
-        </a>
-        <a
-          href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Facebook
-        </a>
-        <a
-          href={`https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${shareText}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          LinkedIn
-        </a>
-      </div>
-
-      {relatedArticles.length > 0 && (
-        <section className={styles.relatedSection}>
-          <h2>{t("related_posts")}</h2>
-          <div className={styles.relatedPosts}>
-            {relatedArticles.map((p) => (
-              <PostCard
-                key={p.id}
-                post={{
-                  ...p,
-                  tags: p.tags ?? [],
-                  excerpt: safePlainText(p.body?.raw).slice(0, 120) + "...",
-                }}
-              />
-            ))}
-          </div>
+        <section className={styles.comments}>
+          <h2>{t("comments")}</h2>
+          <DiscussionEmbed {...disqusConfig} />
         </section>
-      )}
 
-      <section className={styles.comments}>
-        <h2>{t("comments")}</h2>
-        <DiscussionEmbed {...disqusConfig} />
-      </section>
+        <section className={styles.form}>
+          <h2>{t("contact_author")}</h2>
+          <form
+            name="contact"
+            method="POST"
+            data-netlify="true"
+            netlify-honeypot="bot-field"
+            onSubmit={handleSubmit}
+          >
+            <input type="hidden" name="form-name" value="contact" />
+            <p hidden>
+              <label>
+                Don’t fill this out: <input name="bot-field" />
+              </label>
+            </p>
 
-      <section className={styles.form}>
-        <h2>{t("contact_author")}</h2>
-        <form
-          name="contact"
-          method="POST"
-          data-netlify="true"
-          netlify-honeypot="bot-field"
-          onSubmit={handleSubmit}
-        >
-          <input type="hidden" name="form-name" value="contact" />
-          <p hidden>
             <label>
-              Don’t fill this out: <input name="bot-field" />
+              {t("name")}: <input type="text" name="name" required />
             </label>
-          </p>
+            <label>
+              {t("email")}: <input type="email" name="email" required />
+            </label>
+            <label>
+              {t("message")}: <textarea name="message" required></textarea>
+            </label>
 
-          <label>
-            {t("name")}: <input type="text" name="name" required />
-          </label>
-          <label>
-            {t("email")}: <input type="email" name="email" required />
-          </label>
-          <label>
-            {t("message")}: <textarea name="message" required></textarea>
-          </label>
+            <button type="submit" disabled={formStatus === "submitting"}>
+              {formStatus === "submitting" ? "Sending..." : t("send")}
+            </button>
+          </form>
 
-          <button type="submit" disabled={formStatus === "submitting"}>
-            {formStatus === "submitting" ? "Sending..." : t("send")}
-          </button>
-        </form>
-
-        {formStatus === "success" && (
-          <p className={styles.formMessageSuccess}>
-            {t("form_success_message")}
-          </p>
-        )}
-        {formStatus === "error" && (
-          <p className={styles.formMessageError}>{t("form_error_message")}</p>
-        )}
-      </section>
-    </Layout>
+          {formStatus === "success" && (
+            <p className={styles.formMessageSuccess}>
+              {t("form_success_message")}
+            </p>
+          )}
+          {formStatus === "error" && (
+            <p className={styles.formMessageError}>{t("form_error_message")}</p>
+          )}
+        </section>
+      </Layout>
+    </PrivateRoute>
   );
 };
 

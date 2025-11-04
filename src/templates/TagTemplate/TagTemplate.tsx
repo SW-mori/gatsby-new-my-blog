@@ -1,7 +1,7 @@
 import * as React from "react";
 import { PageProps, graphql, Link } from "gatsby";
 import { useTranslation } from "gatsby-plugin-react-i18next";
-import { Layout, SEO, PostCard } from "../../components";
+import { Layout, SEO, PostCard, PrivateRoute } from "../../components";
 import { LANGUAGES, SITE_URL } from "../../constants";
 import { AllContentfulPostQuery } from "../../types";
 import * as styles from "./TagTemplate.module.scss";
@@ -22,53 +22,55 @@ const TagTemplate: React.FC<
   const shareText = encodeURIComponent(`${t("tag")}: ${tag}`);
 
   return (
-    <Layout pageTitle={`${t("tag")}: ${tag}`}>
-      <SEO
-        title={`${t("tag")}: ${tag} - ${t("posts")}`}
-        description={t("tag_posts_description", { tag })}
-        pathname={`/tags/${tag}`}
-        lang={i18n.language}
-        alternateLangs={alternateLangs}
-      />
+    <PrivateRoute>
+      <Layout pageTitle={`${t("tag")}: ${tag}`}>
+        <SEO
+          title={`${t("tag")}: ${tag} - ${t("posts")}`}
+          description={t("tag_posts_description", { tag })}
+          pathname={`/tags/${tag}`}
+          lang={i18n.language}
+          alternateLangs={alternateLangs}
+        />
 
-      <div className={styles.shareButtons}>
-        <span>{t("share")}: </span>
-        <a
-          href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Twitter
-        </a>
-        <a
-          href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Facebook
-        </a>
-        <a
-          href={`https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${shareText}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          LinkedIn
-        </a>
-      </div>
-
-      {posts.length === 0 ? (
-        <p>{t("no_posts_for_tag", { tag })}</p>
-      ) : (
-        <div className={styles.grid}>
-          {posts.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
+        <div className={styles.shareButtons}>
+          <span>{t("share")}: </span>
+          <a
+            href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Twitter
+          </a>
+          <a
+            href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Facebook
+          </a>
+          <a
+            href={`https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${shareText}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            LinkedIn
+          </a>
         </div>
-      )}
-      <Link to="/posts" className={styles.back}>
-        ← {t("back_to_posts")}
-      </Link>
-    </Layout>
+
+        {posts.length === 0 ? (
+          <p>{t("no_posts_for_tag", { tag })}</p>
+        ) : (
+          <div className={styles.grid}>
+            {posts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </div>
+        )}
+        <Link to="/posts" className={styles.back}>
+          ← {t("back_to_posts")}
+        </Link>
+      </Layout>
+    </PrivateRoute>
   );
 };
 

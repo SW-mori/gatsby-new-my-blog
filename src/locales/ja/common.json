@@ -40,7 +40,20 @@
   "email_format": "メールアドレスの形式が正しくありません。",
   "email_wrong": "メールアドレスまたはパスワードが間違っています。",
   "login_failed": "ログインに失敗しました。",
-  "dashboard": "ダッシュボード",
-  "loginUser": "ログイン中のユーザー：",
-  "logout": "ログアウト"
+  "user_not_found": "ユーザーが見つかりません。",
+  "validate_input": "メールアドレスとパスワードを入力してください。",
+  "validate_email": "メールアドレスの形式が正しくありません。",
+  "validate_password": "パスワードは6文字以上で入力してください。",
+  "dashboard": "マイページ",
+  "loginUser": "ログイン中のユーザー: ",
+  "logout": "ログアウト",
+  "loading": "読み込み中...",
+  "noUser": "ユーザー情報が見つかりません。",
+  "createdAt": "登録日時",
+  "lastLogin": "最終ログイン",
+  "noSession": "セッションを更新できませんでした。再ログインしてください。",
+  "authenticationError": "認証エラーが発生しました。再度ログインしてください。",
+  "logoutError": "ログアウト中にエラーが発生しました。",
+  "updateToken": "トークンの更新に失敗しました。再ログインしてください。",
+  "errorTitle": "エラーが発生しました。"
 }
