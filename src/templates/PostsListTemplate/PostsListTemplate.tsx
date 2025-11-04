@@ -3,7 +3,7 @@ import { documentToPlainTextString } from "@contentful/rich-text-plain-text-rend
 import { PageProps, graphql, Link } from "gatsby";
 import { useTranslation } from "gatsby-plugin-react-i18next";
 import { usePostListTemplate } from "./hooks";
-import { Layout, SEO, PostCard } from "../../components";
+import { Layout, SEO, PostCard, PrivateRoute } from "../../components";
 import { LANGUAGES, SITE_URL } from "../../constants";
 import { AllContentfulPostQuery, PageContext } from "../../types";
 import * as styles from "./PostsListTemplate.module.scss";
@@ -71,111 +71,112 @@ const PostsListTemplate: React.FC<
   ];
 
   return (
-    <Layout pageTitle={`${t("posts")} - ${t("page")} ${currentPage}`}>
-      <SEO
-        title={`${t("posts")} - ${t("page")} ${currentPage}`}
-        description={t("posts_list_description", { page: currentPage })}
-        pathname={pathname}
-        lang={i18n.language}
-        alternateLangs={alternateLangs}
-      />
-
-      <div className={styles.filters}>
-        <input
-          type="text"
-          placeholder={t("search_placeholder")}
-          value={searchTerm}
-          onChange={handleSearchChange}
+    <PrivateRoute>
+      <Layout pageTitle={`${t("posts")} - ${t("page")} ${currentPage}`}>
+        <SEO
+          title={`${t("posts")} - ${t("page")} ${currentPage}`}
+          description={t("posts_list_description", { page: currentPage })}
+          pathname={pathname}
+          lang={i18n.language}
+          alternateLangs={alternateLangs}
         />
-        <select value={selectedTag} onChange={handleTagChange}>
-          <option value="">{t("all_tags")}</option>
-          {allTags.map((tag) => (
-            <option key={tag} value={tag}>
-              {tag}
-            </option>
-          ))}
-        </select>
-      </div>
 
-      <div className={styles.tagCloud}>
-        {allTags.map((tag) => (
-          <button
-            key={tag}
-            className={
-              selectedTag === tag ? styles.activeTag : styles.tagButton
-            }
-            onClick={() => handleTagClick(tag)}
-          >
-            {tag}
-          </button>
-        ))}
-      </div>
-
-      <div className={styles.posts}>
-        {filteredPosts.length > 0 ? (
-          filteredPosts.map((post) => (
-            <PostCard
-              key={post.id}
-              post={{
-                ...post,
-                tags: post.tags ?? [],
-                excerpt: post.body?.raw
-                  ? documentToPlainTextString(JSON.parse(post.body.raw)).slice(
-                      0,
-                      120
-                    ) + "..."
-                  : "",
-              }}
-            />
-          ))
-        ) : (
-          <p>{t("no_matching_posts")}</p>
-        )}
-      </div>
-
-      <nav className={styles.pagination}>
-        {hasPrev ? (
-          <Link
-            to={prevPage}
-            onClick={() => pushEvent("pagination_prev", { page: prevPage })}
-          >
-            ← {t("prev")}
-          </Link>
-        ) : (
-          <span />
-        )}
-        {hasNext ? (
-          <Link
-            to={nextPage}
-            onClick={() => pushEvent("pagination_next", { page: nextPage })}
-          >
-            {t("next")} →
-          </Link>
-        ) : (
-          <span />
-        )}
-      </nav>
-
-      {relatedArticles.length > 0 && (
-        <section className={styles.relatedSection}>
-          <h2 className={styles.relatedTitle}>{t("article")}</h2>
-          <ul className={styles.relatedList}>
-            {relatedArticles.map((a) => (
-              <li key={a.id} className={styles.relatedItem}>
-                <a
-                  href={a.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.relatedLink}
-                >
-                  {a.title}
-                </a>
-              </li>
+        <div className={styles.filters}>
+          <input
+            type="text"
+            placeholder={t("search_placeholder")}
+            value={searchTerm}
+            onChange={handleSearchChange}
+          />
+          <select value={selectedTag} onChange={handleTagChange}>
+            <option value="">{t("all_tags")}</option>
+            {allTags.map((tag) => (
+              <option key={tag} value={tag}>
+                {tag}
+              </option>
             ))}
-          </ul>
-        </section>
-      )}
-    </Layout>
+          </select>
+        </div>
+
+        <div className={styles.tagCloud}>
+          {allTags.map((tag) => (
+            <button
+              key={tag}
+              className={
+                selectedTag === tag ? styles.activeTag : styles.tagButton
+              }
+              onClick={() => handleTagClick(tag)}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+
+        <div className={styles.posts}>
+          {filteredPosts.length > 0 ? (
+            filteredPosts.map((post) => (
+              <PostCard
+                key={post.id}
+                post={{
+                  ...post,
+                  tags: post.tags ?? [],
+                  excerpt: post.body?.raw
+                    ? documentToPlainTextString(
+                        JSON.parse(post.body.raw)
+                      ).slice(0, 120) + "..."
+                    : "",
+                }}
+              />
+            ))
+          ) : (
+            <p>{t("no_matching_posts")}</p>
+          )}
+        </div>
+
+        <nav className={styles.pagination}>
+          {hasPrev ? (
+            <Link
+              to={prevPage}
+              onClick={() => pushEvent("pagination_prev", { page: prevPage })}
+            >
+              ← {t("prev")}
+            </Link>
+          ) : (
+            <span />
+          )}
+          {hasNext ? (
+            <Link
+              to={nextPage}
+              onClick={() => pushEvent("pagination_next", { page: nextPage })}
+            >
+              {t("next")} →
+            </Link>
+          ) : (
+            <span />
+          )}
+        </nav>
+
+        {relatedArticles.length > 0 && (
+          <section className={styles.relatedSection}>
+            <h2 className={styles.relatedTitle}>{t("article")}</h2>
+            <ul className={styles.relatedList}>
+              {relatedArticles.map((a) => (
+                <li key={a.id} className={styles.relatedItem}>
+                  <a
+                    href={a.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.relatedLink}
+                  >
+                    {a.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </Layout>
+    </PrivateRoute>
   );
 };
 
