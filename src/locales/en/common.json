@@ -50,5 +50,10 @@
   "loading": "Loading...",
   "noUser": "No user information found.",
   "createdAt": "Registration date and time",
-  "lastLogin": "Last login"
+  "lastLogin": "Last login",
+  "noSession": "Session could not be updated. Please log in again.",
+  "authenticationError": "An authentication error has occurred. Please log in again.",
+  "logoutError": "An error occurred during logout.",
+  "updateToken": "Token renewal failed. Please log in again.",
+  "reload": "Reload"
 }

@@ -4,7 +4,7 @@ import * as styles from "./Dashboard.module.scss";
 
 export const Dashboard = () => {
   const { t } = useTranslation("common");
-  const { user, logout, loading } = useAuth();
+  const { error, user, logout, loading } = useAuth();
 
   if (loading) {
     return <p className={styles.loading}>{t("loading")}</p>;
@@ -15,6 +15,15 @@ export const Dashboard = () => {
       <div className={styles.container}>
         <h1>{t("dashboard")}</h1>
         <p>{t("noUser")}</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.errorBox}>
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()}>{t("reload")}</button>
       </div>
     );
   }

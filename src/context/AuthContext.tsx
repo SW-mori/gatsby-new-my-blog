@@ -16,6 +16,7 @@ import {
 import { navigate } from "gatsby";
 import { AuthContextType } from "./types";
 import { auth } from "../firebase";
+import { useTranslation } from "react-i18next";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -28,9 +29,11 @@ export const useAuth = (): AuthContextType => {
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const { t } = useTranslation("common");
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   const mountedRef = useRef<boolean>(true);
   const timeoutRef = useRef<number | undefined>(undefined);
@@ -40,19 +43,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
     if (typeof window === "undefined") {
       setLoading(false);
-      setUser(null);
-      setIsAuthenticated(false);
       return;
-    }
-
-    try {
-      const current = auth.currentUser;
-      if (current) {
-        setUser(current);
-        setIsAuthenticated(true);
-      }
-    } catch (e) {
-      console.warn("Auth currentUser check failed:", e);
     }
 
     timeoutRef.current = window.setTimeout(() => {
@@ -62,10 +53,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
     const unsubscribe: Unsubscribe = onAuthStateChanged(
       auth,
-      (firebaseUser) => {
+      async (firebaseUser) => {
         if (!mountedRef.current) return;
-        setUser(firebaseUser);
-        setIsAuthenticated(!!firebaseUser);
+
+        if (firebaseUser) {
+          try {
+            await getIdToken(firebaseUser, true);
+            setUser(firebaseUser);
+            setIsAuthenticated(true);
+            setError(null);
+          } catch (e) {
+            console.error("Token refresh error:", e);
+            setError(t("noSession"));
+            setUser(null);
+            setIsAuthenticated(false);
+            navigate("/login");
+          }
+        } else {
+          setUser(null);
+          setIsAuthenticated(false);
+        }
+
         setLoading(false);
         if (timeoutRef.current) {
           clearTimeout(timeoutRef.current);
@@ -77,11 +85,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         if (!mountedRef.current) return;
         setUser(null);
         setIsAuthenticated(false);
+        setError(t("authenticationError"));
         setLoading(false);
-        if (timeoutRef.current) {
-          clearTimeout(timeoutRef.current);
-          timeoutRef.current = undefined;
-        }
+        navigate("/login");
       }
     );
 
@@ -98,6 +104,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const logout = async () => {
     try {
       await signOut(auth);
+
       try {
         localStorage.removeItem("some-app-cache-key");
         localStorage.removeItem("firebase:authUser");
@@ -107,12 +114,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
       setUser(null);
       setIsAuthenticated(false);
-
-      if (typeof window !== "undefined") {
-        navigate("/login");
-      }
+      navigate("/login");
     } catch (e) {
       console.error("logout failed:", e);
+      setError(t("logoutError"));
       throw e;
     }
   };
@@ -124,6 +129,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       return token;
     } catch (e) {
       console.error("refreshIdToken failed:", e);
+      setError(t("updateToken"));
       return null;
     }
   };
@@ -134,6 +140,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     isAuthenticated,
     logout,
     refreshIdToken,
+    error,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
