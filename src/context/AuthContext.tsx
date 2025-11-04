@@ -13,6 +13,7 @@ import {
   type User,
   type Unsubscribe,
 } from "firebase/auth";
+import { navigate } from "gatsby";
 import { AuthContextType } from "./types";
 import { auth } from "../firebase";
 
@@ -99,7 +100,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       await signOut(auth);
       try {
         localStorage.removeItem("some-app-cache-key");
-      } catch (e) {}
+        localStorage.removeItem("firebase:authUser");
+      } catch (e) {
+        console.warn("localStorage clear failed:", e);
+      }
+
+      setUser(null);
+      setIsAuthenticated(false);
+
+      if (typeof window !== "undefined") {
+        navigate("/login");
+      }
     } catch (e) {
       console.error("logout failed:", e);
       throw e;
