@@ -10,20 +10,26 @@ export const Dashboard = () => {
     return <p className={styles.loading}>{t("loading")}</p>;
   }
 
+  if (error) {
+    return (
+      <div className={styles.errorBox}>
+        <h1>{t("errorTitle")}</h1>
+        <p>{error}</p>
+        <button
+          className={styles.reloadButton}
+          onClick={() => window.location.reload()}
+        >
+          {t("reload")}
+        </button>
+      </div>
+    );
+  }
+
   if (!user) {
     return (
       <div className={styles.container}>
         <h1>{t("dashboard")}</h1>
         <p>{t("noUser")}</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className={styles.errorBox}>
-        <p>{error}</p>
-        <button onClick={() => window.location.reload()}>{t("reload")}</button>
       </div>
     );
   }

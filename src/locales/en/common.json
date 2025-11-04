@@ -55,5 +55,6 @@
   "authenticationError": "An authentication error has occurred. Please log in again.",
   "logoutError": "An error occurred during logout.",
   "updateToken": "Token renewal failed. Please log in again.",
-  "reload": "Reload"
+  "reload": "Reload",
+  "errorTitle": "An error has occurred."
 }
