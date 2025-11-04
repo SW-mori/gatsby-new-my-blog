@@ -2,6 +2,7 @@ import React, {
   createContext,
   useContext,
   useEffect,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -10,6 +11,7 @@ import {
   signOut,
   getIdToken,
   type User,
+  type Unsubscribe,
 } from "firebase/auth";
 import { AuthContextType } from "./types";
 import { auth } from "../firebase";
@@ -27,32 +29,77 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  const mountedRef = useRef<boolean>(true);
+  const timeoutRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
+    mountedRef.current = true;
+
     if (typeof window === "undefined") {
       setLoading(false);
+      setUser(null);
+      setIsAuthenticated(false);
       return;
     }
 
-    const unsubscribe = onAuthStateChanged(
+    try {
+      const current = auth.currentUser;
+      if (current) {
+        setUser(current);
+        setIsAuthenticated(true);
+      }
+    } catch (e) {
+      console.warn("Auth currentUser check failed:", e);
+    }
+
+    timeoutRef.current = window.setTimeout(() => {
+      if (!mountedRef.current) return;
+      setLoading(false);
+    }, 10000);
+
+    const unsubscribe: Unsubscribe = onAuthStateChanged(
       auth,
       (firebaseUser) => {
+        if (!mountedRef.current) return;
         setUser(firebaseUser);
+        setIsAuthenticated(!!firebaseUser);
         setLoading(false);
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+          timeoutRef.current = undefined;
+        }
       },
       (error) => {
         console.error("onAuthStateChanged error:", error);
+        if (!mountedRef.current) return;
         setUser(null);
+        setIsAuthenticated(false);
         setLoading(false);
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+          timeoutRef.current = undefined;
+        }
       }
     );
 
-    return () => unsubscribe();
+    return () => {
+      mountedRef.current = false;
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = undefined;
+      }
+      unsubscribe();
+    };
   }, []);
 
   const logout = async () => {
     try {
       await signOut(auth);
+      try {
+        localStorage.removeItem("some-app-cache-key");
+      } catch (e) {}
     } catch (e) {
       console.error("logout failed:", e);
       throw e;
@@ -70,9 +117,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
-  return (
-    <AuthContext.Provider value={{ user, loading, logout, refreshIdToken }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const value: AuthContextType = {
+    user,
+    loading,
+    isAuthenticated,
+    logout,
+    refreshIdToken,
+  };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
