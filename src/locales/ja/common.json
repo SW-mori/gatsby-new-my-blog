@@ -64,5 +64,7 @@
   "saving": "保存中...",
   "saved": "保存しました！",
   "profileUpdateSuccess": "プロフィールを更新しました。",
-  "profileUpdateError": "プロフィールの更新に失敗しました。もう一度お試しください。"
+  "profileUpdateError": "プロフィールの更新に失敗しました。もう一度お試しください。",
+  "noImage": "画像なし",
+  "changePhoto": "画像を変更"
 }

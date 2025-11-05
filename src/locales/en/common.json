@@ -64,5 +64,7 @@
   "saving": "Saving...",
   "saved": "Saved!",
   "profileUpdateSuccess": "Profile updated successfully.",
-  "profileUpdateError": "Failed to update profile. Please try again."
+  "profileUpdateError": "Failed to update profile. Please try again.",
+  "noImage": "No Image",
+  "changePhoto": "Change Photo"
 }
