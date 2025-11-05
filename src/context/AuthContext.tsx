@@ -8,15 +8,22 @@ import React, {
 } from "react";
 import {
   onAuthStateChanged,
+  onIdTokenChanged,
   signOut,
   getIdToken,
+  updateProfile,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
+  deleteUser,
   type User,
   type Unsubscribe,
+  updatePassword,
 } from "firebase/auth";
 import { navigate } from "gatsby";
 import { AuthContextType } from "./types";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { useTranslation } from "react-i18next";
+import { doc, deleteDoc } from "firebase/firestore";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -34,6 +41,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [loading, setLoading] = useState<boolean>(true);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const [needsReauth, setNeedsReauth] = useState<boolean>(false);
 
   const mountedRef = useRef<boolean>(true);
   const timeoutRef = useRef<number | undefined>(undefined);
@@ -51,7 +59,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       setLoading(false);
     }, 10000);
 
-    const unsubscribe: Unsubscribe = onAuthStateChanged(
+    const unsubscribeAuth: Unsubscribe = onAuthStateChanged(
       auth,
       async (firebaseUser) => {
         if (!mountedRef.current) return;
@@ -91,13 +99,24 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       }
     );
 
+    const unsubscribeToken = onIdTokenChanged(auth, async (firebaseUser) => {
+      if (!firebaseUser) return;
+      try {
+        await getIdToken(firebaseUser, true);
+      } catch (e) {
+        setNeedsReauth(true);
+        setError(t("updateToken"));
+      }
+    });
+
     return () => {
       mountedRef.current = false;
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = undefined;
       }
-      unsubscribe();
+      unsubscribeAuth();
+      unsubscribeToken();
     };
   }, []);
 
@@ -116,7 +135,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       setIsAuthenticated(false);
       navigate("/login");
     } catch (e) {
-      console.error("logout failed:", e);
       setError(t("logoutError"));
       throw e;
     }
@@ -128,9 +146,80 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       const token = await getIdToken(auth.currentUser, true);
       return token;
     } catch (e) {
-      console.error("refreshIdToken failed:", e);
       setError(t("updateToken"));
+      setNeedsReauth(true);
       return null;
+    }
+  };
+
+  const updateProfileInfo = async (payload: {
+    displayName?: string | null;
+    photoURL?: string | null;
+  }): Promise<boolean> => {
+    if (!auth.currentUser) return false;
+    try {
+      await updateProfile(auth.currentUser, {
+        ...(payload.displayName !== undefined
+          ? { displayName: payload.displayName }
+          : {}),
+        ...(payload.photoURL !== undefined
+          ? { photoURL: payload.photoURL }
+          : {}),
+      });
+      setUser({ ...auth.currentUser });
+      setIsAuthenticated(!!auth.currentUser);
+      return true;
+    } catch (e) {
+      setError(t("profileUpdateError"));
+      return false;
+    }
+  };
+
+  const reauthenticate = async (
+    email: string,
+    password: string
+  ): Promise<boolean> => {
+    if (!auth.currentUser) return false;
+    try {
+      const credential = EmailAuthProvider.credential(email, password);
+      await reauthenticateWithCredential(auth.currentUser, credential);
+      setNeedsReauth(false);
+      return true;
+    } catch (error) {
+      console.error("reauthenticate failed:", error);
+      return false;
+    }
+  };
+
+  const updatePasswordSecure = async (
+    currentPassword: string,
+    newPassword: string
+  ): Promise<boolean> => {
+    if (!auth.currentUser || !auth.currentUser.email) return false;
+
+    try {
+      const credential = EmailAuthProvider.credential(
+        auth.currentUser.email,
+        currentPassword
+      );
+      await reauthenticateWithCredential(auth.currentUser, credential);
+      await updatePassword(auth.currentUser, newPassword);
+      return true;
+    } catch (error) {
+      setNeedsReauth(true);
+      return false;
+    }
+  };
+
+  const deleteUserAccount = async (): Promise<boolean> => {
+    if (!auth.currentUser || !auth.currentUser.email) return false;
+    try {
+      await deleteDoc(doc(db, "users", auth.currentUser.uid));
+      await deleteUser(auth.currentUser);
+      return true;
+    } catch (error: any) {
+      setNeedsReauth(true);
+      return false;
     }
   };
 
@@ -141,6 +230,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     logout,
     refreshIdToken,
     error,
+    updateProfileInfo,
+    reauthenticate,
+    updatePasswordSecure,
+    deleteUserAccount,
+    needsReauth,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
