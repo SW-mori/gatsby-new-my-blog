@@ -78,5 +78,12 @@
   "currentPassword": "Current Password",
   "newPassword": "New Password",
   "passwordUpdateSuccess": "Password updated successfully.",
-  "passwordUpdateFailed": "Failed to update password. Please reauthenticate."
+  "passwordUpdateFailed": "Failed to update password. Please reauthenticate.",
+  "deleteAccount": "Delete Account",
+  "delete": "Delete",
+  "deleted": "Deleted!",
+  "deleteWarning": "This action cannot be undone. Type 'DELETE' to confirm account removal.",
+  "deleteConfirmError": "Please type 'DELETE' to confirm.",
+  "deleteAccountFailed": "Failed to delete account. Please reauthenticate.",
+  "accountDeleted": "Your account has been deleted. Thank you for using our service."
 }

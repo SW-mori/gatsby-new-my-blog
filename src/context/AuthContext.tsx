@@ -13,14 +13,16 @@ import {
   updateProfile,
   reauthenticateWithCredential,
   EmailAuthProvider,
+  deleteUser,
   type User,
   type Unsubscribe,
   updatePassword,
 } from "firebase/auth";
 import { navigate } from "gatsby";
 import { AuthContextType } from "./types";
-import { auth } from "../firebase";
+import { auth, db } from "../firebase";
 import { useTranslation } from "react-i18next";
+import { doc, deleteDoc } from "firebase/firestore";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -194,6 +196,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const deleteUserAccount = async (): Promise<boolean> => {
+    if (!auth.currentUser || !auth.currentUser.email) return false;
+    try {
+      await deleteDoc(doc(db, "users", auth.currentUser.uid));
+      await deleteUser(auth.currentUser);
+      return true;
+    } catch (error: any) {
+      return false;
+    }
+  };
+
   const value: AuthContextType = {
     user,
     loading,
@@ -204,6 +217,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     updateProfileInfo,
     reauthenticate,
     updatePasswordSecure,
+    deleteUserAccount,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

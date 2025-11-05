@@ -78,5 +78,12 @@
   "currentPassword": "現在のパスワード",
   "newPassword": "新しいパスワード",
   "passwordUpdateSuccess": "パスワードを更新しました。",
-  "passwordUpdateFailed": "パスワードの更新に失敗しました。再認証が必要です。"
+  "passwordUpdateFailed": "パスワードの更新に失敗しました。再認証が必要です。",
+  "deleteAccount": "アカウント削除",
+  "delete": "削除",
+  "deleted": "削除しました！",
+  "deleteWarning": "この操作は取り消せません。アカウントを完全に削除するには「DELETE」と入力してください。",
+  "deleteConfirmError": "確認のため「DELETE」と入力してください。",
+  "deleteAccountFailed": "アカウントの削除に失敗しました。再認証が必要です。",
+  "accountDeleted": "アカウントを削除しました。ご利用ありがとうございました。"
 }

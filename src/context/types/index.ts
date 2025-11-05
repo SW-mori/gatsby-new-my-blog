@@ -16,4 +16,5 @@ export type AuthContextType = {
     currentPassword: string,
     newPassword: string
   ) => Promise<boolean>;
+  deleteUserAccount: () => Promise<boolean>;
 };
