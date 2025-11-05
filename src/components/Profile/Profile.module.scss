@@ -171,3 +171,64 @@
     transform: translateY(0);
   }
 }
+
+.avatarSection {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.avatarWrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ddd;
+}
+
+.avatarPlaceholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.avatarActions {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+.uploadButton,
+.deleteButton {
+  background-color: #4a90e2;
+  color: white;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.uploadButton:hover {
+  background-color: #357ab8;
+}
+
+.deleteButton {
+  background-color: #e24a4a;
+}
+
+.deleteButton:hover {
+  background-color: #c63c3c;
+}

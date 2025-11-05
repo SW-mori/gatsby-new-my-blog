@@ -66,5 +66,8 @@
   "profileUpdateSuccess": "プロフィールを更新しました。",
   "profileUpdateError": "プロフィールの更新に失敗しました。もう一度お試しください。",
   "noImage": "画像なし",
-  "changePhoto": "画像を変更"
+  "changePhoto": "画像を変更",
+  "removePhoto": "画像を削除",
+  "uploading": "アップロード中...",
+  "deleting": "削除中..."
 }

@@ -3,8 +3,15 @@ import { ProfileStatus } from "../types";
 import { useAuth } from "../../../context";
 import { saveUserProfile, getUserProfile } from "../../../services";
 import { FormEvent, useState, useEffect, useRef, ChangeEvent } from "react";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "../../../firebase";
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
+import { app } from "../../../firebase";
+import { setLogLevel } from "firebase/firestore";
 
 export const useProfile = () => {
   const { user, updateProfileInfo } = useAuth();
@@ -13,11 +20,15 @@ export const useProfile = () => {
   const [photoURL, setPhotoURL] = useState("");
   const [status, setStatus] = useState<ProfileStatus>(PROFILE_STATUS.IDLE);
   const [loading, setLoading] = useState<boolean>(true);
+  const [uploading, setUploading] = useState<boolean>(false);
+  const [deleting, setDeleting] = useState<boolean>(false);
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const storage = getStorage(app);
 
   useEffect(() => {
     const loadProfile = async () => {
-      if (!user) {
+      if (typeof window === "undefined" || !user) {
         setLoading(false);
         return;
       }
@@ -42,45 +53,7 @@ export const useProfile = () => {
     loadProfile();
   }, [user]);
 
-  const uploadAvatar = async (file: File): Promise<string | null> => {
-    if (!user) return null;
-
-    try {
-      const avatarRef = ref(storage, `avatars/${user.uid}/${file.name}`);
-      await uploadBytes(avatarRef, file);
-      const url = await getDownloadURL(avatarRef);
-      return url;
-    } catch (e) {
-      return null;
-    }
-  };
-
-  const handleFileUpload = async (file: File) => {
-    setStatus(PROFILE_STATUS.SAVING);
-    const url = await uploadAvatar(file);
-    if (!url) {
-      setStatus(PROFILE_STATUS.ERROR);
-      return;
-    }
-
-    try {
-      const ok = await updateProfileInfo({ photoURL: url });
-      if (!ok) throw new Error("updateProfileInfo failed");
-
-      await saveUserProfile({
-        uid: user!.uid,
-        displayName,
-        photoURL: url,
-        updatedAt: Date.now(),
-      });
-
-      setPhotoURL(url);
-      setStatus(PROFILE_STATUS.SUCCESS);
-      setTimeout(() => setStatus(PROFILE_STATUS.IDLE), 2500);
-    } catch (e) {
-      setStatus(PROFILE_STATUS.ERROR);
-    }
-  };
+  setLogLevel("error");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -111,13 +84,65 @@ export const useProfile = () => {
   };
 
   const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    if (!e.target.files?.length || !user) return;
+    const file = e.target.files[0];
+    setUploading(true);
 
-    const preview = URL.createObjectURL(file);
-    setPhotoURL(preview);
+    try {
+      const filePath = `users/${user.uid}/profile/${file.name}`;
+      const storageRef = ref(storage, filePath);
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
 
-    await handleFileUpload(file);
+      const ok = await updateProfileInfo({ photoURL: url });
+      if (ok) {
+        await saveUserProfile({
+          uid: user.uid,
+          displayName: displayName.trim() || null,
+          photoURL: url,
+          updatedAt: Date.now(),
+        });
+        setPhotoURL(url);
+      }
+
+      setStatus(PROFILE_STATUS.SUCCESS);
+      setTimeout(() => setStatus(PROFILE_STATUS.IDLE), 2500);
+    } catch (error) {
+      setStatus(PROFILE_STATUS.ERROR);
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const handleDeletePhoto = async () => {
+    if (!user || !photoURL) return;
+    setDeleting(true);
+
+    try {
+      const fileRef = ref(storage, photoURL);
+      await deleteObject(fileRef).catch(() =>
+        console.warn("Storage file not found, skipping delete.")
+      );
+
+      const ok = await updateProfileInfo({ photoURL: null });
+      if (ok) {
+        await saveUserProfile({
+          uid: user.uid,
+          displayName: displayName.trim() || null,
+          photoURL: null,
+          updatedAt: Date.now(),
+        });
+        setPhotoURL("");
+      }
+
+      setStatus(PROFILE_STATUS.SUCCESS);
+      setTimeout(() => setStatus(PROFILE_STATUS.IDLE), 2500);
+    } catch (error) {
+      setStatus(PROFILE_STATUS.ERROR);
+    } finally {
+      setDeleting(false);
+    }
   };
 
   return {
@@ -127,8 +152,11 @@ export const useProfile = () => {
     setPhotoURL,
     status,
     loading,
+    uploading,
+    deleting,
     handleSubmit,
-    fileInputRef,
     handleFileChange,
+    handleDeletePhoto,
+    fileInputRef,
   };
 };

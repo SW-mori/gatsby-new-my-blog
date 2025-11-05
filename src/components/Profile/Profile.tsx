@@ -2,7 +2,6 @@ import { useProfile } from "./hooks";
 import { useTranslation } from "react-i18next";
 import * as styles from "./Profile.module.scss";
 import { PROFILE_STATUS } from "./constants";
-import { ChangeEvent, useRef } from "react";
 
 export const Profile = () => {
   const { t } = useTranslation("common");
@@ -13,10 +12,21 @@ export const Profile = () => {
     setPhotoURL,
     status,
     loading,
+    uploading,
+    deleting,
     handleSubmit,
     fileInputRef,
     handleFileChange,
+    handleDeletePhoto,
   } = useProfile();
+
+  if (loading) {
+    return (
+      <div className={styles.container}>
+        <p className={styles.loading}>{t("loading")}</p>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.container}>
@@ -30,14 +40,31 @@ export const Profile = () => {
               <div className={styles.avatarPlaceholder}>{t("noImage")}</div>
             )}
           </div>
-          <button
-            type="button"
-            className={styles.uploadButton}
-            onClick={() => fileInputRef.current?.click()}
-            disabled={status === PROFILE_STATUS.SAVING}
-          >
-            {t("changePhoto")}
-          </button>
+          <div className={styles.avatarActions}>
+            <button
+              type="button"
+              className={styles.uploadButton}
+              onClick={() => fileInputRef.current?.click()}
+              disabled={
+                uploading || deleting || status === PROFILE_STATUS.SAVING
+              }
+            >
+              {uploading ? t("uploading") : t("changePhoto")}
+            </button>
+            {photoURL && (
+              <button
+                type="button"
+                className={styles.deleteButton}
+                onClick={handleDeletePhoto}
+                disabled={
+                  deleting || uploading || status === PROFILE_STATUS.SAVING
+                }
+              >
+                {deleting ? t("deleting") : t("removePhoto")}
+              </button>
+            )}
+          </div>
+
           <input
             ref={fileInputRef}
             type="file"
@@ -46,7 +73,6 @@ export const Profile = () => {
             className={styles.hiddenInput}
           />
         </div>
-
         <label className={styles.label}>
           {t("displayName")}
           <input
@@ -56,7 +82,6 @@ export const Profile = () => {
             className={styles.input}
           />
         </label>
-
         <label className={styles.label}>
           {t("photoUrl")}
           <input
@@ -66,11 +91,10 @@ export const Profile = () => {
             className={styles.input}
           />
         </label>
-
         <button
           type="submit"
           className={styles.button}
-          disabled={status === PROFILE_STATUS.SAVING}
+          disabled={uploading || deleting || status === PROFILE_STATUS.SAVING}
         >
           {status === PROFILE_STATUS.SAVING
             ? t("saving")
