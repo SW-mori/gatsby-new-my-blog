@@ -69,5 +69,14 @@
   "changePhoto": "画像を変更",
   "removePhoto": "画像を削除",
   "uploading": "アップロード中...",
-  "deleting": "削除中..."
+  "deleting": "削除中...",
+  "reauthenticateTitle": "本人確認",
+  "reauthenticateFailed": "認証に失敗しました。もう一度お試しください。",
+  "authenticating": "確認中...",
+  "confirm": "確認",
+  "updatePassword": "パスワード変更",
+  "currentPassword": "現在のパスワード",
+  "newPassword": "新しいパスワード",
+  "passwordUpdateSuccess": "パスワードを更新しました。",
+  "passwordUpdateFailed": "パスワードの更新に失敗しました。再認証が必要です。"
 }

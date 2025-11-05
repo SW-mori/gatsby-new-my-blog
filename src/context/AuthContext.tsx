@@ -11,8 +11,11 @@ import {
   signOut,
   getIdToken,
   updateProfile,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
   type User,
   type Unsubscribe,
+  updatePassword,
 } from "firebase/auth";
 import { navigate } from "gatsby";
 import { AuthContextType } from "./types";
@@ -156,6 +159,41 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       return false;
     }
   };
+
+  const reauthenticate = async (
+    email: string,
+    password: string
+  ): Promise<boolean> => {
+    if (!auth.currentUser) return false;
+    try {
+      const credential = EmailAuthProvider.credential(email, password);
+      await reauthenticateWithCredential(auth.currentUser, credential);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const updatePasswordSecure = async (
+    currentPassword: string,
+    newPassword: string
+  ): Promise<boolean> => {
+    if (!auth.currentUser || !auth.currentUser.email) return false;
+
+    try {
+      const credential = EmailAuthProvider.credential(
+        auth.currentUser.email,
+        currentPassword
+      );
+      await reauthenticateWithCredential(auth.currentUser, credential);
+
+      await updatePassword(auth.currentUser, newPassword);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
   const value: AuthContextType = {
     user,
     loading,
@@ -164,6 +202,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     refreshIdToken,
     error,
     updateProfileInfo,
+    reauthenticate,
+    updatePasswordSecure,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

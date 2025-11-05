@@ -11,4 +11,9 @@ export type AuthContextType = {
     displayName?: string | null;
     photoURL?: string | null;
   }) => Promise<boolean>;
+  reauthenticate: (email: string, password: string) => Promise<boolean>;
+  updatePasswordSecure: (
+    currentPassword: string,
+    newPassword: string
+  ) => Promise<boolean>;
 };

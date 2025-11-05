@@ -69,5 +69,14 @@
   "changePhoto": "Change Photo",
   "removePhoto": "Remove Photo",
   "uploading": "Uploading...",
-  "deleting": "Deleting..."
+  "deleting": "Deleting...",
+  "reauthenticateTitle": "Identity Verification",
+  "reauthenticateFailed": "Authentication failed. Please try again.",
+  "authenticating": "Verifying...",
+  "confirm": "Confirm",
+  "updatePassword": "Update Password",
+  "currentPassword": "Current Password",
+  "newPassword": "New Password",
+  "passwordUpdateSuccess": "Password updated successfully.",
+  "passwordUpdateFailed": "Failed to update password. Please reauthenticate."
 }
