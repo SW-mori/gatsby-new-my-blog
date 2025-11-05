@@ -17,4 +17,5 @@ export type AuthContextType = {
     newPassword: string
   ) => Promise<boolean>;
   deleteUserAccount: () => Promise<boolean>;
+  needsReauth: boolean;
 };
