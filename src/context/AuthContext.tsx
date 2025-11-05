@@ -10,6 +10,7 @@ import {
   onAuthStateChanged,
   signOut,
   getIdToken,
+  updateProfile,
   type User,
   type Unsubscribe,
 } from "firebase/auth";
@@ -134,6 +135,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     }
   };
 
+  const updateProfileInfo = async (payload: {
+    displayName?: string | null;
+    photoURL?: string | null;
+  }): Promise<boolean> => {
+    if (!auth.currentUser) return false;
+    try {
+      await updateProfile(auth.currentUser, {
+        ...(payload.displayName !== undefined
+          ? { displayName: payload.displayName }
+          : {}),
+        ...(payload.photoURL !== undefined
+          ? { photoURL: payload.photoURL }
+          : {}),
+      });
+      setUser({ ...auth.currentUser });
+      setIsAuthenticated(!!auth.currentUser);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  };
   const value: AuthContextType = {
     user,
     loading,
@@ -141,6 +163,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
     logout,
     refreshIdToken,
     error,
+    updateProfileInfo,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

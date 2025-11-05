@@ -56,5 +56,13 @@
   "logoutError": "An error occurred during logout.",
   "updateToken": "Token renewal failed. Please log in again.",
   "reload": "Reload",
-  "errorTitle": "An error has occurred."
+  "errorTitle": "An error has occurred.",
+  "profileSettings": "Profile Settings",
+  "displayName": "Display Name",
+  "photoUrl": "Profile Image URL",
+  "save": "Save",
+  "saving": "Saving...",
+  "saved": "Saved!",
+  "profileUpdateSuccess": "Profile updated successfully.",
+  "profileUpdateError": "Failed to update profile. Please try again."
 }

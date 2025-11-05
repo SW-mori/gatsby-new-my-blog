@@ -7,4 +7,8 @@ export type AuthContextType = {
   logout: () => Promise<void>;
   refreshIdToken: () => Promise<string | null>;
   error?: string | null;
+  updateProfileInfo: (payload: {
+    displayName?: string | null;
+    photoURL?: string | null;
+  }) => Promise<boolean>;
 };
