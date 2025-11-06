@@ -34,6 +34,9 @@ export const Header: React.FC = () => {
               <Link to="/posts" className={styles.link}>
                 {t("posts")}
               </Link>
+              <Link to="/settings" className={styles.link}>
+                {t("settings")}
+              </Link>
               <button onClick={handleLogout} className={styles.logoutButton}>
                 {t("logout")}
               </button>

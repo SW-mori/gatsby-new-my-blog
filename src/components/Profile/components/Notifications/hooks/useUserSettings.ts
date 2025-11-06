@@ -32,7 +32,6 @@ export const useUserSettings = () => {
         );
       }
     } catch (error: any) {
-      console.error("Failed to fetch user settings:", error);
       if (error.code === "unavailable") {
         console.warn("Client is offline. Using default settings.");
       }
