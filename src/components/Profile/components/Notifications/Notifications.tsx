@@ -5,7 +5,11 @@ import * as styles from "./Notifications.module.scss";
 
 export const Notifications = () => {
   const { t } = useTranslation("common");
-  const { settings, updateSetting, status } = useUserSettings();
+  const { settings, updateSetting, loading, status } = useUserSettings();
+
+  if (loading) {
+    return <p className={styles.loading}>{t("loading")}</p>;
+  }
 
   return (
     <div className={styles.container}>
