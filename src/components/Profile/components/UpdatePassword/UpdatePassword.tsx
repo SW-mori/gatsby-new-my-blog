@@ -3,8 +3,8 @@ import { useTranslation } from "react-i18next";
 import * as styles from "./UpdatePassword.module.scss";
 import { Reauthenticate } from "../../../Reauthenticate";
 import { useAuth } from "../../../../context";
-import { ProfileStatus } from "../../../../types";
-import { PROFILE_STATUS } from "../../../../constants";
+import { ProfileStatus } from "../../types";
+import { PROFILE_STATUS } from "../../constants";
 
 export const UpdatePassword = () => {
   const { t } = useTranslation("common");

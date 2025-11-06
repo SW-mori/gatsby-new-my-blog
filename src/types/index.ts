@@ -1,5 +1,3 @@
-import { PROFILE_STATUS } from "../constants";
-
 export type ContentfulPost = {
   id: string;
   title: string;
@@ -44,6 +42,3 @@ export type ContentfulPostData = {
     nodes: ContentfulPost[];
   };
 };
-
-export type ProfileStatus =
-  (typeof PROFILE_STATUS)[keyof typeof PROFILE_STATUS];

@@ -1,10 +1,10 @@
 import { useEffect, useState, useCallback } from "react";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
-import { auth, db } from "../../../firebase";
 import { PROFILE_STATUS } from "../../../constants";
-import { UserSettings } from "../types";
 import { ProfileStatus } from "../../../types";
-import { useErrorLogger } from "../../../services";
+import { auth, db } from "../../../../../firebase";
+import { useErrorLogger } from "../../../../../services";
+import { UserSettings } from "../types";
 
 export const useUserSettings = () => {
   const [settings, setSettings] = useState<UserSettings>({

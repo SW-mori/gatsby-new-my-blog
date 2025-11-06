@@ -11,8 +11,6 @@ export const Notifications = () => {
     return <p className={styles.loading}>{t("loading")}</p>;
   }
 
-  console.log(status);
-
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>{t("notificationSettings")}</h2>

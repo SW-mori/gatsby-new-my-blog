@@ -1,8 +1,8 @@
 import { useProfile } from "./hooks";
 import { useTranslation } from "react-i18next";
 import * as styles from "./Profile.module.scss";
-import { PROFILE_STATUS } from "../../constants";
-import { DeleteAccount, UpdatePassword } from "./components";
+import { PROFILE_STATUS } from "./constants";
+import { DeleteAccount, Notifications, UpdatePassword } from "./components";
 
 export const Profile = () => {
   const { t } = useTranslation("common");
@@ -114,6 +114,7 @@ export const Profile = () => {
       </div>
       <UpdatePassword />
       <DeleteAccount />
+      <Notifications />
     </>
   );
 };

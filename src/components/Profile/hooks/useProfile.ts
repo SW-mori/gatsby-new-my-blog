@@ -1,5 +1,5 @@
-import { PROFILE_STATUS } from "../../../constants";
-import { ProfileStatus } from "../../../types";
+import { PROFILE_STATUS } from "../constants";
+import { ProfileStatus } from "../types";
 import { useAuth } from "../../../context";
 import { saveUserProfile, getUserProfile } from "../../../services";
 import { FormEvent, useState, useEffect, useRef, ChangeEvent } from "react";
