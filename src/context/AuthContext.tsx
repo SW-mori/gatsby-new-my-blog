@@ -44,7 +44,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [needsReauth, setNeedsReauth] = useState<boolean>(false);
 
   const mountedRef = useRef<boolean>(true);
-  const timeoutRef = useRef<number | undefined>(undefined);
+  const refreshRetryRef = useRef<number>(0);
+  const maxRetries = 3;
 
   useEffect(() => {
     mountedRef.current = true;
@@ -54,42 +55,24 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       return;
     }
 
-    timeoutRef.current = window.setTimeout(() => {
-      if (!mountedRef.current) return;
-      setLoading(false);
-    }, 10000);
-
     const unsubscribeAuth: Unsubscribe = onAuthStateChanged(
       auth,
       async (firebaseUser) => {
         if (!mountedRef.current) return;
 
         if (firebaseUser) {
-          try {
-            await getIdToken(firebaseUser, true);
-            setUser(firebaseUser);
-            setIsAuthenticated(true);
-            setError(null);
-          } catch (e) {
-            console.error("Token refresh error:", e);
-            setError(t("noSession"));
-            setUser(null);
-            setIsAuthenticated(false);
-            navigate("/login");
-          }
+          setUser(firebaseUser);
+          setIsAuthenticated(true);
+          setError(null);
+          await tryRefreshToken(firebaseUser);
         } else {
           setUser(null);
           setIsAuthenticated(false);
         }
-
         setLoading(false);
-        if (timeoutRef.current) {
-          clearTimeout(timeoutRef.current);
-          timeoutRef.current = undefined;
-        }
       },
-      (error) => {
-        console.error("onAuthStateChanged error:", error);
+      (err) => {
+        console.error("onAuthStateChanged error:", err);
         if (!mountedRef.current) return;
         setUser(null);
         setIsAuthenticated(false);
@@ -99,26 +82,39 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       }
     );
 
-    const unsubscribeToken = onIdTokenChanged(auth, async (firebaseUser) => {
-      if (!firebaseUser) return;
-      try {
-        await getIdToken(firebaseUser, true);
-      } catch (e) {
-        setNeedsReauth(true);
-        setError(t("updateToken"));
+    const unsubscribeToken: Unsubscribe = onIdTokenChanged(
+      auth,
+      async (firebaseUser) => {
+        if (!firebaseUser) return;
+        await tryRefreshToken(firebaseUser);
       }
-    });
+    );
 
     return () => {
       mountedRef.current = false;
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-        timeoutRef.current = undefined;
-      }
       unsubscribeAuth();
       unsubscribeToken();
     };
   }, []);
+
+  const tryRefreshToken = async (firebaseUser: User) => {
+    for (let i = 0; i < maxRetries; i++) {
+      try {
+        const token = await getIdToken(firebaseUser, true);
+        console.log("Token refreshed:", token.slice(0, 10), "...");
+        refreshRetryRef.current = 0;
+        setNeedsReauth(false);
+        setError(null);
+        return token;
+      } catch (err) {
+        refreshRetryRef.current++;
+        await new Promise((r) => setTimeout(r, 1000));
+      }
+    }
+    setNeedsReauth(true);
+    setError(t("updateToken"));
+    await logout();
+  };
 
   const logout = async () => {
     try {
@@ -143,11 +139,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const refreshIdToken = async (): Promise<string | null> => {
     if (!auth.currentUser) return null;
     try {
-      const token = await getIdToken(auth.currentUser, true);
-      return token;
-    } catch (e) {
-      setError(t("updateToken"));
-      setNeedsReauth(true);
+      return (await tryRefreshToken(auth.currentUser)) as string;
+    } catch {
       return null;
     }
   };
@@ -186,7 +179,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       setNeedsReauth(false);
       return true;
     } catch (error) {
-      console.error("reauthenticate failed:", error);
       return false;
     }
   };
