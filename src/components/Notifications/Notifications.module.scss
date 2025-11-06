@@ -1,0 +1,39 @@
+.container {
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.title {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.toggleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.toggleLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.saving {
+  color: #999;
+}
+.success {
+  color: green;
+}
+.error {
+  color: red;
+}
+
+.loading {
+  text-align: center;
+  font-size: 1.1rem;
+  padding: 3rem;
+  color: #555;
+}

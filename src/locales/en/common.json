@@ -85,5 +85,11 @@
   "deleteWarning": "This action cannot be undone. Type 'DELETE' to confirm account removal.",
   "deleteConfirmError": "Please type 'DELETE' to confirm.",
   "deleteAccountFailed": "Failed to delete account. Please reauthenticate.",
-  "accountDeleted": "Your account has been deleted. Thank you for using our service."
+  "accountDeleted": "Your account has been deleted. Thank you for using our service.",
+  "notificationSettings": "Notification Settings",
+  "emailNotifications": "Email Notifications",
+  "commentNotifications": "Comment Notifications",
+  "securityAlerts": "Security Notifications",
+  "settingsSaved": "Settings saved successfully",
+  "settingsSaveError": "Failed to save settings"
 }

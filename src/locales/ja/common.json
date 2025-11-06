@@ -85,5 +85,11 @@
   "deleteWarning": "この操作は取り消せません。アカウントを完全に削除するには「DELETE」と入力してください。",
   "deleteConfirmError": "確認のため「DELETE」と入力してください。",
   "deleteAccountFailed": "アカウントの削除に失敗しました。再認証が必要です。",
-  "accountDeleted": "アカウントを削除しました。ご利用ありがとうございました。"
+  "accountDeleted": "アカウントを削除しました。ご利用ありがとうございました。",
+  "notificationSettings": "通知設定",
+  "emailNotifications": "メール通知",
+  "commentNotifications": "コメント通知",
+  "securityAlerts": "セキュリティ通知",
+  "settingsSaved": "設定を保存しました",
+  "settingsSaveError": "設定の保存に失敗しました"
 }
