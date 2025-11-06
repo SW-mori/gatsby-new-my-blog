@@ -1,7 +1,7 @@
 import { useProfile } from "./hooks";
 import { useTranslation } from "react-i18next";
 import * as styles from "./Profile.module.scss";
-import { PROFILE_STATUS } from "./constants";
+import { PROFILE_STATUS } from "../../constants";
 import { DeleteAccount, UpdatePassword } from "./components";
 
 export const Profile = () => {
