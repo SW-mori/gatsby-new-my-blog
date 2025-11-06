@@ -1,5 +1,5 @@
-import { PROFILE_STATUS } from "../constants";
-import { ProfileStatus } from "../types";
+import { PROFILE_STATUS } from "../../../constants";
+import { ProfileStatus } from "../../../types";
 import { useAuth } from "../../../context";
 import { saveUserProfile, getUserProfile } from "../../../services";
 import { FormEvent, useState, useEffect, useRef, ChangeEvent } from "react";
@@ -12,6 +12,7 @@ import {
 } from "firebase/storage";
 import { app } from "../../../firebase";
 import { setLogLevel } from "firebase/firestore";
+import { useErrorLogger } from "../../../services";
 
 export const useProfile = () => {
   const { user, updateProfileInfo } = useAuth();
@@ -25,6 +26,7 @@ export const useProfile = () => {
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const storage = getStorage(app);
+  const { logError } = useErrorLogger();
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -43,8 +45,9 @@ export const useProfile = () => {
           setDisplayName(user.displayName ?? "");
           setPhotoURL(user.photoURL ?? "");
         }
-      } catch (e) {
+      } catch (e: any) {
         console.error("loadProfile error:", e);
+        logError("useProfile", e.message, e.stack);
       } finally {
         setLoading(false);
       }
@@ -78,8 +81,9 @@ export const useProfile = () => {
 
       setStatus(PROFILE_STATUS.SUCCESS);
       setTimeout(() => setStatus(PROFILE_STATUS.IDLE), 2500);
-    } catch (error) {
+    } catch (e: any) {
       setStatus(PROFILE_STATUS.ERROR);
+      logError("useProfile", e.message, e.stack);
     }
   };
 
@@ -107,8 +111,9 @@ export const useProfile = () => {
 
       setStatus(PROFILE_STATUS.SUCCESS);
       setTimeout(() => setStatus(PROFILE_STATUS.IDLE), 2500);
-    } catch (error) {
+    } catch (e: any) {
       setStatus(PROFILE_STATUS.ERROR);
+      logError("useProfile", e.message, e.stack);
     } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
@@ -138,8 +143,9 @@ export const useProfile = () => {
 
       setStatus(PROFILE_STATUS.SUCCESS);
       setTimeout(() => setStatus(PROFILE_STATUS.IDLE), 2500);
-    } catch (error) {
+    } catch (e: any) {
       setStatus(PROFILE_STATUS.ERROR);
+      logError("useProfile", e.message, e.stack);
     } finally {
       setDeleting(false);
     }
