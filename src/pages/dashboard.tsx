@@ -1,17 +1,20 @@
 import React from "react";
 import { PrivateRoute } from "@components/PrivateRoute";
-import { Profile } from "@components/Profile";
+import { Dashboard } from "@components/Dashboard";
+import { Layout } from "@components/Layout";
 import { graphql } from "gatsby";
 
-const ProfilePage: React.FC = () => {
+const DashboardPage: React.FC = () => {
   return (
     <PrivateRoute>
-      <Profile />
+      <Layout>
+        <Dashboard />
+      </Layout>
     </PrivateRoute>
   );
 };
 
-export default ProfilePage;
+export default DashboardPage;
 
 export const query = graphql`
   query {

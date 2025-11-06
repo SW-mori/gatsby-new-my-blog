@@ -4,6 +4,7 @@
   "seo_home_title": "Home Page",
   "seo_home_description": "Top page of Gatsby site",
   "posts": "Posts",
+  "settings": "Settings",
   "page": "Page",
   "read_more": "Read more",
   "post_not_found": "Post not found",
@@ -85,5 +86,11 @@
   "deleteWarning": "This action cannot be undone. Type 'DELETE' to confirm account removal.",
   "deleteConfirmError": "Please type 'DELETE' to confirm.",
   "deleteAccountFailed": "Failed to delete account. Please reauthenticate.",
-  "accountDeleted": "Your account has been deleted. Thank you for using our service."
+  "accountDeleted": "Your account has been deleted. Thank you for using our service.",
+  "notificationSettings": "Notification Settings",
+  "emailNotifications": "Email Notifications",
+  "commentNotifications": "Comment Notifications",
+  "securityAlerts": "Security Notifications",
+  "settingsSaved": "Settings saved successfully",
+  "settingsSaveError": "Failed to save settings"
 }
