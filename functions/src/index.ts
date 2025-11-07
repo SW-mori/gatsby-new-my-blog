@@ -10,10 +10,37 @@
 import { setGlobalOptions } from "firebase-functions";
 import { onRequest } from "firebase-functions/https";
 import * as logger from "firebase-functions/logger";
+import { logError } from "./logError";
+import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
+import { Timestamp } from "firebase-admin/firestore";
 
 export const helloWorld = onRequest((request, response) => {
   logger.info("Hello logs!", { structuredData: true });
   response.send("Hello from Firebase!");
+});
+
+export { logError };
+
+admin.initializeApp();
+
+export const logTestError = functions.https.onRequest(async (req, res) => {
+  try {
+    const ref = admin.firestore().collection("errorLogs");
+    await ref.add({
+      message: "Test error log from function",
+      page: "/error-logs",
+      stack: "This is a simulated error stack trace",
+      timestamp: Timestamp.now(),
+    });
+    res.status(200).send("Test error log added ✅");
+  } catch (error) {
+    console.error("Error writing test log:", error);
+    res.status(500).json({
+      message: "Failed to write test log",
+      details: (error as Error).message,
+    });
+  }
 });
 
 // Start writing functions
