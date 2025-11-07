@@ -1,19 +1,21 @@
 import { ErrorLogProps } from "./types";
 import * as styles from "./ErrorLogs.module.scss";
+import { useTranslation } from "react-i18next";
 
 export const ErrorLogs = ({ logs }: ErrorLogProps) => {
+  const { t } = useTranslation("common");
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>エラーログ一覧</h1>
+      <h1 className={styles.title}>{t("errorLogs")}</h1>
       {logs.length === 0 ? (
-        <p>現在エラーログはありません。</p>
+        <p>{t("notErrorLogs")}</p>
       ) : (
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>日時</th>
-              <th>メッセージ</th>
-              <th>ページ</th>
+              <th>{t("date")}</th>
+              <th>{t("message")}</th>
+              <th>{t("page")}</th>
             </tr>
           </thead>
           <tbody>

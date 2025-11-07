@@ -92,5 +92,8 @@
   "commentNotifications": "Comment Notifications",
   "securityAlerts": "Security Notifications",
   "settingsSaved": "Settings saved successfully",
-  "settingsSaveError": "Failed to save settings"
+  "settingsSaveError": "Failed to save settings",
+  "errorLogs": "Error Log List",
+  "notErrorLogs": "No error logs currently available.",
+  "date": "Date and Time"
 }
