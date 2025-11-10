@@ -6,6 +6,11 @@ import { ErrorLog } from "../types";
 export const useErrorLogs = () => {
   const [logs, setLogs] = useState<ErrorLog[]>([]);
   const [loading, setLoading] = useState(true);
+  const [openId, setOpenId] = useState<string | null>(null);
+
+  const toggleDetails = (id: string) => {
+    setOpenId((prev) => (prev === id ? null : id));
+  };
 
   useEffect(() => {
     const fetchLogs = async () => {
@@ -14,21 +19,20 @@ export const useErrorLogs = () => {
           collection(db, "errorLogs"),
           orderBy("timestamp", "desc")
         );
-        const snap = await getDocs(q);
-        const data = snap.docs.map((doc) => ({
+        const snapshot = await getDocs(q);
+        const data = snapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         })) as ErrorLog[];
         setLogs(data);
       } catch (error) {
-        console.error("Failed to load error logs:", error);
+        console.error("Error fetching logs:", error);
       } finally {
         setLoading(false);
       }
     };
-
     fetchLogs();
   }, []);
 
-  return { logs, loading };
+  return { logs, loading, openId, toggleDetails };
 };

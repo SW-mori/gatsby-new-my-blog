@@ -95,5 +95,7 @@
   "settingsSaveError": "設定の保存に失敗しました",
   "errorLogs": "エラーログ一覧",
   "notErrorLogs": "エラーログは現在ありません。",
-  "date": "日時"
+  "date": "日時",
+  "level": "レベル",
+  "noDetails": "詳細情報はありません。"
 }

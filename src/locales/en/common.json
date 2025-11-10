@@ -95,5 +95,7 @@
   "settingsSaveError": "Failed to save settings",
   "errorLogs": "Error Log List",
   "notErrorLogs": "No error logs currently available.",
-  "date": "Date and Time"
+  "date": "Date and Time",
+  "level": "Level",
+  "noDetails": "No additional details."
 }
