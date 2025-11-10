@@ -1,78 +1,95 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
+import { db } from "../../../firebase";
 import {
   collection,
   getDocs,
   query,
   orderBy,
+  where,
   deleteDoc,
   doc,
 } from "firebase/firestore";
-import { db } from "../../../firebase";
 import { ErrorLog } from "../types";
-import { useTranslation } from "react-i18next";
 
 export const useErrorLogs = () => {
-  const { t } = useTranslation("common");
-  const [logs, setLogs] = useState<ErrorLog[]>([]);
+  const [logs, setLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [openId, setOpenId] = useState<string | null>(null);
+  const [filter, setFilter] = useState("all");
 
   const toggleDetails = (id: string) => {
     setOpenId((prev) => (prev === id ? null : id));
   };
 
-  const handleDeleteLog = async (id: string) => {
+  const fetchLogs = async () => {
+    setLoading(true);
     try {
-      await deleteDoc(doc(db, "errorLogs", id));
-      alert(t("deleteLog"));
-    } catch (error) {
-      alert(t("deleteFailed"));
-    }
-  };
-
-  const handleDeleteAllLogs = async () => {
-    if (!window.confirm(t("logDelete"))) return;
-
-    try {
-      const querySnapshot = await getDocs(collection(db, "errorLogs"));
-      const deletions = querySnapshot.docs.map((d) =>
-        deleteDoc(doc(db, "errorLogs", d.id))
+      const snapshot = await getDocs(
+        query(collection(db, "errorLogs"), orderBy("timestamp", "desc"))
       );
-      await Promise.all(deletions);
-      alert(t("deleteAllLog"));
+
+      const logsData: ErrorLog[] = snapshot.docs.map((docSnap) => {
+        const data = docSnap.data() as {
+          timestamp: any;
+          level?: string;
+          message?: string;
+          detail?: string | null;
+          page?: string | null;
+          userId?: string | null;
+        };
+
+        return {
+          id: docSnap.id,
+          timestamp: data.timestamp?.toDate
+            ? data.timestamp.toDate()
+            : new Date(data.timestamp),
+          level: (data.level as "error" | "warning" | "info") ?? "error",
+          message: data.message ?? "-",
+          detail: data.detail ?? null,
+          page: data.page ?? "-",
+          userId: data.userId ?? null,
+        };
+      });
+      const filteredLogs =
+        filter === "all"
+          ? logsData
+          : logsData.filter((log) => log.level === filter);
+
+      setLogs(filteredLogs);
     } catch (error) {
-      alert(t("deleteFailed"));
+      console.error("Error fetching logs:", error);
+      setLogs([]);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    const fetchLogs = async () => {
-      try {
-        const q = query(
-          collection(db, "errorLogs"),
-          orderBy("timestamp", "desc")
-        );
-        const snapshot = await getDocs(q);
-        const data = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        })) as ErrorLog[];
-        setLogs(data);
-      } catch (error) {
-        console.error("Error fetching logs:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchLogs();
-  }, []);
+  }, [filter]);
+
+  const handleDeleteLog = async (id: string) => {
+    await deleteDoc(doc(db, "errorLogs", id));
+    fetchLogs();
+  };
+
+  const handleDeleteAllLogs = async () => {
+    const snapshot = await getDocs(collection(db, "errorLogs"));
+    const deletions = snapshot.docs.map((docSnap) =>
+      deleteDoc(doc(db, "errorLogs", docSnap.id))
+    );
+    await Promise.all(deletions);
+    fetchLogs();
+  };
 
   return {
     logs,
     loading,
     openId,
     toggleDetails,
-    handleDeleteAllLogs,
     handleDeleteLog,
+    handleDeleteAllLogs,
+    filter,
+    setFilter,
   };
 };

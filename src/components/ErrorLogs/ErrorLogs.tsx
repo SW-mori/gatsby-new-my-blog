@@ -4,6 +4,7 @@ import { useErrorLogs } from "./hooks";
 
 export const ErrorLogs = () => {
   const { t } = useTranslation("common");
+
   const {
     logs,
     loading,
@@ -11,6 +12,8 @@ export const ErrorLogs = () => {
     toggleDetails,
     handleDeleteAllLogs,
     handleDeleteLog,
+    filter,
+    setFilter,
   } = useErrorLogs();
 
   if (loading) return <div className={styles.loading}>{t("loading")}</div>;
@@ -18,6 +21,22 @@ export const ErrorLogs = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>{t("errorLogs")}</h1>
+
+      <div className={styles.filterArea}>
+        <label htmlFor="filter">{t("filter")}：</label>
+        <select
+          id="filter"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          className={styles.filterSelect}
+        >
+          <option value="all">{t("all")}</option>
+          <option value="error">{t("error")}</option>
+          <option value="warning">{t("warning")}</option>
+          <option value="info">{t("info")}</option>
+        </select>
+      </div>
+
       {logs.length === 0 ? (
         <p>{t("notErrorLogs")}</p>
       ) : (
@@ -48,14 +67,19 @@ export const ErrorLogs = () => {
                     className={styles[`level_${log.level ?? "error"}`]}
                     onClick={() => toggleDetails(log.id)}
                   >
-                    <td>{log.timestamp?.toDate().toLocaleString() ?? "-"}</td>
+                    <td>
+                      {log.timestamp ? log.timestamp.toLocaleString() : "-"}
+                    </td>
                     <td>{log.level ?? "error"}</td>
                     <td>{log.message}</td>
                     <td>{log.page ?? "-"}</td>
                     <td>
                       <button
                         className={styles.deleteButton}
-                        onClick={() => handleDeleteLog(log.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteLog(log.id);
+                        }}
                       >
                         {t("delete")}
                       </button>

@@ -102,5 +102,10 @@
   "deleteFailed": "削除に失敗しました。",
   "deleteLog": "ログを削除しました。",
   "deleteAllLog": "すべてのログを削除しました。",
-  "logDelete": "すべてのログを削除しますか？"
+  "logDelete": "すべてのログを削除しますか？",
+  "filter": "フィルター",
+  "all": "すべて",
+  "error": "エラー",
+  "warning": "警告",
+  "info": "情報"
 }
