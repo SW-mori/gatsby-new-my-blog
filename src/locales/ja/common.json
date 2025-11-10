@@ -97,5 +97,10 @@
   "notErrorLogs": "エラーログは現在ありません。",
   "date": "日時",
   "level": "レベル",
-  "noDetails": "詳細情報はありません。"
+  "deleteAll": "完全削除",
+  "noDetails": "詳細情報はありません。",
+  "deleteFailed": "削除に失敗しました。",
+  "deleteLog": "ログを削除しました。",
+  "deleteAllLog": "すべてのログを削除しました。",
+  "logDelete": "すべてのログを削除しますか？"
 }

@@ -97,5 +97,10 @@
   "notErrorLogs": "No error logs currently available.",
   "date": "Date and Time",
   "level": "Level",
-  "noDetails": "No additional details."
+  "deleteAll": "Permanent Deletion",
+  "noDetails": "No additional details.",
+  "deleteFailed": "Deletion failed.",
+  "deleteLog": "Log deleted.",
+  "deleteAllLog": "All logs deleted.",
+  "logDelete": "Delete all logs?"
 }

@@ -54,3 +54,36 @@
   background-color: #e8f5e9;
   color: #2e7d32;
 }
+
+.actions {
+  text-align: right;
+  margin-bottom: 12px;
+}
+
+.deleteButton {
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+
+  &:hover {
+    background-color: #c9302c;
+  }
+}
+
+.deleteAllButton {
+  background-color: #a94442;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+
+  &:hover {
+    background-color: #843534;
+  }
+}
