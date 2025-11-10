@@ -13,7 +13,6 @@ import * as logger from "firebase-functions/logger";
 import { logError } from "./logError";
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import { Timestamp } from "firebase-admin/firestore";
 
 export const helloWorld = onRequest((request, response) => {
   logger.info("Hello logs!", { structuredData: true });
@@ -30,8 +29,9 @@ export const logTestError = functions.https.onRequest(async (req, res) => {
     await ref.add({
       message: "Test error log from function",
       page: "/error-logs",
-      stack: "This is a simulated error stack trace",
-      timestamp: Timestamp.now(),
+      detail: "This is a simulated error stack trace",
+      timestamp: admin.firestore.Timestamp.now(),
+      level: "error",
     });
     res.status(200).send("Test error log added ✅");
   } catch (error) {

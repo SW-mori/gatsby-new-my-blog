@@ -95,5 +95,17 @@
   "settingsSaveError": "設定の保存に失敗しました",
   "errorLogs": "エラーログ一覧",
   "notErrorLogs": "エラーログは現在ありません。",
-  "date": "日時"
+  "date": "日時",
+  "level": "レベル",
+  "deleteAll": "完全削除",
+  "noDetails": "詳細情報はありません。",
+  "deleteFailed": "削除に失敗しました。",
+  "deleteLog": "ログを削除しました。",
+  "deleteAllLog": "すべてのログを削除しました。",
+  "logDelete": "すべてのログを削除しますか？",
+  "filter": "フィルター",
+  "all": "すべて",
+  "error": "エラー",
+  "warning": "警告",
+  "info": "情報"
 }

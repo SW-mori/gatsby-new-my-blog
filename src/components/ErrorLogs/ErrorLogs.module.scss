@@ -1,32 +1,126 @@
+.loading {
+  text-align: center;
+  margin: 1rem;
+  font-size: 24px;
+}
+
 .container {
   padding: 2rem;
 }
 
 .title {
   font-size: 1.8rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
-  background: #fff;
-  border-radius: 8px;
-  overflow: hidden;
 
   th,
   td {
+    padding: 0.6rem;
     border-bottom: 1px solid #ddd;
-    padding: 0.75rem 1rem;
     text-align: left;
   }
 
-  th {
-    background-color: #f5f5f5;
-    font-weight: 600;
+  tr:hover {
+    background-color: #f9f9f9;
+    cursor: pointer;
   }
 
-  tr:hover {
+  .detailsRow {
     background-color: #fafafa;
+  }
+
+  .details {
+    white-space: pre-wrap;
+    font-size: 0.9rem;
+    color: #333;
+  }
+}
+
+.level_error {
+  background-color: #ffeaea;
+  color: #d32f2f;
+}
+
+.level_warning {
+  background-color: #fff7e0;
+  color: #f57c00;
+}
+
+.level_info {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.actions {
+  text-align: right;
+  margin-bottom: 12px;
+}
+
+.deleteButton {
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+
+  &:hover {
+    background-color: #c9302c;
+  }
+}
+
+.deleteAllButton {
+  background-color: #a94442;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+
+  &:hover {
+    background-color: #843534;
+  }
+}
+
+.filterArea {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 8px 12px;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+
+  label {
+    font-weight: 600;
+    color: #374151;
+  }
+
+  select {
+    padding: 6px 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #111827;
+    font-size: 14px;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+
+    &:hover {
+      border-color: #9ca3af;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+    }
   }
 }

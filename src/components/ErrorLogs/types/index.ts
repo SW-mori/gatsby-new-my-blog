@@ -1,13 +1,11 @@
 import { Timestamp } from "firebase/firestore";
+import { LOG_LEVEL } from "../constants";
 
 export type ErrorLog = {
   id: string;
   message: string;
-  stack?: string;
+  details?: string;
   page?: string;
   timestamp?: Timestamp;
-};
-
-export type ErrorLogProps = {
-  logs: ErrorLog[];
+  level?: (typeof LOG_LEVEL)[keyof typeof LOG_LEVEL];
 };

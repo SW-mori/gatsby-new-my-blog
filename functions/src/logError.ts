@@ -14,7 +14,7 @@ export const logError = functions.https.onRequest(async (req, res) => {
   }
 
   try {
-    const { message, stack, userId, page, timestamp } = req.body;
+    const { message, detail, userId, page, level, timestamp } = req.body;
 
     if (!message) {
       res.status(400).json({ error: "message is required" });
@@ -23,10 +23,13 @@ export const logError = functions.https.onRequest(async (req, res) => {
 
     await db.collection("errorLogs").add({
       message,
-      stack: stack || null,
+      detail: detail || null,
       userId: userId || null,
       page: page || null,
-      timestamp: timestamp || new Date().toISOString(),
+      timestamp: timestamp
+        ? admin.firestore.Timestamp.fromDate(new Date(timestamp))
+        : admin.firestore.Timestamp.now(),
+      level: level || "error",
     });
 
     res.status(200).json({ success: true });

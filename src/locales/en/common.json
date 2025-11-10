@@ -95,5 +95,17 @@
   "settingsSaveError": "Failed to save settings",
   "errorLogs": "Error Log List",
   "notErrorLogs": "No error logs currently available.",
-  "date": "Date and Time"
+  "date": "Date and Time",
+  "level": "Level",
+  "deleteAll": "Permanent Deletion",
+  "noDetails": "No additional details.",
+  "deleteFailed": "Deletion failed.",
+  "deleteLog": "Log deleted.",
+  "deleteAllLog": "All logs deleted.",
+  "logDelete": "Delete all logs?",
+  "filter": "Filter",
+  "all": "All",
+  "error": "Error",
+  "warning": "Warning",
+  "info": "Info"
 }
