@@ -20,6 +20,7 @@ export const helloWorld = onRequest((request, response) => {
 });
 
 export { logError };
+export { notifyOnError } from "./notifyOnError";
 
 admin.initializeApp();
 
