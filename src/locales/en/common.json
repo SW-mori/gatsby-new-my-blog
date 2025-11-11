@@ -107,5 +107,7 @@
   "all": "All",
   "error": "Error",
   "warning": "Warning",
-  "info": "Info"
+  "info": "Info",
+  "errorNotificationSettings": "Error Log Notification Settings",
+  "selectErrorLevelsToNotify": "Select the error levels you wish to receive notifications for"
 }

@@ -34,6 +34,9 @@ export const Header: React.FC = () => {
               <Link to="/posts" className={styles.link}>
                 {t("posts")}
               </Link>
+              <Link to="/error-logs" className={styles.link}>
+                {t("errorLogs")}
+              </Link>
               <Link to="/settings" className={styles.link}>
                 {t("settings")}
               </Link>

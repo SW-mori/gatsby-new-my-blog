@@ -107,5 +107,7 @@
   "all": "すべて",
   "error": "エラー",
   "warning": "警告",
-  "info": "情報"
+  "info": "情報",
+  "errorNotificationSettings": "エラーログ通知設定",
+  "selectErrorLevelsToNotify": "通知を受け取りたいエラーレベルを選択してください"
 }
