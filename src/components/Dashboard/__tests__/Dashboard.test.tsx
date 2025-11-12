@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { Dashboard } from "../Dashboard";
 import { useAuth } from "../../../context";
 
-jest.mock("../../context", () => ({
+jest.mock("../../../context", () => ({
   useAuth: jest.fn(),
 }));
 

@@ -22,6 +22,11 @@ jest.mock("gatsby-plugin-react-i18next", () => ({
         home: "ホーム画面へようこそ",
         images_page: "画像最適化ページ",
         posts: "Posts",
+        dashboard: "Dashboard",
+        settings: "Settings",
+        logout: "Logout",
+        errorLogs: "Error Logs",
+        login: "Login",
       };
       return translations[key] || key;
     },
@@ -33,19 +38,26 @@ jest.mock("gatsby-plugin-react-i18next", () => ({
   }),
 }));
 
+jest.mock("../../Header/hooks", () => ({
+  useHeader: () => ({
+    getPathForLanguage: (lng: string) => (lng === "ja" ? "/" : "/en/"),
+    handleLogout: jest.fn(),
+    isAuthenticated: true,
+    language: "en",
+    loading: false,
+  }),
+}));
+
 describe("Layoutコンポーネント", () => {
-  it("ヘッダーのタイトルとナビリンクが正しく表示される", () => {
+  it("ヘッダーとナビリンクが正しく表示される", () => {
     render(<Layout pageTitle="ページタイトル">本文</Layout>);
 
-    expect(screen.getByText("My Gatsby Site")).toBeInTheDocument();
-
+    expect(screen.getByText(/My Gatsby Site/)).toBeInTheDocument();
     expect(screen.getByText("ホーム画面へようこそ")).toHaveAttribute(
       "href",
       "/"
     );
-
     expect(screen.getByText("Posts")).toHaveAttribute("href", "/posts");
-
     expect(screen.getByText("JA")).toHaveAttribute("href", "/");
   });
 
@@ -53,7 +65,6 @@ describe("Layoutコンポーネント", () => {
     render(<Layout pageTitle="ページタイトル">本文</Layout>);
 
     expect(screen.getByText("ページタイトル")).toBeInTheDocument();
-
     expect(screen.getByText("本文")).toBeInTheDocument();
   });
 
