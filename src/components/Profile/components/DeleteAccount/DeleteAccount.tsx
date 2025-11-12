@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import * as styles from "./DeleteAccount.module.scss";
 import { Reauthenticate } from "../../../Reauthenticate";
@@ -14,7 +14,7 @@ export const DeleteAccount = () => {
   const [status, setStatus] = useState<DeleteStatus>(DELETE_STATUS.IDLE);
   const [error, setError] = useState("");
 
-  const handleDelete = async (e: React.FormEvent) => {
+  const handleDelete = async (e: FormEvent) => {
     e.preventDefault();
     if (confirm !== "DELETE") {
       setError(t("deleteConfirmError"));

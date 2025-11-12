@@ -15,6 +15,9 @@ jest.mock("../../../components", () => ({
       <span>{pathname}</span>
     </div>
   ),
+  PrivateRoute: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
 }));
 
 jest.mock("gatsby-plugin-react-i18next", () => ({

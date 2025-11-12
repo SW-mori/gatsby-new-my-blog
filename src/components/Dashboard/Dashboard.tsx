@@ -1,8 +1,9 @@
 import { useTranslation } from "react-i18next";
+import { DashboardProps } from "./types";
 import { useAuth } from "../../context";
 import * as styles from "./Dashboard.module.scss";
 
-export const Dashboard = () => {
+export const Dashboard: React.FC<DashboardProps> = ({ reloadFn }) => {
   const { t } = useTranslation("common");
   const { error, user, logout, loading } = useAuth();
 
@@ -17,7 +18,7 @@ export const Dashboard = () => {
         <p>{error}</p>
         <button
           className={styles.reloadButton}
-          onClick={() => window.location.reload()}
+          onClick={reloadFn || (() => window.location.reload())}
         >
           {t("reload")}
         </button>

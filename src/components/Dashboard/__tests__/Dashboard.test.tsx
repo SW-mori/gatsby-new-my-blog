@@ -1,96 +1,126 @@
+import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import { Dashboard } from "../Dashboard";
-import { useAuth } from "../../../context";
 
-jest.mock("../../context", () => ({
-  useAuth: jest.fn(),
-}));
-
+// --- i18n モック ---
 jest.mock("react-i18next", () => ({
   useTranslation: () => ({
-    t: (key: string) => key,
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        loading: "読み込み中...",
+        errorTitle: "エラーが発生しました",
+        reload: "再読み込み",
+        dashboard: "ダッシュボード",
+        noUser: "ユーザー情報がありません",
+        email: "メールアドレス",
+        createdAt: "作成日時",
+        lastLogin: "最終ログイン",
+        logout: "ログアウト",
+      };
+      return translations[key] || key;
+    },
   }),
 }));
 
-describe("Dashboard Component", () => {
-  const mockUseAuth = useAuth as jest.Mock;
+// --- useAuth モック ---
+jest.mock("../../../context", () => ({
+  useAuth: jest.fn(),
+}));
 
-  beforeEach(() => {
+const { useAuth } = jest.requireMock("../../../context");
+
+describe("Dashboard コンポーネント", () => {
+  afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test("🔄 ローディング中の表示", () => {
-    mockUseAuth.mockReturnValue({
+  it("loading 中はローディングメッセージを表示する", () => {
+    useAuth.mockReturnValue({
       loading: true,
-      user: null,
       error: null,
+      user: null,
+      logout: jest.fn(),
+    });
+    render(<Dashboard />);
+    expect(screen.getByText("読み込み中...")).toBeInTheDocument();
+  });
+
+  it("エラー時はエラーメッセージと再読み込みボタンを表示する", () => {
+    useAuth.mockReturnValue({
+      loading: false,
+      error: "サーバーエラー",
+      user: null,
       logout: jest.fn(),
     });
 
-    render(<Dashboard />);
-    expect(screen.getByText("loading")).toBeInTheDocument();
+    const reloadMock = jest.fn();
+    render(<Dashboard reloadFn={reloadMock} />); // テスト用関数を注入
+
+    expect(screen.getByText("エラーが発生しました")).toBeInTheDocument();
+    expect(screen.getByText("サーバーエラー")).toBeInTheDocument();
+
+    const reloadButton = screen.getByText("再読み込み");
+    fireEvent.click(reloadButton);
+    expect(reloadMock).toHaveBeenCalled(); // 安全に確認可能
   });
 
-  test("⚠️ エラー表示とリロードボタン動作", () => {
-    mockUseAuth.mockReturnValue({
+  it("未ログイン時はユーザー情報なしメッセージを表示する", () => {
+    useAuth.mockReturnValue({
       loading: false,
-      user: null,
-      error: "認証エラーが発生しました",
-      logout: jest.fn(),
-    });
-
-    render(<Dashboard />);
-
-    expect(screen.getByText("errorTitle")).toBeInTheDocument();
-    expect(screen.getByText("認証エラーが発生しました")).toBeInTheDocument();
-
-    // reloadボタン動作確認
-    const reloadSpy = jest
-      .spyOn(window.location, "reload")
-      .mockImplementation(() => {});
-    fireEvent.click(screen.getByText("reload"));
-    expect(reloadSpy).toHaveBeenCalled();
-  });
-
-  test("👤 ユーザーがいない場合の表示", () => {
-    mockUseAuth.mockReturnValue({
-      loading: false,
-      user: null,
       error: null,
+      user: null,
       logout: jest.fn(),
     });
 
     render(<Dashboard />);
-    expect(screen.getByText("dashboard")).toBeInTheDocument();
-    expect(screen.getByText("noUser")).toBeInTheDocument();
+    expect(screen.getByText("ダッシュボード")).toBeInTheDocument();
+    expect(screen.getByText("ユーザー情報がありません")).toBeInTheDocument();
   });
 
-  test("✅ ユーザー情報がある場合の表示", () => {
+  it("ログイン済み時はユーザー情報とログアウトボタンを表示する", () => {
     const mockLogout = jest.fn();
-    const mockUser = {
-      uid: "user123",
-      email: "test@example.com",
-      metadata: {
-        creationTime: "2024-01-01T10:00:00Z",
-        lastSignInTime: "2024-06-01T15:00:00Z",
-      },
-    };
 
-    mockUseAuth.mockReturnValue({
+    useAuth.mockReturnValue({
       loading: false,
-      user: mockUser,
       error: null,
+      user: {
+        uid: "abc123",
+        email: "test@example.com",
+        metadata: {
+          creationTime: "2025-01-01T00:00:00Z",
+          lastSignInTime: "2025-11-10T00:00:00Z",
+        },
+      },
       logout: mockLogout,
     });
 
     render(<Dashboard />);
 
-    expect(screen.getByText("dashboard")).toBeInTheDocument();
+    expect(screen.getByText("ダッシュボード")).toBeInTheDocument();
     expect(screen.getByText("UID:")).toBeInTheDocument();
+    expect(screen.getByText("abc123")).toBeInTheDocument();
+    expect(screen.getByText("メールアドレス:")).toBeInTheDocument();
     expect(screen.getByText("test@example.com")).toBeInTheDocument();
-    expect(screen.getByText("logout")).toBeInTheDocument();
+    expect(screen.getByText("作成日時:")).toBeInTheDocument();
+    expect(screen.getByText("最終ログイン:")).toBeInTheDocument();
 
-    fireEvent.click(screen.getByText("logout"));
+    const logoutButton = screen.getByText("ログアウト");
+    fireEvent.click(logoutButton);
     expect(mockLogout).toHaveBeenCalled();
+  });
+
+  it("ユーザーメタデータがない場合は N/A を表示する", () => {
+    useAuth.mockReturnValue({
+      loading: false,
+      error: null,
+      user: { uid: "abc123", email: "test@example.com", metadata: null },
+      logout: jest.fn(),
+    });
+
+    render(<Dashboard />);
+
+    const naElements = screen.getAllByText("N/A");
+    expect(naElements.length).toBe(2);
   });
 });
