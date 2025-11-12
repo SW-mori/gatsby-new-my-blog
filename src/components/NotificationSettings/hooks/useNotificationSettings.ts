@@ -48,5 +48,5 @@ export const useNotificationSettings = () => {
     fetchSettings();
   }, []);
 
-  return { settings, loading, updateSettings, handleChange };
+  return { settings, loading, handleChange };
 };

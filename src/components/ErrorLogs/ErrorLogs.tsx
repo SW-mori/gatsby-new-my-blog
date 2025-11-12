@@ -1,6 +1,7 @@
 import * as styles from "./ErrorLogs.module.scss";
 import { useTranslation } from "react-i18next";
 import { useErrorLogs } from "./hooks";
+import { Fragment } from "react";
 
 export const ErrorLogs = () => {
   const { t } = useTranslation("common");
@@ -61,7 +62,7 @@ export const ErrorLogs = () => {
             </thead>
             <tbody>
               {logs.map((log) => (
-                <>
+                <Fragment key={log.id}>
                   <tr
                     key={log.id}
                     className={styles[`level_${log.level ?? "error"}`]}
@@ -94,7 +95,7 @@ export const ErrorLogs = () => {
                       </td>
                     </tr>
                   )}
-                </>
+                </Fragment>
               ))}
             </tbody>
           </table>

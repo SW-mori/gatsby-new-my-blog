@@ -4,8 +4,7 @@ import { useTranslation } from "react-i18next";
 
 export const NotificationSettings = () => {
   const { t } = useTranslation("common");
-  const { settings, loading, handleChange, updateSettings } =
-    useNotificationSettings();
+  const { settings, loading, handleChange } = useNotificationSettings();
 
   if (loading) return <div className={styles.loading}>{t("loading")}</div>;
 
