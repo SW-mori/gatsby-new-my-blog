@@ -22,6 +22,9 @@ jest.mock("../../../components", () => ({
     </div>
   ),
   PostCard: ({ post }: any) => <div data-testid="post-card">{post.title}</div>,
+  PrivateRoute: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
 }));
 
 jest.mock("gatsby-plugin-react-i18next", () => ({
