@@ -140,9 +140,9 @@ describe("PostsListTemplate コンポーネント", () => {
 
   it("ページネーションリンクが正しく表示される", () => {
     render(<PostsListTemplate {...mockProps} />);
-    const nextLink = screen.getByText("Next →");
+    const nextLink = screen.getByText("Next");
     expect(nextLink).toHaveAttribute("href", "/posts/2");
-    const prevLink = screen.queryByText("← Prev");
+    const prevLink = screen.queryByText("Prev");
     expect(prevLink).not.toBeInTheDocument();
   });
 

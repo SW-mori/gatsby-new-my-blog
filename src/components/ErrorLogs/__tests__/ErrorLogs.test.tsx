@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, within } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { ErrorLogs } from "../ErrorLogs";
 
@@ -51,7 +51,7 @@ describe("ErrorLogs コンポーネント", () => {
     });
 
     render(<ErrorLogs />);
-    expect(screen.getByText("読み込み中...")).toBeInTheDocument();
+    expect(screen.getAllByText("読み込み中...")[0]).toBeInTheDocument();
   });
 
   it("ログがない場合はメッセージを表示する", () => {
@@ -67,7 +67,9 @@ describe("ErrorLogs コンポーネント", () => {
     });
 
     render(<ErrorLogs />);
-    expect(screen.getByText("エラーログ一覧")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "エラーログ一覧" })
+    ).toBeInTheDocument();
     expect(screen.getByText("エラーログはありません")).toBeInTheDocument();
   });
 
@@ -113,8 +115,8 @@ describe("ErrorLogs コンポーネント", () => {
     fireEvent.click(deleteButton);
     expect(handleDeleteLogMock).toHaveBeenCalledWith("1");
 
-    const firstRow = screen.getByText("エラー1").closest("tr")!;
-    fireEvent.click(firstRow);
+    const firstRowCell = screen.getAllByText("エラー1")[0].closest("tr")!;
+    fireEvent.click(firstRowCell);
     expect(toggleDetailsMock).toHaveBeenCalledWith("1");
   });
 
@@ -140,7 +142,9 @@ describe("ErrorLogs コンポーネント", () => {
     });
 
     render(<ErrorLogs />);
-    expect(screen.getByText("詳細1")).toBeInTheDocument();
+
+    const detailsElements = screen.getAllByText("詳細1");
+    expect(detailsElements[0]).toBeInTheDocument();
   });
 
   it("details がない場合は '詳細なし' を表示する", () => {

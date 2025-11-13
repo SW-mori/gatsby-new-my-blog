@@ -79,14 +79,10 @@ export const Header: FC = () => {
         <Link to="/" className={styles.logo}>
           {t("home")}
         </Link>
-
-        {/* 通常ナビ */}
         <nav className={styles.nav}>
           <NavLinks />
           <LanguageSwitcher />
         </nav>
-
-        {/* ハンバーガーメニュー */}
         <div
           className={`${styles.menuButton} ${menuOpen ? styles.active : ""}`}
           onClick={() => setMenuOpen(!menuOpen)}
@@ -96,14 +92,10 @@ export const Header: FC = () => {
           <span></span>
         </div>
       </div>
-
-      {/* オーバーレイ */}
       <div
         className={`${styles.overlay} ${menuOpen ? styles.open : ""}`}
         onClick={() => setMenuOpen(false)}
       ></div>
-
-      {/* モバイルメニュー */}
       <div className={`${styles.mobileNav} ${menuOpen ? styles.open : ""}`}>
         <div className={styles.mobileNavInner}>
           <NavLinks />

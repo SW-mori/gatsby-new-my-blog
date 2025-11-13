@@ -22,8 +22,6 @@ export const ErrorLogs = () => {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>{t("errorLogs")}</h1>
-
-      {/* フィルター */}
       <div className={styles.filterArea}>
         <label htmlFor="filter">{t("filter")}：</label>
         <select
@@ -37,13 +35,10 @@ export const ErrorLogs = () => {
           <option value="info">{t("info")}</option>
         </select>
       </div>
-
-      {/* ログがない場合 */}
       {logs.length === 0 ? (
         <p>{t("notErrorLogs")}</p>
       ) : (
         <>
-          {/* アクションボタン */}
           <div className={styles.actions}>
             <button
               className={styles.deleteAllButton}
@@ -52,8 +47,6 @@ export const ErrorLogs = () => {
               {t("deleteAll")}
             </button>
           </div>
-
-          {/* PC用テーブル表示 */}
           <div className={styles.tableWrapper}>
             <table className={styles.table}>
               <thead>
@@ -104,8 +97,6 @@ export const ErrorLogs = () => {
               </tbody>
             </table>
           </div>
-
-          {/* モバイルカード表示 */}
           <div className={styles.mobileCards}>
             {logs.map((log) => (
               <div key={log.id} className={styles.cardRow}>
