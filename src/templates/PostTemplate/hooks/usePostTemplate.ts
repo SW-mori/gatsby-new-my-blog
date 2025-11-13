@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { FORM_STATUS } from "../constants";
 import { FormStatus } from "../types";
 
 export const usePostTemplate = () => {
   const [formStatus, setFormStatus] = useState<FormStatus>(FORM_STATUS.IDLE);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFormStatus(FORM_STATUS.SUBMITTING);
 

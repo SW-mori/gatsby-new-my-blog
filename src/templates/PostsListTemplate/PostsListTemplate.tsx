@@ -1,4 +1,4 @@
-import * as React from "react";
+import { FC } from "react";
 import { documentToPlainTextString } from "@contentful/rich-text-plain-text-renderer";
 import { PageProps, graphql, Link } from "gatsby";
 import { useTranslation } from "gatsby-plugin-react-i18next";
@@ -8,9 +8,10 @@ import { LANGUAGES, SITE_URL } from "../../constants";
 import { AllContentfulPostQuery, PageContext } from "../../types";
 import * as styles from "./PostsListTemplate.module.scss";
 
-const PostsListTemplate: React.FC<
-  PageProps<AllContentfulPostQuery, PageContext>
-> = ({ data, pageContext }) => {
+const PostsListTemplate: FC<PageProps<AllContentfulPostQuery, PageContext>> = ({
+  data,
+  pageContext,
+}) => {
   const { t, i18n } = useTranslation("common");
   const {
     searchTerm,

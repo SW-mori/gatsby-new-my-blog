@@ -1,4 +1,4 @@
-import React from "react";
+import { ReactNode } from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Layout } from "../Layout";
@@ -8,7 +8,7 @@ jest.mock("gatsby", () => {
   return {
     __esModule: true,
     ...originalModule,
-    Link: ({ to, children }: { to: string; children: React.ReactNode }) => (
+    Link: ({ to, children }: { to: string; children: ReactNode }) => (
       <a href={to}>{children}</a>
     ),
   };

@@ -1,5 +1,6 @@
-import React, {
+import {
   createContext,
+  FC,
   useContext,
   useEffect,
   useRef,
@@ -33,9 +34,7 @@ export const useAuth = (): AuthContextType => {
   return ctx;
 };
 
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
+export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const { t } = useTranslation("common");
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);

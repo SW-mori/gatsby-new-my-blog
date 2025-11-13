@@ -1,13 +1,11 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import HomeTemplate from "../HomeTemplate";
 
 jest.mock("../../../components", () => ({
   __esModule: true,
-  Layout: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
+  Layout: ({ children }: { children: ReactNode }) => <div>{children}</div>,
   SEO: ({ title, description, pathname }: any) => (
     <div data-testid="seo">
       <span>{title}</span>
@@ -15,9 +13,7 @@ jest.mock("../../../components", () => ({
       <span>{pathname}</span>
     </div>
   ),
-  PrivateRoute: ({ children }: { children: React.ReactNode }) => (
-    <>{children}</>
-  ),
+  PrivateRoute: ({ children }: { children: ReactNode }) => <>{children}</>,
 }));
 
 jest.mock("gatsby-plugin-react-i18next", () => ({

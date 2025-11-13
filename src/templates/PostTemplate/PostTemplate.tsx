@@ -1,4 +1,4 @@
-import * as React from "react";
+import { FC } from "react";
 import { graphql, PageProps } from "gatsby";
 import { usePostTemplate } from "./hooks";
 import { safeParse, safePlainText } from "./utils";
@@ -10,7 +10,7 @@ import { useTranslation } from "gatsby-plugin-react-i18next";
 import { DiscussionEmbed } from "disqus-react";
 import * as styles from "./PostTemplate.module.scss";
 
-const PostTemplate: React.FC<PageProps<ContentfulPostData>> = ({ data }) => {
+const PostTemplate: FC<PageProps<ContentfulPostData>> = ({ data }) => {
   const { t, i18n } = useTranslation("common");
   const { formStatus, handleSubmit, handleTagClick } = usePostTemplate();
 

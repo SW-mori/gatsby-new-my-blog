@@ -1,10 +1,10 @@
-import React from "react";
+import { FC } from "react";
 import { PrivateRoute } from "@components/PrivateRoute";
 import { Dashboard } from "@components/Dashboard";
 import { Layout } from "@components/Layout";
 import { graphql } from "gatsby";
 
-const DashboardPage: React.FC = () => {
+const DashboardPage: FC = () => {
   return (
     <PrivateRoute>
       <Layout>

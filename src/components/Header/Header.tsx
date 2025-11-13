@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { FC, useState } from "react";
 import { Link } from "gatsby";
 import { useTranslation } from "gatsby-plugin-react-i18next";
 import { LANGUAGES } from "../../constants";
@@ -7,7 +7,7 @@ import { useHeader } from "./hooks";
 
 const languages = [LANGUAGES.JA, LANGUAGES.EN];
 
-export const Header: React.FC = () => {
+export const Header: FC = () => {
   const { t } = useTranslation("common");
   const {
     getPathForLanguage,

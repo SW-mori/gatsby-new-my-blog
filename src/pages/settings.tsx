@@ -1,10 +1,10 @@
-import React from "react";
+import { FC } from "react";
 import { PrivateRoute } from "@components/PrivateRoute";
 import { Profile } from "@components/Profile";
 import { graphql } from "gatsby";
 import { Layout } from "@components/Layout";
 
-const SettingsPage: React.FC = () => {
+const SettingsPage: FC = () => {
   return (
     <PrivateRoute>
       <Layout>
