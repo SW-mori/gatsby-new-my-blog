@@ -23,13 +23,13 @@ export const ErrorLogs = () => {
     <div className={styles.container}>
       <h1 className={styles.title}>{t("errorLogs")}</h1>
 
+      {/* フィルター */}
       <div className={styles.filterArea}>
         <label htmlFor="filter">{t("filter")}：</label>
         <select
           id="filter"
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className={styles.filterSelect}
         >
           <option value="all">{t("all")}</option>
           <option value="error">{t("error")}</option>
@@ -38,10 +38,12 @@ export const ErrorLogs = () => {
         </select>
       </div>
 
+      {/* ログがない場合 */}
       {logs.length === 0 ? (
         <p>{t("notErrorLogs")}</p>
       ) : (
         <>
+          {/* アクションボタン */}
           <div className={styles.actions}>
             <button
               className={styles.deleteAllButton}
@@ -50,55 +52,95 @@ export const ErrorLogs = () => {
               {t("deleteAll")}
             </button>
           </div>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>{t("date")}</th>
-                <th>{t("level")}</th>
-                <th>{t("message")}</th>
-                <th>{t("page")}</th>
-                <th>{t("delete")}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {logs.map((log) => (
-                <Fragment key={log.id}>
-                  <tr
-                    key={log.id}
-                    className={styles[`level_${log.level ?? "error"}`]}
-                    onClick={() => toggleDetails(log.id)}
-                  >
-                    <td>
-                      {log.timestamp ? log.timestamp.toLocaleString() : "-"}
-                    </td>
-                    <td>{log.level ?? "error"}</td>
-                    <td>{log.message}</td>
-                    <td>{log.page ?? "-"}</td>
-                    <td>
-                      <button
-                        className={styles.deleteButton}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteLog(log.id);
-                        }}
-                      >
-                        {t("delete")}
-                      </button>
-                    </td>
-                  </tr>
-                  {openId === log.id && (
-                    <tr className={styles.detailsRow}>
-                      <td colSpan={5}>
-                        <pre className={styles.details}>
-                          {log.details ?? t("noDetails")}
-                        </pre>
+
+          {/* PC用テーブル表示 */}
+          <div className={styles.tableWrapper}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>{t("date")}</th>
+                  <th>{t("level")}</th>
+                  <th>{t("message")}</th>
+                  <th>{t("page")}</th>
+                  <th>{t("delete")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {logs.map((log) => (
+                  <Fragment key={log.id}>
+                    <tr
+                      className={styles[`level_${log.level ?? "error"}`]}
+                      onClick={() => toggleDetails(log.id)}
+                    >
+                      <td>
+                        {log.timestamp ? log.timestamp.toLocaleString() : "-"}
+                      </td>
+                      <td>{log.level ?? "error"}</td>
+                      <td>{log.message}</td>
+                      <td>{log.page ?? "-"}</td>
+                      <td>
+                        <button
+                          className={styles.deleteButton}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteLog(log.id);
+                          }}
+                        >
+                          {t("delete")}
+                        </button>
                       </td>
                     </tr>
-                  )}
-                </Fragment>
-              ))}
-            </tbody>
-          </table>
+                    {openId === log.id && (
+                      <tr className={`${styles.detailsRow} open`}>
+                        <td colSpan={5}>
+                          <pre className={styles.details}>
+                            {log.details ?? t("noDetails")}
+                          </pre>
+                        </td>
+                      </tr>
+                    )}
+                  </Fragment>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* モバイルカード表示 */}
+          <div className={styles.mobileCards}>
+            {logs.map((log) => (
+              <div key={log.id} className={styles.cardRow}>
+                <div className={styles.cardField}>
+                  <span className="label">{t("date")}:</span>
+                  <span className="value">
+                    {log.timestamp ? log.timestamp.toLocaleString() : "-"}
+                  </span>
+                </div>
+                <div className={styles.cardField}>
+                  <span className="label">{t("level")}:</span>
+                  <span className="value">{log.level ?? "error"}</span>
+                </div>
+                <div className={styles.cardField}>
+                  <span className="label">{t("message")}:</span>
+                  <span className="value">{log.message}</span>
+                </div>
+                <div className={styles.cardField}>
+                  <span className="label">{t("page")}:</span>
+                  <span className="value">{log.page ?? "-"}</span>
+                </div>
+
+                {openId === log.id && log.details && (
+                  <div className={styles.cardDetails}>{log.details}</div>
+                )}
+
+                <button
+                  className={styles.deleteButton}
+                  onClick={() => handleDeleteLog(log.id)}
+                >
+                  {t("delete")}
+                </button>
+              </div>
+            ))}
+          </div>
         </>
       )}
     </div>

@@ -134,25 +134,22 @@ const PostsListTemplate: React.FC<
         </div>
 
         <nav className={styles.pagination}>
-          {hasPrev ? (
+          {hasPrev && (
             <Link
               to={prevPage}
               onClick={() => pushEvent("pagination_prev", { page: prevPage })}
             >
-              ← {t("prev")}
+              {t("prev")}
             </Link>
-          ) : (
-            <span />
           )}
-          {hasNext ? (
+
+          {hasNext && (
             <Link
               to={nextPage}
               onClick={() => pushEvent("pagination_next", { page: nextPage })}
             >
-              {t("next")} →
+              {t("next")}
             </Link>
-          ) : (
-            <span />
           )}
         </nav>
 
