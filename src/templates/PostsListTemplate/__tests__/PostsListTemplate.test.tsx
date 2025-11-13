@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { PageProps } from "gatsby";
@@ -7,9 +7,7 @@ import { AllContentfulPostQuery, PageContext } from "types";
 
 jest.mock("../../../components", () => ({
   __esModule: true,
-  Layout: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
+  Layout: ({ children }: { children: ReactNode }) => <div>{children}</div>,
   SEO: ({ title, description, pathname, alternateLangs }: any) => (
     <div data-testid="seo">
       <span>{title}</span>
@@ -24,9 +22,7 @@ jest.mock("../../../components", () => ({
     </div>
   ),
   PostCard: ({ post }: any) => <div data-testid="post">{post.title}</div>,
-  PrivateRoute: ({ children }: { children: React.ReactNode }) => (
-    <>{children}</>
-  ),
+  PrivateRoute: ({ children }: { children: ReactNode }) => <>{children}</>,
 }));
 
 jest.mock("gatsby-plugin-react-i18next", () => ({
@@ -144,9 +140,9 @@ describe("PostsListTemplate コンポーネント", () => {
 
   it("ページネーションリンクが正しく表示される", () => {
     render(<PostsListTemplate {...mockProps} />);
-    const nextLink = screen.getByText("Next →");
+    const nextLink = screen.getByText("Next");
     expect(nextLink).toHaveAttribute("href", "/posts/2");
-    const prevLink = screen.queryByText("← Prev");
+    const prevLink = screen.queryByText("Prev");
     expect(prevLink).not.toBeInTheDocument();
   });
 

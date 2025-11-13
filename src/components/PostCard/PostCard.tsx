@@ -1,9 +1,9 @@
-import React from "react";
+import { FC } from "react";
 import { Link } from "gatsby";
 import { PostCardProps } from "./types";
 import * as styles from "./PostCard.module.scss";
 
-export const PostCard: React.FC<PostCardProps> = ({ post }) => {
+export const PostCard: FC<PostCardProps> = ({ post }) => {
   return (
     <article className={styles.postCard}>
       <Link to={`/posts/${post.slug}`} className={styles.title}>

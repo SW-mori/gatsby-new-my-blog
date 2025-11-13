@@ -1,10 +1,10 @@
-import * as React from "react";
+import { FC } from "react";
 import { useTranslation } from "gatsby-plugin-react-i18next";
 import { LayoutProps } from "./types";
 import { Header } from "../Header";
 import * as styles from "./Layout.module.scss";
 
-export const Layout: React.FC<LayoutProps> = ({ pageTitle, children }) => {
+export const Layout: FC<LayoutProps> = ({ pageTitle, children }) => {
   const { t } = useTranslation("common");
 
   return (

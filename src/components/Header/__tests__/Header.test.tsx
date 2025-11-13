@@ -1,6 +1,7 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, within } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Header } from "../Header";
+import { useHeader } from "../hooks";
 
 jest.mock("../../../constants", () => ({
   LANGUAGES: {
@@ -32,15 +33,13 @@ jest.mock("../hooks", () => ({
   useHeader: jest.fn(),
 }));
 
-const { useHeader } = jest.requireMock("../hooks");
+const mockedUseHeader = useHeader as jest.Mock;
 
 describe("Header コンポーネント", () => {
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+  afterEach(() => jest.clearAllMocks());
 
   it("ロード中は loading 表示", () => {
-    useHeader.mockReturnValue({
+    mockedUseHeader.mockReturnValue({
       getPathForLanguage: jest.fn(),
       handleLogout: jest.fn(),
       isAuthenticated: false,
@@ -49,11 +48,12 @@ describe("Header コンポーネント", () => {
     });
 
     render(<Header />);
-    expect(screen.getByText("読み込み中")).toBeInTheDocument();
+    const header = screen.getByRole("banner");
+    expect(within(header).getAllByText("読み込み中")[0]).toBeInTheDocument();
   });
 
   it("未ログイン時はログイン・新規登録リンクが表示される", () => {
-    useHeader.mockReturnValue({
+    mockedUseHeader.mockReturnValue({
       getPathForLanguage: (lng: string) => (lng === "ja" ? "/" : "/en"),
       handleLogout: jest.fn(),
       isAuthenticated: false,
@@ -62,15 +62,21 @@ describe("Header コンポーネント", () => {
     });
 
     render(<Header />);
-    expect(screen.getByText("ログイン")).toHaveAttribute("href", "/login");
-    expect(screen.getByText("新規登録")).toHaveAttribute("href", "/signup");
-    expect(screen.getByText("ホーム")).toHaveAttribute("href", "/");
+    const header = screen.getByRole("banner");
+    const nav = within(header).getByRole("navigation");
+
+    expect(within(header).getByText("ホーム")).toHaveAttribute("href", "/");
+    expect(within(nav).getByText("ログイン")).toHaveAttribute("href", "/login");
+    expect(within(nav).getByText("resister")).toHaveAttribute(
+      "href",
+      "/signup"
+    );
   });
 
   it("ログイン済みの場合はダッシュボードなどのリンクとログアウトボタンが表示される", () => {
     const handleLogoutMock = jest.fn();
 
-    useHeader.mockReturnValue({
+    mockedUseHeader.mockReturnValue({
       getPathForLanguage: (lng: string) => (lng === "ja" ? "/" : "/en"),
       handleLogout: handleLogoutMock,
       isAuthenticated: true,
@@ -79,25 +85,27 @@ describe("Header コンポーネント", () => {
     });
 
     render(<Header />);
+    const header = screen.getByRole("banner");
+    const nav = within(header).getByRole("navigation");
 
-    expect(screen.getByText("ダッシュボード")).toHaveAttribute(
+    expect(within(nav).getByText("ダッシュボード")).toHaveAttribute(
       "href",
       "/dashboard"
     );
-    expect(screen.getByText("投稿一覧")).toHaveAttribute("href", "/posts");
-    expect(screen.getByText("エラーログ")).toHaveAttribute(
+    expect(within(nav).getByText("投稿一覧")).toHaveAttribute("href", "/posts");
+    expect(within(nav).getByText("エラーログ")).toHaveAttribute(
       "href",
       "/error-logs"
     );
-    expect(screen.getByText("設定")).toHaveAttribute("href", "/settings");
+    expect(within(nav).getByText("設定")).toHaveAttribute("href", "/settings");
 
-    const logoutButton = screen.getByText("ログアウト");
+    const logoutButton = within(nav).getByText("ログアウト");
     fireEvent.click(logoutButton);
     expect(handleLogoutMock).toHaveBeenCalled();
   });
 
   it("言語切替リンクが正しく表示される", () => {
-    useHeader.mockReturnValue({
+    mockedUseHeader.mockReturnValue({
       getPathForLanguage: (lng: string) => (lng === "ja" ? "/" : "/en"),
       handleLogout: jest.fn(),
       isAuthenticated: false,
@@ -106,10 +114,12 @@ describe("Header コンポーネント", () => {
     });
 
     render(<Header />);
+    const header = screen.getByRole("banner");
+    const nav = within(header).getByRole("navigation");
 
-    const jaElement = screen.getByText("JA");
+    const jaElement = within(nav).getByText("JA");
     expect(jaElement.tagName).toBe("SPAN");
-    const enElement = screen.getByText("EN");
+    const enElement = within(nav).getByText("EN");
     expect(enElement.tagName).toBe("A");
     expect(enElement).toHaveAttribute("href", "/en");
   });

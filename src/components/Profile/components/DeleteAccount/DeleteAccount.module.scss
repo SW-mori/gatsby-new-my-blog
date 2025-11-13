@@ -84,3 +84,22 @@
   margin-top: 1rem;
   text-align: center;
 }
+
+@media (max-width: 480px) {
+  .container {
+    padding: 1rem;
+  }
+
+  .input,
+  .deleteButton {
+    font-size: 0.95rem;
+    padding: 0.65rem 0.9rem;
+  }
+
+  .warning,
+  .error,
+  .success {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+}

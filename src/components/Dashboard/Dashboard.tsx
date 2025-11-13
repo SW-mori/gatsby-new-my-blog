@@ -2,8 +2,9 @@ import { useTranslation } from "react-i18next";
 import { DashboardProps } from "./types";
 import { useAuth } from "../../context";
 import * as styles from "./Dashboard.module.scss";
+import { FC } from "react";
 
-export const Dashboard: React.FC<DashboardProps> = ({ reloadFn }) => {
+export const Dashboard: FC<DashboardProps> = ({ reloadFn }) => {
   const { t } = useTranslation("common");
   const { error, user, logout, loading } = useAuth();
 

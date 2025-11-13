@@ -24,14 +24,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
 }
 
 .avatarWrapper {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 0.8rem;
+  display: flex;
+  justify-content: center;
   position: relative;
-  width: 110px;
-  height: 110px;
-  margin-bottom: 0.5rem;
 }
 
 .avatar {
@@ -39,46 +42,72 @@
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #e0e0e0;
+  border: 2px solid #ddd;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
-}
 
-.avatar:hover {
-  transform: scale(1.03);
+  &:hover {
+    transform: scale(1.03);
+  }
 }
 
 .avatarPlaceholder {
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: #f2f2f2;
+  background: #f0f0f0;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #999;
+  color: #888;
   font-size: 0.9rem;
   border: 2px dashed #ddd;
 }
 
-.uploadButton {
-  background-color: #555;
-  color: white;
+.avatarActions {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.uploadButton,
+.deleteButton {
   font-size: 0.9rem;
-  padding: 0.4rem 0.9rem;
-  border: none;
+  padding: 0.4rem 0.8rem;
   border-radius: 6px;
+  border: none;
   cursor: pointer;
-  transition: background-color 0.2s;
+  font-weight: 600;
+  transition: background-color 0.2s ease;
 }
 
-.uploadButton:hover {
-  background-color: #333;
+.uploadButton {
+  background-color: #4a90e2;
+  color: #fff;
+
+  &:hover {
+    background-color: #357ab8;
+  }
+
+  &:disabled {
+    background-color: #9bbce0;
+    cursor: not-allowed;
+  }
 }
 
-.uploadButton:disabled {
-  background-color: #999;
-  cursor: not-allowed;
+.deleteButton {
+  background-color: #e24a4a;
+  color: #fff;
+
+  &:hover {
+    background-color: #c63c3c;
+  }
+
+  &:disabled {
+    background-color: #f39c9c;
+    cursor: not-allowed;
+  }
 }
 
 .hiddenInput {
@@ -97,6 +126,14 @@
   border-radius: 6px;
   font-size: 1rem;
   margin-top: 0.3rem;
+  width: 100%;
+  box-sizing: border-box;
+
+  &:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+  }
 }
 
 .button {
@@ -107,28 +144,31 @@
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: #357ab8;
+  }
+
+  &:disabled {
+    background-color: #9bbce0;
+    cursor: not-allowed;
+  }
 }
 
-.button:hover {
-  background-color: #3a7bd5;
-}
-
-.button:disabled {
-  background-color: #9bbce0;
-  cursor: not-allowed;
+.success,
+.error {
+  text-align: center;
+  margin-top: 1rem;
+  font-weight: 500;
 }
 
 .success {
   color: #2e7d32;
-  margin-top: 1rem;
-  text-align: center;
 }
 
 .error {
   color: #c62828;
-  margin-top: 1rem;
-  text-align: center;
 }
 
 .loading {
@@ -172,63 +212,38 @@
   }
 }
 
-.avatarSection {
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
+@media (max-width: 480px) {
+  .container {
+    padding: 1rem;
+    margin: 1rem auto;
+  }
 
-.avatarWrapper {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
+  .avatarWrapper {
+    width: 100px;
+    height: 100px;
+  }
 
-.avatar {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #ddd;
-}
+  .avatarPlaceholder,
+  .avatar {
+    width: 100px;
+    height: 100px;
+  }
 
-.avatarPlaceholder {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: #f0f0f0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #888;
-  font-size: 0.9rem;
-}
+  .form {
+    gap: 1rem;
+  }
 
-.avatarActions {
-  display: flex;
-  justify-content: center;
-  gap: 0.8rem;
-}
+  .uploadButton,
+  .deleteButton {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.85rem;
+  }
 
-.uploadButton,
-.deleteButton {
-  background-color: #4a90e2;
-  color: white;
-  font-weight: 600;
-  padding: 0.4rem 0.8rem;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
+  .input {
+    font-size: 0.95rem;
+  }
 
-.uploadButton:hover {
-  background-color: #357ab8;
-}
-
-.deleteButton {
-  background-color: #e24a4a;
-}
-
-.deleteButton:hover {
-  background-color: #c63c3c;
+  .button {
+    padding: 0.5rem 0.8rem;
+  }
 }

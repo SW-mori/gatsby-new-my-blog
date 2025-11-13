@@ -32,9 +32,10 @@ export const usePostListTemplate = () => {
   };
 
   const handleTagClick = (tag: string) => {
+    const newValue = selectedTag === tag ? "" : tag;
     const event = {
-      target: { value: tag },
-    } as React.ChangeEvent<HTMLSelectElement>;
+      target: { value: newValue },
+    } as ChangeEvent<HTMLSelectElement>;
     handleTagChange(event);
   };
 

@@ -1,5 +1,5 @@
-import React from "react";
-import { render, screen } from "@testing-library/react";
+import { ReactNode } from "react";
+import { render, screen, within } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Layout } from "../Layout";
 
@@ -8,7 +8,7 @@ jest.mock("gatsby", () => {
   return {
     __esModule: true,
     ...originalModule,
-    Link: ({ to, children }: { to: string; children: React.ReactNode }) => (
+    Link: ({ to, children }: { to: string; children: ReactNode }) => (
       <a href={to}>{children}</a>
     ),
   };
@@ -52,13 +52,28 @@ describe("Layoutコンポーネント", () => {
   it("ヘッダーとナビリンクが正しく表示される", () => {
     render(<Layout pageTitle="ページタイトル">本文</Layout>);
 
-    expect(screen.getByText(/My Gatsby Site/)).toBeInTheDocument();
-    expect(screen.getByText("ホーム画面へようこそ")).toHaveAttribute(
-      "href",
-      "/"
-    );
-    expect(screen.getByText("Posts")).toHaveAttribute("href", "/posts");
-    expect(screen.getByText("JA")).toHaveAttribute("href", "/");
+    const homeLink = screen.getByText("ホーム画面へようこそ");
+    expect(homeLink).toHaveAttribute("href", "/");
+
+    const headerNav = screen.getByRole("navigation");
+
+    const dashboardLink = within(headerNav).getByText("Dashboard");
+    expect(dashboardLink).toHaveAttribute("href", "/dashboard");
+
+    const postsLink = within(headerNav).getByText("Posts");
+    expect(postsLink).toHaveAttribute("href", "/posts");
+
+    const errorLogsLink = within(headerNav).getByText("Error Logs");
+    expect(errorLogsLink).toHaveAttribute("href", "/error-logs");
+
+    const settingsLink = within(headerNav).getByText("Settings");
+    expect(settingsLink).toHaveAttribute("href", "/settings");
+
+    const langLink = within(headerNav).getByText("JA");
+    expect(langLink).toHaveAttribute("href", "/");
+
+    const logoutButton = within(headerNav).getByText("Logout");
+    expect(logoutButton).toBeInTheDocument();
   });
 
   it("pageTitle と children が main に表示される", () => {

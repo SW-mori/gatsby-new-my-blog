@@ -1,9 +1,9 @@
-import React from "react";
+import { FC } from "react";
 import { Layout } from "@components/Layout";
 import { ErrorLogs } from "@components/ErrorLogs/ErrorLogs";
 import { graphql } from "gatsby";
 
-const ErrorLogsPage: React.FC = () => {
+const ErrorLogsPage: FC = () => {
   return (
     <Layout>
       <ErrorLogs />

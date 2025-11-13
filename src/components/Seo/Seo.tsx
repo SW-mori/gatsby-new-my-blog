@@ -1,9 +1,9 @@
-import React from "react";
+import { FC } from "react";
 import { Helmet } from "react-helmet";
 import { useStaticQuery, graphql } from "gatsby";
 import { SEOProps } from "./types";
 
-export const SEO: React.FC<SEOProps> = ({
+export const SEO: FC<SEOProps> = ({
   title,
   description,
   image,

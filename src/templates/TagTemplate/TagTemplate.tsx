@@ -1,4 +1,4 @@
-import * as React from "react";
+import { FC } from "react";
 import { PageProps, graphql, Link } from "gatsby";
 import { useTranslation } from "gatsby-plugin-react-i18next";
 import { Layout, SEO, PostCard, PrivateRoute } from "../../components";
@@ -6,9 +6,10 @@ import { LANGUAGES, SITE_URL } from "../../constants";
 import { AllContentfulPostQuery } from "../../types";
 import * as styles from "./TagTemplate.module.scss";
 
-const TagTemplate: React.FC<
-  PageProps<AllContentfulPostQuery, { tag: string }>
-> = ({ data, pageContext }) => {
+const TagTemplate: FC<PageProps<AllContentfulPostQuery, { tag: string }>> = ({
+  data,
+  pageContext,
+}) => {
   const { t, i18n } = useTranslation("common");
   const posts = data?.allContentfulGatsbyBlog?.nodes ?? [];
   const { tag } = pageContext;

@@ -1,4 +1,4 @@
-import React from "react";
+import { ReactNode } from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { PageProps } from "gatsby";
@@ -22,9 +22,7 @@ jest.mock("../../../components", () => ({
     </div>
   ),
   PostCard: ({ post }: any) => <div data-testid="post-card">{post.title}</div>,
-  PrivateRoute: ({ children }: { children: React.ReactNode }) => (
-    <>{children}</>
-  ),
+  PrivateRoute: ({ children }: { children: ReactNode }) => <>{children}</>,
 }));
 
 jest.mock("gatsby-plugin-react-i18next", () => ({

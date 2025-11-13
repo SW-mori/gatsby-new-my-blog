@@ -1,11 +1,11 @@
-import * as React from "react";
+import { FC } from "react";
 import { useTranslation } from "gatsby-plugin-react-i18next";
 import { graphql } from "gatsby";
 import { Layout, SEO, PrivateRoute } from "../../components";
 import { LANGUAGES, SITE_URL } from "../../constants";
 import * as styles from "./HomeTemplate.module.scss";
 
-const HomeTemplate: React.FC = () => {
+const HomeTemplate: FC = () => {
   const { t, i18n } = useTranslation("common");
 
   const alternateLangs = [

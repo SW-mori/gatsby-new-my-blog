@@ -2,19 +2,65 @@
   display: flex;
   gap: 1rem;
   margin-bottom: 1.5rem;
+  flex-wrap: wrap;
 
-  input {
+  input,
+  select {
     flex: 1;
-    padding: 0.5rem;
+    padding: 0.6rem 0.8rem;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
   }
 
-  select {
-    padding: 0.5rem;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background: #fff;
+  input:focus,
+  select:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  }
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+
+    input,
+    select {
+      flex: none;
+      width: 100%;
+    }
+  }
+}
+
+.filters select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 0.6rem 1rem;
+  font-size: 0.95rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2210%22%20height%3D%227%22%20viewBox%3D%220%200%2010%207%22%20fill%3D%22none%22%20xmlns%3D%22http://www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M1%201L5%205L9%201%22%20stroke%3D%22%23343A40%22%20stroke-width%3D%222%22/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.8rem center;
+  background-size: 10px 7px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    border-color: #3b82f6;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
   }
 }
 
@@ -23,16 +69,27 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  align-items: center;
+
+  .tagButton,
+  .activeTag {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.35rem;
+    cursor: pointer;
+    border: none;
+    white-space: nowrap;
+
+    transition: background-color 0.25s ease, color 0.25s ease,
+      transform 0.15s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
 
   .tagButton {
     background-color: #f3f4f6;
-    border: none;
-    border-radius: 0.3rem;
-    padding: 0.3rem 0.6rem;
-    cursor: pointer;
-    font-size: 0.85rem;
-    transition: background-color 0.2s ease;
+    color: #374151;
 
     &:hover {
       background-color: #d1d5db;
@@ -62,28 +119,34 @@
 .pagination {
   display: flex;
   justify-content: center;
-  gap: 1rem;
-  margin-top: 2rem;
+  gap: 0.8rem;
+  margin: 2rem 0;
 
   a,
   span {
-    padding: 0.5rem 0.8rem;
-    border-radius: 4px;
+    display: inline-block;
+    padding: 0.5rem 0.9rem;
+    border-radius: 6px;
     font-size: 0.9rem;
     font-weight: 500;
     text-decoration: none;
-    color: #2563eb;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: all 0.2s ease;
   }
 
-  a:hover {
-    background-color: #2563eb;
-    color: #ffffff;
+  a {
+    color: #2563eb;
+    border: 1px solid #2563eb;
+
+    &:hover {
+      background-color: #2563eb;
+      color: #fff;
+    }
   }
 
   span {
     color: #9ca3af;
     cursor: default;
+    border: 1px solid #e5e7eb;
   }
 }
 
@@ -102,7 +165,7 @@
 
 .relatedList {
   list-style: none;
-  padding-left: 0;
+  padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
@@ -116,10 +179,30 @@
 .relatedLink {
   color: #2563eb;
   text-decoration: underline;
-  transition: color 0.2s ease;
+  transition: all 0.2s ease;
 
   &:hover {
     color: #1d4ed8;
     text-decoration: none;
+  }
+}
+
+.posts p {
+  text-align: center;
+  font-size: 1rem;
+  color: #6b7280;
+  padding: 2rem 0;
+}
+
+@media (max-width: 480px) {
+  .filters {
+    input,
+    select {
+      width: 100%;
+    }
+  }
+
+  .tagCloud {
+    justify-content: flex-start;
   }
 }
