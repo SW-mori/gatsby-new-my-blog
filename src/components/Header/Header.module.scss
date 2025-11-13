@@ -27,7 +27,6 @@
   }
 }
 
-/* PCナビ */
 .nav {
   display: flex;
   gap: 1rem;
@@ -38,7 +37,6 @@
   }
 }
 
-/* 共通リンク */
 .link {
   color: #333;
   text-decoration: none;
@@ -86,7 +84,7 @@
   height: 24px;
   cursor: pointer;
   transition: transform 0.3s ease;
-  z-index: 1200; // メニューより前面に出す
+  z-index: 1200;
 
   span {
     position: absolute;
@@ -108,12 +106,10 @@
     top: 20px;
   }
 
-  /* ホバー時：少し濃くなる */
   &:hover span {
     background-color: #000;
   }
 
-  /* 開いた状態（アクティブ） */
   &.active span:nth-child(1) {
     transform: translateY(10px) rotate(45deg);
   }
@@ -132,7 +128,7 @@
     justify-content: center;
   }
 }
-/* スライドインメニュー */
+
 .mobileNav {
   position: fixed;
   top: 0;
@@ -219,11 +215,10 @@
   }
 
   @media (max-width: 768px) {
-    display: none; /* モバイル時は非表示（モバイルメニューに表示） */
+    display: none;
   }
 }
 
-/* モバイル用言語切り替え */
 .mobileLanguage {
   margin-top: 2rem;
   border-top: 1px solid #eee;
