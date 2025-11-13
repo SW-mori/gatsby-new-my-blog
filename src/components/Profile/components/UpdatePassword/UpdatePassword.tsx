@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FC, FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import * as styles from "./UpdatePassword.module.scss";
 import { Reauthenticate } from "../../../Reauthenticate";
@@ -6,7 +6,7 @@ import { useAuth } from "../../../../context";
 import { ProfileStatus } from "../../types";
 import { PROFILE_STATUS } from "../../constants";
 
-export const UpdatePassword = () => {
+export const UpdatePassword: FC = () => {
   const { t } = useTranslation("common");
   const { updatePasswordSecure } = useAuth();
   const [currentPassword, setCurrentPassword] = useState("");
@@ -15,7 +15,7 @@ export const UpdatePassword = () => {
   const [status, setStatus] = useState<ProfileStatus>(PROFILE_STATUS.IDLE);
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError("");
     setStatus(PROFILE_STATUS.SAVING);

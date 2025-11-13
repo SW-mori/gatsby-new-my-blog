@@ -1,9 +1,10 @@
+import { FC } from "react";
 import { useUserSettings } from "./hooks";
 import { PROFILE_STATUS } from "../../constants";
 import { useTranslation } from "react-i18next";
 import * as styles from "./Notifications.module.scss";
 
-export const Notifications = () => {
+export const Notifications: FC = () => {
   const { t } = useTranslation("common");
   const { settings, updateSetting, loading, status } = useUserSettings();
 
@@ -46,7 +47,6 @@ export const Notifications = () => {
           {t("securityAlerts")}
         </label>
       </div>
-
       {status === PROFILE_STATUS.SAVING && (
         <p className={styles.saving}>{t("saving")}</p>
       )}

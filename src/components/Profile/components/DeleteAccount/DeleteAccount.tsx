@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FC, FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import * as styles from "./DeleteAccount.module.scss";
 import { Reauthenticate } from "../../../Reauthenticate";
@@ -6,7 +6,7 @@ import { useAuth } from "../../../../context";
 import { DeleteStatus } from "./types";
 import { DELETE_STATUS } from "./constants";
 
-export const DeleteAccount = () => {
+export const DeleteAccount: FC = () => {
   const { t } = useTranslation("common");
   const { deleteUserAccount } = useAuth();
   const [confirm, setConfirm] = useState("");
@@ -31,7 +31,7 @@ export const DeleteAccount = () => {
       } else {
         setShowReauth(true);
       }
-    } catch (err) {
+    } catch {
       setError(t("deleteAccountFailed"));
       setStatus(DELETE_STATUS.ERROR);
     }
