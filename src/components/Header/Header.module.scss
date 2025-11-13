@@ -2,6 +2,12 @@
   background-color: #fff;
   border-bottom: 1px solid #eee;
   padding: 1rem 2rem;
+  position: relative;
+  z-index: 1000;
+
+  @media (max-width: 768px) {
+    padding: 0.8rem 1.2rem;
+  }
 }
 
 .inner {
@@ -15,14 +21,24 @@
   font-size: 1.4rem;
   color: #333;
   text-decoration: none;
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
 }
 
+/* PCナビ */
 .nav {
   display: flex;
   gap: 1rem;
   align-items: center;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 }
 
+/* 共通リンク */
 .link {
   color: #333;
   text-decoration: none;
@@ -39,6 +55,7 @@
   border-radius: 4px;
   text-decoration: none;
   font-weight: 500;
+
   &:hover {
     background-color: #0059c1;
   }
@@ -51,6 +68,7 @@
   padding: 0.4rem 1rem;
   border-radius: 4px;
   cursor: pointer;
+
   &:hover {
     background-color: #fee;
   }
@@ -61,13 +79,122 @@
   color: #888;
 }
 
+.menuButton {
+  display: none;
+  position: relative;
+  width: 32px;
+  height: 24px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  z-index: 1200; // メニューより前面に出す
+
+  span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #333;
+    border-radius: 2px;
+    transition: all 0.3s ease-in-out;
+  }
+
+  span:nth-child(1) {
+    top: 0;
+  }
+  span:nth-child(2) {
+    top: 10px;
+  }
+  span:nth-child(3) {
+    top: 20px;
+  }
+
+  /* ホバー時：少し濃くなる */
+  &:hover span {
+    background-color: #000;
+  }
+
+  /* 開いた状態（アクティブ） */
+  &.active span:nth-child(1) {
+    transform: translateY(10px) rotate(45deg);
+  }
+
+  &.active span:nth-child(2) {
+    opacity: 0;
+  }
+
+  &.active span:nth-child(3) {
+    transform: translateY(-10px) rotate(-45deg);
+  }
+
+  @media (max-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+/* スライドインメニュー */
+.mobileNav {
+  position: fixed;
+  top: 0;
+  right: -280px;
+  width: 260px;
+  height: 100%;
+  background-color: #fff;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+  transition: right 0.3s ease-in-out;
+  z-index: 999;
+
+  &.open {
+    right: 0;
+  }
+
+  .mobileNavInner {
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1.5rem;
+    gap: 1rem;
+
+    a,
+    button {
+      font-size: 1rem;
+      color: #333;
+      text-decoration: none;
+      background: none;
+      border: none;
+      text-align: left;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 0.5rem 0;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+  }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 998;
+
+  &.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
 .languageSwitcher {
   display: flex;
   gap: 12px;
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  z-index: 10;
+  align-items: center;
 
   .languageLink,
   .activeLanguage {
@@ -91,15 +218,26 @@
     color: white;
   }
 
-  @media (max-width: 600px) {
-    flex-direction: column;
-    top: 12px;
-    right: 12px;
+  @media (max-width: 768px) {
+    display: none; /* モバイル時は非表示（モバイルメニューに表示） */
+  }
+}
+
+/* モバイル用言語切り替え */
+.mobileLanguage {
+  margin-top: 2rem;
+  border-top: 1px solid #eee;
+  padding-top: 1rem;
+
+  .languageSwitcher {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+    justify-content: center;
 
     .languageLink,
     .activeLanguage {
       padding: 8px 12px;
-      text-align: center;
     }
   }
 }

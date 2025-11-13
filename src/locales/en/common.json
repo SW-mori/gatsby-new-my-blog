@@ -109,5 +109,6 @@
   "warning": "Warning",
   "info": "Info",
   "errorNotificationSettings": "Error Log Notification Settings",
-  "selectErrorLevelsToNotify": "Select the error levels you wish to receive notifications for"
+  "selectErrorLevelsToNotify": "Select the error levels you wish to receive notifications for",
+  "resister": "Resister"
 }
