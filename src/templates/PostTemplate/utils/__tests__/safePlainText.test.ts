@@ -1,5 +1,4 @@
 import { safePlainText } from "../safePlainText";
-import * as safeParseModule from "../safeParse";
 import { documentToPlainTextString } from "@contentful/rich-text-plain-text-renderer";
 
 jest.mock("@contentful/rich-text-plain-text-renderer", () => ({
@@ -27,7 +26,7 @@ describe("safePlainText", () => {
   });
 
   it("無効な JSON の場合は空文字を返す", () => {
-    const raw = '{"content":[{"nodeType":"paragraph",}]}'; // 不正な JSON
+    const raw = '{"content":[{"nodeType":"paragraph",}]}';
     const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => {});
 
     const result = safePlainText(raw);

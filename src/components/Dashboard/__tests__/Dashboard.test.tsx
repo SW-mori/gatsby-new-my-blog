@@ -1,9 +1,7 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Dashboard } from "../Dashboard";
 
-// --- i18n モック ---
 jest.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string) => {
@@ -23,7 +21,6 @@ jest.mock("react-i18next", () => ({
   }),
 }));
 
-// --- useAuth モック ---
 jest.mock("../../../context", () => ({
   useAuth: jest.fn(),
 }));
@@ -55,14 +52,14 @@ describe("Dashboard コンポーネント", () => {
     });
 
     const reloadMock = jest.fn();
-    render(<Dashboard reloadFn={reloadMock} />); // テスト用関数を注入
+    render(<Dashboard reloadFn={reloadMock} />);
 
     expect(screen.getByText("エラーが発生しました")).toBeInTheDocument();
     expect(screen.getByText("サーバーエラー")).toBeInTheDocument();
 
     const reloadButton = screen.getByText("再読み込み");
     fireEvent.click(reloadButton);
-    expect(reloadMock).toHaveBeenCalled(); // 安全に確認可能
+    expect(reloadMock).toHaveBeenCalled();
   });
 
   it("未ログイン時はユーザー情報なしメッセージを表示する", () => {
