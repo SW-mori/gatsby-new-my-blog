@@ -60,9 +60,6 @@ describe("Layoutコンポーネント", () => {
     const dashboardLink = within(headerNav).getByText("Dashboard");
     expect(dashboardLink).toHaveAttribute("href", "/dashboard");
 
-    const postsLink = within(headerNav).getByText("Posts");
-    expect(postsLink).toHaveAttribute("href", "/posts");
-
     const errorLogsLink = within(headerNav).getByText("Error Logs");
     expect(errorLogsLink).toHaveAttribute("href", "/error-logs");
 

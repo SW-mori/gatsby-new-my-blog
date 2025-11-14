@@ -1,8 +1,6 @@
 {
   "site_name": "マイGatsbyサイト",
   "home": "ホーム画面",
-  "seo_home_title": "ホームページ",
-  "seo_home_description": "Gatsbyサイトのトップページです",
   "posts": "記事一覧",
   "settings": "設定",
   "page": "ページ",
