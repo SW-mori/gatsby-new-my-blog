@@ -1,3 +1,20 @@
+article {
+  max-width: 100%;
+  overflow-wrap: break-word;
+
+  img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  iframe {
+    max-width: 100%;
+    width: 100%;
+    border: none;
+  }
+}
+
 .date {
   font-size: 0.875rem;
   color: #666;
@@ -28,6 +45,7 @@
 .shareButtons {
   margin: 2rem 0;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
   font-size: 0.875rem;
@@ -39,6 +57,7 @@
     color: white;
     text-decoration: none;
     transition: background-color 0.2s ease;
+    white-space: nowrap;
 
     &:hover {
       background-color: #1d4ed8;
@@ -86,8 +105,10 @@
   }
 
   iframe {
-    border-radius: 6px;
     width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 6px;
   }
 }
 
@@ -127,6 +148,8 @@
       transition: border-color 0.2s ease, background-color 0.2s ease,
         color 0.2s ease;
       font-family: inherit;
+      width: 100%;
+      box-sizing: border-box;
 
       &:focus {
         outline: none;
