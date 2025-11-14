@@ -1,8 +1,6 @@
 {
   "site_name": "My Gatsby Site",
   "home": "Home",
-  "seo_home_title": "Home Page",
-  "seo_home_description": "Top page of Gatsby site",
   "posts": "Posts",
   "settings": "Settings",
   "page": "Page",

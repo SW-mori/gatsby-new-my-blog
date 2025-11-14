@@ -17,7 +17,6 @@ jest.mock("gatsby-plugin-react-i18next", () => ({
         home: "ホーム",
         loading: "読み込み中",
         dashboard: "ダッシュボード",
-        posts: "投稿一覧",
         errorLogs: "エラーログ",
         settings: "設定",
         logout: "ログアウト",
@@ -92,7 +91,6 @@ describe("Header コンポーネント", () => {
       "href",
       "/dashboard"
     );
-    expect(within(nav).getByText("投稿一覧")).toHaveAttribute("href", "/posts");
     expect(within(nav).getByText("エラーログ")).toHaveAttribute(
       "href",
       "/error-logs"

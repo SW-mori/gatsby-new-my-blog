@@ -8,9 +8,6 @@ export const createPages: GatsbyNode["createPages"] = async ({
 }) => {
   const { createPage } = actions;
 
-  const homeTemplate = path.resolve(
-    "./src/templates/HomeTemplate/HomeTemplate.tsx"
-  );
   const postTemplate = path.resolve(
     "./src/templates/PostTemplate/PostTemplate.tsx"
   );
@@ -52,12 +49,6 @@ export const createPages: GatsbyNode["createPages"] = async ({
 
   const posts = result.data.allContentfulGatsbyBlog.nodes;
 
-  createPage({
-    path: `/`,
-    component: homeTemplate,
-    context: {},
-  });
-
   posts.forEach((post) => {
     createPage({
       path: `/posts/${post.slug}`,
@@ -71,7 +62,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
 
   Array.from({ length: numPages }).forEach((_, i) => {
     createPage({
-      path: i === 0 ? `/posts` : `/posts/${i + 1}`,
+      path: i === 0 ? `/` : `/${i + 1}`,
       component: postsListTemplate,
       context: {
         limit: postsPerPage,

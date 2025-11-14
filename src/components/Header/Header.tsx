@@ -28,9 +28,6 @@ export const Header: FC = () => {
           <Link to="/dashboard" className={styles.link}>
             {t("dashboard")}
           </Link>
-          <Link to="/posts" className={styles.link}>
-            {t("posts")}
-          </Link>
           <Link to="/error-logs" className={styles.link}>
             {t("errorLogs")}
           </Link>
