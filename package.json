@@ -17,7 +17,10 @@
     "test:coverage": "jest --config jest.config.ts --coverage",
     "typecheck": "tsc --noEmit",
     "typecheck:watch": "tsc --noEmit --watch",
-    "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}' --max-warnings=0"
+    "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}' --max-warnings=0",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "test:e2e": "npm-run-all --parallel start:test cy:run"
   },
   "dependencies": {
     "@contentful/rich-text-plain-text-renderer": "^17.1.5",
@@ -62,6 +65,7 @@
     "@typescript-eslint/parser": "^8.46.1",
     "babel-jest": "^30.2.0",
     "babel-preset-gatsby": "^3.15.0",
+    "cypress": "^15.6.0",
     "eslint": "^9.37.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react": "^7.37.5",
