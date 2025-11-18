@@ -3,6 +3,7 @@ import { DashboardProps } from "./types";
 import { useAuth } from "../../context";
 import * as styles from "./Dashboard.module.scss";
 import { FC } from "react";
+import { DASHBOARD_TEST_ID } from "../../../cypress";
 
 export const Dashboard: FC<DashboardProps> = ({ reloadFn }) => {
   const { t } = useTranslation("common");
@@ -62,7 +63,11 @@ export const Dashboard: FC<DashboardProps> = ({ reloadFn }) => {
               : "N/A"}
           </li>
         </ul>
-        <button className={styles.logoutButton} onClick={logout}>
+        <button
+          className={styles.logoutButton}
+          onClick={logout}
+          data-testid={DASHBOARD_TEST_ID.BUTTON}
+        >
           {t("logout")}
         </button>
       </div>

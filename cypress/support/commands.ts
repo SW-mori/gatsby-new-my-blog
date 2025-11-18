@@ -1,4 +1,7 @@
 /// <reference types="cypress" />
+
+import { BASE_URL, LOGIN_TEST_ID } from "../constants";
+
 // ***********************************************
 // This example commands.ts shows you how to
 // create various custom commands and overwrite
@@ -11,7 +14,16 @@
 //
 //
 // -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
+Cypress.Commands.add("login", (email: string, password: string) => {
+  cy.visit(`${BASE_URL}/login`);
+
+  cy.get(`[data-testid="${LOGIN_TEST_ID.INPUT("email")}"]`).type(email);
+  cy.get(`[data-testid="${LOGIN_TEST_ID.INPUT("password")}"]`).type(password);
+  cy.get(`[data-testid="${LOGIN_TEST_ID.BUTTON}"]`).click();
+
+  cy.wait(500);
+  cy.url().should("eq", `${BASE_URL}/`);
+});
 //
 //
 // -- This is a child command --
