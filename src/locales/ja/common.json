@@ -36,8 +36,6 @@
   "login": "ログイン",
   "loadingLogin": "ログイン中...",
   "password": "パスワード",
-  "email_format": "メールアドレスの形式が正しくありません。",
-  "email_wrong": "メールアドレスまたはパスワードが間違っています。",
   "login_failed": "ログインに失敗しました。",
   "user_not_found": "ユーザーが見つかりません。",
   "validate_input": "メールアドレスとパスワードを入力してください。",

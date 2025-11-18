@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useLogin } from "./hooks";
+import { LOGIN_TEST_ID } from "../../../cypress";
 import * as styles from "./Login.module.scss";
 
 export const Login = () => {
@@ -11,7 +12,7 @@ export const Login = () => {
     <div className={styles.page}>
       <div className={styles.card}>
         <h1 className={styles.title}>{t("login")}</h1>
-        <form onSubmit={handleLogin} className={styles.form}>
+        <form onSubmit={handleLogin} className={styles.form} noValidate>
           <div className={styles.formGroup}>
             <label htmlFor="email">{t("email")}</label>
             <input
@@ -20,9 +21,9 @@ export const Login = () => {
               value={email}
               onChange={onChangeEmail}
               required
+              data-testId={LOGIN_TEST_ID.INPUT("email")}
             />
           </div>
-
           <div className={styles.formGroup}>
             <label htmlFor="password">{t("password")}</label>
             <input
@@ -31,10 +32,15 @@ export const Login = () => {
               value={password}
               onChange={onChangePassword}
               required
+              data-testId={LOGIN_TEST_ID.INPUT("password")}
             />
           </div>
           {error && <p className={styles.errorMessage}>{error}</p>}
-          <button type="submit" disabled={loading}>
+          <button
+            type="submit"
+            disabled={loading}
+            data-testId={LOGIN_TEST_ID.BUTTON}
+          >
             {loading ? t("loadingLogin") : t("login")}
           </button>
         </form>

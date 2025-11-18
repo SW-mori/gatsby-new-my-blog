@@ -36,8 +36,6 @@
   "login": "Login",
   "loadingLogin": "Logging in...",
   "password": "Password",
-  "email_format": "The email address format is incorrect.",
-  "email_wrong": "The email address or password is incorrect.",
   "login_failed": "Login failed.",
   "user_not_found": "User not found.",
   "validate_input": "Please enter your email address and password.",
