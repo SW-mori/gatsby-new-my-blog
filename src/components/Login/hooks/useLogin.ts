@@ -41,19 +41,7 @@ export const useLogin = () => {
       await signInWithEmailAndPassword(auth, email, password);
       navigate("/");
     } catch (err: any) {
-      switch (err.code) {
-        case "auth/invalid-email":
-          setError(t("email_format"));
-          break;
-        case "auth/user-not-found":
-          setError(t(""));
-          break;
-        case "auth/wrong-password":
-          setError(t("email_wrong"));
-          break;
-        default:
-          setError(t("login_failed"));
-      }
+      setError(t("login_failed"));
     } finally {
       setLoading(false);
     }
