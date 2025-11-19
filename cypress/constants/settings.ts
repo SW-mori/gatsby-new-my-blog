@@ -4,4 +4,5 @@ export const SETTINGS_TEST_ID = {
     PROFILE: "profile-save-button",
     PASSWORD: "password-save-button",
   },
+  CHECK: (key: string) => `${key}-notification`,
 };

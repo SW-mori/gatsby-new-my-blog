@@ -48,4 +48,14 @@ describe("Testing for dashboard page", () => {
     cy.contains("保存しました！");
     cy.contains("パスワードを更新しました。");
   });
+
+  // Since there is only one account, the end-to-end test for account deletion is skipped.
+
+  it("Notification settings", () => {
+    cy.get(`[data-testid="${SETTINGS_TEST_ID.CHECK("email")}"]`).click();
+    cy.get(`[data-testid="${SETTINGS_TEST_ID.CHECK("comment")}"]`).click();
+    cy.get(`[data-testid="${SETTINGS_TEST_ID.CHECK("security")}"]`).click();
+    cy.contains("保存中...");
+    cy.contains("設定を保存しました");
+  });
 });
