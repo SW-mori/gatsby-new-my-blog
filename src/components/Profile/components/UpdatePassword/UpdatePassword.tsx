@@ -5,6 +5,7 @@ import { Reauthenticate } from "../../../Reauthenticate";
 import { useAuth } from "../../../../context";
 import { ProfileStatus } from "../../types";
 import { PROFILE_STATUS } from "../../constants";
+import { SETTINGS_TEST_ID } from "../../../../../cypress";
 
 export const UpdatePassword: FC = () => {
   const { t } = useTranslation("common");
@@ -49,6 +50,7 @@ export const UpdatePassword: FC = () => {
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
             className={styles.input}
+            data-testid={SETTINGS_TEST_ID.INPUT("currentPassword")}
           />
           <input
             type="password"
@@ -56,11 +58,13 @@ export const UpdatePassword: FC = () => {
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             className={styles.input}
+            data-testid={SETTINGS_TEST_ID.INPUT("newPassword")}
           />
           <button
             type="submit"
             disabled={status === PROFILE_STATUS.SUCCESS}
             className={styles.button}
+            data-testid={SETTINGS_TEST_ID.BUTTON.PASSWORD}
           >
             {status === PROFILE_STATUS.SAVING
               ? t("saving")
