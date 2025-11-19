@@ -2,6 +2,7 @@ import * as styles from "./ErrorLogs.module.scss";
 import { useTranslation } from "react-i18next";
 import { useErrorLogs } from "./hooks";
 import { Fragment } from "react";
+import { ERROR_LOGS_TEST_ID } from "../../../cypress";
 
 export const ErrorLogs = () => {
   const { t } = useTranslation("common");
@@ -28,11 +29,26 @@ export const ErrorLogs = () => {
           id="filter"
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
+          data-testid={ERROR_LOGS_TEST_ID.SELECT}
         >
-          <option value="all">{t("all")}</option>
-          <option value="error">{t("error")}</option>
-          <option value="warning">{t("warning")}</option>
-          <option value="info">{t("info")}</option>
+          <option value="all" data-testid={ERROR_LOGS_TEST_ID.FILTER("all")}>
+            {t("all")}
+          </option>
+          <option
+            value="error"
+            data-testid={ERROR_LOGS_TEST_ID.FILTER("error")}
+          >
+            {t("error")}
+          </option>
+          <option
+            value="warning"
+            data-testid={ERROR_LOGS_TEST_ID.FILTER("warning")}
+          >
+            {t("warning")}
+          </option>
+          <option value="info" data-testid={ERROR_LOGS_TEST_ID.FILTER("info")}>
+            {t("info")}
+          </option>
         </select>
       </div>
       {logs.length === 0 ? (

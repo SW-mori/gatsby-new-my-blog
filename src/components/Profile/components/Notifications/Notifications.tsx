@@ -3,6 +3,7 @@ import { useUserSettings } from "./hooks";
 import { PROFILE_STATUS } from "../../constants";
 import { useTranslation } from "react-i18next";
 import * as styles from "./Notifications.module.scss";
+import { SETTINGS_TEST_ID } from "../../../../../cypress";
 
 export const Notifications: FC = () => {
   const { t } = useTranslation("common");
@@ -23,6 +24,7 @@ export const Notifications: FC = () => {
             onChange={(e) =>
               updateSetting("emailNotifications", e.target.checked)
             }
+            data-testid={SETTINGS_TEST_ID.CHECK("email")}
           />
           {t("emailNotifications")}
         </label>
@@ -34,6 +36,7 @@ export const Notifications: FC = () => {
             onChange={(e) =>
               updateSetting("commentNotifications", e.target.checked)
             }
+            data-testid={SETTINGS_TEST_ID.CHECK("comment")}
           />
           {t("commentNotifications")}
         </label>
@@ -43,6 +46,7 @@ export const Notifications: FC = () => {
             type="checkbox"
             checked={settings.securityAlerts}
             onChange={(e) => updateSetting("securityAlerts", e.target.checked)}
+            data-testid={SETTINGS_TEST_ID.CHECK("security")}
           />
           {t("securityAlerts")}
         </label>

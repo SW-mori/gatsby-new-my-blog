@@ -1,4 +1,4 @@
-import { BASE_URL, DASHBOARD_TEST_ID } from "../constants";
+import { BASE_URL } from "../constants";
 
 describe("Testing for Header banner", () => {
   beforeEach(() => {

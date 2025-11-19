@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import * as styles from "./Profile.module.scss";
 import { PROFILE_STATUS } from "./constants";
 import { DeleteAccount, Notifications, UpdatePassword } from "./components";
+import { SETTINGS_TEST_ID } from "../../../cypress";
 
 export const Profile: FC = () => {
   const { t } = useTranslation("common");
@@ -83,6 +84,7 @@ export const Profile: FC = () => {
               value={displayName}
               onChange={(e) => setDisplayName(e.target.value)}
               className={styles.input}
+              data-testid={SETTINGS_TEST_ID.INPUT("name")}
             />
           </label>
           <label className={styles.label}>
@@ -92,12 +94,14 @@ export const Profile: FC = () => {
               value={photoURL}
               onChange={(e) => setPhotoURL(e.target.value)}
               className={styles.input}
+              data-testid={SETTINGS_TEST_ID.INPUT("url")}
             />
           </label>
           <button
             type="submit"
             className={styles.button}
             disabled={uploading || deleting || status === PROFILE_STATUS.SAVING}
+            data-testid={SETTINGS_TEST_ID.BUTTON.PROFILE}
           >
             {status === PROFILE_STATUS.SAVING
               ? t("saving")
