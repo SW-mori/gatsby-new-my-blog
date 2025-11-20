@@ -1,6 +1,6 @@
 import { BASE_URL } from "../constants";
 
-describe("Testing for Header banner", () => {
+describe("Testing for header banner", () => {
   beforeEach(() => {
     cy.login("test@test.com", "testUser");
     cy.visit(`${BASE_URL}/dashboard`);

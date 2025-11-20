@@ -9,6 +9,7 @@ import { documentToReactComponents } from "@contentful/rich-text-react-renderer"
 import { useTranslation } from "gatsby-plugin-react-i18next";
 import { DiscussionEmbed } from "disqus-react";
 import * as styles from "./PostTemplate.module.scss";
+import { POSTS_TEST_ID } from "../../../cypress";
 
 const PostTemplate: FC<PageProps<ContentfulPostData>> = ({ data }) => {
   const { t, i18n } = useTranslation("common");
@@ -107,6 +108,7 @@ const PostTemplate: FC<PageProps<ContentfulPostData>> = ({ data }) => {
             href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
             target="_blank"
             rel="noopener noreferrer"
+            data-testid={POSTS_TEST_ID.SHARE("twitter")}
           >
             Twitter
           </a>
@@ -114,6 +116,7 @@ const PostTemplate: FC<PageProps<ContentfulPostData>> = ({ data }) => {
             href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
             target="_blank"
             rel="noopener noreferrer"
+            data-testid={POSTS_TEST_ID.SHARE("facebook")}
           >
             Facebook
           </a>
@@ -121,6 +124,7 @@ const PostTemplate: FC<PageProps<ContentfulPostData>> = ({ data }) => {
             href={`https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${shareText}`}
             target="_blank"
             rel="noopener noreferrer"
+            data-testid={POSTS_TEST_ID.SHARE("linkedIn")}
           >
             LinkedIn
           </a>
@@ -166,16 +170,37 @@ const PostTemplate: FC<PageProps<ContentfulPostData>> = ({ data }) => {
             </p>
 
             <label>
-              {t("name")}: <input type="text" name="name" required />
+              {t("name")}:
+              <input
+                type="text"
+                name="name"
+                required
+                data-testid={POSTS_TEST_ID.INPUT("name")}
+              />
             </label>
             <label>
-              {t("email")}: <input type="email" name="email" required />
+              {t("email")}:
+              <input
+                type="email"
+                name="email"
+                required
+                data-testid={POSTS_TEST_ID.INPUT("email")}
+              />
             </label>
             <label>
-              {t("message")}: <textarea name="message" required></textarea>
+              {t("message")}:
+              <textarea
+                name="message"
+                required
+                data-testid={POSTS_TEST_ID.INPUT("message")}
+              ></textarea>
             </label>
 
-            <button type="submit" disabled={formStatus === "submitting"}>
+            <button
+              type="submit"
+              disabled={formStatus === "submitting"}
+              data-testid={POSTS_TEST_ID.BUTTON}
+            >
               {formStatus === "submitting" ? "Sending..." : t("send")}
             </button>
           </form>

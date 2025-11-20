@@ -1,6 +1,6 @@
 import { BASE_URL, TAGS_TEST_ID } from "../constants";
 
-describe("Testing for home page", () => {
+describe("Testing for tags page", () => {
   beforeEach(() => {
     cy.login("test@test.com", "testUser");
     cy.visit(`${BASE_URL}/tags/seo/`);
