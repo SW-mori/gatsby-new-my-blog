@@ -31,10 +31,18 @@ describe("Testing for home page", () => {
     cy.contains("各ページのレスポンシブ対応");
   });
 
+  // As the number of articles increases, it may become necessary to make revisions.
   it("Pagination Test", () => {
+    cy.get(`[data-testid="${HOME_TEST_ID.BUTTON.PREV}"]`).should("not.exist");
     cy.get(`[data-testid="${HOME_TEST_ID.BUTTON.NEXT}"]`).click();
     cy.url().should("eq", `${BASE_URL}/posts/2/`);
     cy.get(`[data-testid="${HOME_TEST_ID.BUTTON.PREV}"]`).click();
     cy.url().should("eq", `${BASE_URL}/`);
+    cy.get(`[data-testid="${HOME_TEST_ID.BUTTON.NEXT}"]`).click();
+    cy.get(`[data-testid="${HOME_TEST_ID.BUTTON.NEXT}"]`).click();
+    cy.get(`[data-testid="${HOME_TEST_ID.BUTTON.NEXT}"]`).click();
+    cy.get(`[data-testid="${HOME_TEST_ID.BUTTON.NEXT}"]`).click();
+    cy.get(`[data-testid="${HOME_TEST_ID.BUTTON.NEXT}"]`).click();
+    cy.get(`[data-testid="${HOME_TEST_ID.BUTTON.NEXT}"]`).should("not.exist");
   });
 });
