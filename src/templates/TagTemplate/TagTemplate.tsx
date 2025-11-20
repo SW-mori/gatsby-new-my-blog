@@ -5,6 +5,7 @@ import { Layout, SEO, PostCard, PrivateRoute } from "../../components";
 import { LANGUAGES, SITE_URL } from "../../constants";
 import { AllContentfulPostQuery } from "../../types";
 import * as styles from "./TagTemplate.module.scss";
+import { TAGS_TEST_ID } from "../../../cypress";
 
 const TagTemplate: FC<PageProps<AllContentfulPostQuery, { tag: string }>> = ({
   data,
@@ -39,6 +40,7 @@ const TagTemplate: FC<PageProps<AllContentfulPostQuery, { tag: string }>> = ({
             href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
             target="_blank"
             rel="noopener noreferrer"
+            data-testid={TAGS_TEST_ID.SHARE("twitter")}
           >
             Twitter
           </a>
@@ -46,6 +48,7 @@ const TagTemplate: FC<PageProps<AllContentfulPostQuery, { tag: string }>> = ({
             href={`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`}
             target="_blank"
             rel="noopener noreferrer"
+            data-testid={TAGS_TEST_ID.SHARE("facebook")}
           >
             Facebook
           </a>
@@ -53,6 +56,7 @@ const TagTemplate: FC<PageProps<AllContentfulPostQuery, { tag: string }>> = ({
             href={`https://www.linkedin.com/shareArticle?mini=true&url=${shareUrl}&title=${shareText}`}
             target="_blank"
             rel="noopener noreferrer"
+            data-testid={TAGS_TEST_ID.SHARE("linkedIn")}
           >
             LinkedIn
           </a>
@@ -67,7 +71,7 @@ const TagTemplate: FC<PageProps<AllContentfulPostQuery, { tag: string }>> = ({
             ))}
           </div>
         )}
-        <Link to="/posts" className={styles.back}>
+        <Link to="/" className={styles.back}>
           ← {t("back_to_posts")}
         </Link>
       </Layout>
