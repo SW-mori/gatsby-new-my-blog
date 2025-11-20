@@ -1,6 +1,6 @@
 import { BASE_URL, ERROR_LOGS_TEST_ID } from "../constants";
 
-describe("Testing for dashboard page", () => {
+describe("Testing for error-logs page", () => {
   beforeEach(() => {
     cy.login("test@test.com", "testUser");
     cy.visit(`${BASE_URL}/error-logs`);

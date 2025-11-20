@@ -1,6 +1,6 @@
 import { BASE_URL, SETTINGS_TEST_ID } from "../constants";
 
-describe("Testing for dashboard page", () => {
+describe("Testing for settings page", () => {
   beforeEach(() => {
     cy.login("test@test.com", "testUser");
     cy.visit(`${BASE_URL}/settings`);
