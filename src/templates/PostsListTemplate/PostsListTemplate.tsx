@@ -7,6 +7,7 @@ import { Layout, SEO, PostCard, PrivateRoute } from "../../components";
 import { LANGUAGES, SITE_URL } from "../../constants";
 import { AllContentfulPostQuery, PageContext } from "../../types";
 import * as styles from "./PostsListTemplate.module.scss";
+import { HOME_TEST_ID } from "../../../cypress";
 
 const PostsListTemplate: FC<PageProps<AllContentfulPostQuery, PageContext>> = ({
   data,
@@ -47,26 +48,24 @@ const PostsListTemplate: FC<PageProps<AllContentfulPostQuery, PageContext>> = ({
     return (titleMatch || bodyMatch) && matchesTag;
   });
 
-  const prevPage = currentPage === 2 ? `/posts` : `/posts/${currentPage - 1}`;
+  const prevPage = currentPage === 2 ? `/` : `/posts/${currentPage - 1}`;
   const nextPage = `/posts/${currentPage + 1}`;
   const hasPrev = currentPage > 1;
   const hasNext = currentPage < numPages;
 
-  const pathname = currentPage === 1 ? `/posts` : `/posts/${currentPage}`;
+  const pathname = currentPage === 1 ? `/` : `/posts/${currentPage}`;
 
   const alternateLangs = [
     {
       hreflang: LANGUAGES.JA,
       href:
-        currentPage === 1
-          ? `${SITE_URL}/posts`
-          : `${SITE_URL}/posts/${currentPage}`,
+        currentPage === 1 ? `${SITE_URL}/` : `${SITE_URL}/posts/${currentPage}`,
     },
     {
       hreflang: LANGUAGES.EN,
       href:
         currentPage === 1
-          ? `${SITE_URL}/${LANGUAGES.EN}/posts`
+          ? `${SITE_URL}/${LANGUAGES.EN}/`
           : `${SITE_URL}/${LANGUAGES.EN}/posts/${currentPage}`,
     },
   ];
@@ -88,8 +87,13 @@ const PostsListTemplate: FC<PageProps<AllContentfulPostQuery, PageContext>> = ({
             placeholder={t("search_placeholder")}
             value={searchTerm}
             onChange={handleSearchChange}
+            data-testid={HOME_TEST_ID.SEARCH}
           />
-          <select value={selectedTag} onChange={handleTagChange}>
+          <select
+            value={selectedTag}
+            onChange={handleTagChange}
+            data-testid={HOME_TEST_ID.SELECT}
+          >
             <option value="">{t("all_tags")}</option>
             {allTags.map((tag) => (
               <option key={tag} value={tag}>
@@ -139,6 +143,7 @@ const PostsListTemplate: FC<PageProps<AllContentfulPostQuery, PageContext>> = ({
             <Link
               to={prevPage}
               onClick={() => pushEvent("pagination_prev", { page: prevPage })}
+              data-testid={HOME_TEST_ID.BUTTON.PREV}
             >
               {t("prev")}
             </Link>
@@ -148,6 +153,7 @@ const PostsListTemplate: FC<PageProps<AllContentfulPostQuery, PageContext>> = ({
             <Link
               to={nextPage}
               onClick={() => pushEvent("pagination_next", { page: nextPage })}
+              data-testid={HOME_TEST_ID.BUTTON.NEXT}
             >
               {t("next")}
             </Link>
