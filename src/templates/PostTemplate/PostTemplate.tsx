@@ -44,7 +44,7 @@ const PostTemplate: FC<PageProps<ContentfulPostData>> = ({ data }) => {
   ];
 
   const disqusConfig = {
-    shortname: "disqus",
+    shortname: "my-gatsby-blog",
     config: {
       identifier: post.slug,
       title: post.title,
