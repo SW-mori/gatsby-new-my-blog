@@ -11,7 +11,6 @@ import {
   deleteObject,
 } from "firebase/storage";
 import { app } from "../../../firebase";
-import { setLogLevel } from "firebase/firestore";
 import { useErrorLogger } from "../../../services";
 
 export const useProfile = () => {
@@ -19,6 +18,7 @@ export const useProfile = () => {
 
   const [displayName, setDisplayName] = useState("");
   const [photoURL, setPhotoURL] = useState("");
+
   const [status, setStatus] = useState<ProfileStatus>(PROFILE_STATUS.IDLE);
   const [loading, setLoading] = useState<boolean>(true);
   const [uploading, setUploading] = useState<boolean>(false);
@@ -39,8 +39,8 @@ export const useProfile = () => {
       try {
         const data = await getUserProfile(user.uid);
         if (data) {
-          setDisplayName(data.displayName ?? user.displayName ?? "");
-          setPhotoURL(data.photoURL ?? user.photoURL ?? "");
+          setDisplayName(data.displayName ?? "");
+          setPhotoURL(data.photoURL ?? "");
         } else {
           setDisplayName(user.displayName ?? "");
           setPhotoURL(user.photoURL ?? "");
@@ -55,8 +55,6 @@ export const useProfile = () => {
 
     loadProfile();
   }, [user]);
-
-  setLogLevel("error");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -95,19 +93,20 @@ export const useProfile = () => {
     try {
       const filePath = `users/${user.uid}/profile/${file.name}`;
       const storageRef = ref(storage, filePath);
+
       await uploadBytes(storageRef, file);
       const url = await getDownloadURL(storageRef);
 
       const ok = await updateProfileInfo({ photoURL: url });
-      if (ok) {
-        await saveUserProfile({
-          uid: user.uid,
-          displayName: displayName.trim() || null,
-          photoURL: url,
-          updatedAt: Date.now(),
-        });
-        setPhotoURL(url);
-      }
+      if (!ok) throw new Error("updateProfileInfo failed");
+
+      await saveUserProfile({
+        uid: user.uid,
+        displayName: displayName.trim() || null,
+        photoURL: url,
+        updatedAt: Date.now(),
+      });
+      setPhotoURL(url);
 
       setStatus(PROFILE_STATUS.SUCCESS);
       setTimeout(() => setStatus(PROFILE_STATUS.IDLE), 2500);
@@ -121,25 +120,43 @@ export const useProfile = () => {
   };
 
   const handleDeletePhoto = async () => {
-    if (!user || !photoURL) return;
+    if (!user) return;
+
+    const isFirebaseURL = photoURL?.startsWith(
+      "https://firebasestorage.googleapis.com/"
+    );
+
     setDeleting(true);
 
     try {
-      const fileRef = ref(storage, photoURL);
-      await deleteObject(fileRef).catch(() =>
-        console.warn("Storage file not found, skipping delete.")
-      );
+      if (isFirebaseURL && photoURL) {
+        const url = new URL(photoURL);
+        const fullPathEncoded = url.pathname.split("/o/")[1]?.split("?")[0];
+
+        if (!fullPathEncoded) throw new Error("Invalid Firebase Storage URL");
+
+        const fullPath = decodeURIComponent(fullPathEncoded);
+
+        const fileRef = ref(storage, fullPath);
+
+        await deleteObject(fileRef).catch(() =>
+          console.warn("Storage file not found, skipping delete.")
+        );
+      } else {
+        console.warn("External URL detected. Skipping storage delete.");
+      }
 
       const ok = await updateProfileInfo({ photoURL: null });
-      if (ok) {
-        await saveUserProfile({
-          uid: user.uid,
-          displayName: displayName.trim() || null,
-          photoURL: null,
-          updatedAt: Date.now(),
-        });
-        setPhotoURL("");
-      }
+      if (!ok) throw new Error("updateProfileInfo failed");
+
+      await saveUserProfile({
+        uid: user.uid,
+        displayName: displayName.trim() || null,
+        photoURL: null,
+        updatedAt: Date.now(),
+      });
+
+      setPhotoURL("");
 
       setStatus(PROFILE_STATUS.SUCCESS);
       setTimeout(() => setStatus(PROFILE_STATUS.IDLE), 2500);
