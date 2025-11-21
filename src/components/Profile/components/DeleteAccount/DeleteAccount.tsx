@@ -47,7 +47,7 @@ export const DeleteAccount: FC = () => {
           <p className={styles.warning}>{t("deleteWarning")}</p>
           <input
             type="text"
-            placeholder="Type DELETE to confirm"
+            placeholder="DELETEと入力してください。"
             value={confirm}
             onChange={(e) => setConfirm(e.target.value)}
             className={styles.input}

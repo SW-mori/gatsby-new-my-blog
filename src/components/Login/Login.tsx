@@ -21,7 +21,7 @@ export const Login = () => {
               value={email}
               onChange={onChangeEmail}
               required
-              data-testId={LOGIN_TEST_ID.INPUT("email")}
+              data-testid={LOGIN_TEST_ID.INPUT("email")}
             />
           </div>
           <div className={styles.formGroup}>
@@ -32,14 +32,14 @@ export const Login = () => {
               value={password}
               onChange={onChangePassword}
               required
-              data-testId={LOGIN_TEST_ID.INPUT("password")}
+              data-testid={LOGIN_TEST_ID.INPUT("password")}
             />
           </div>
           {error && <p className={styles.errorMessage}>{error}</p>}
           <button
             type="submit"
             disabled={loading}
-            data-testId={LOGIN_TEST_ID.BUTTON}
+            data-testid={LOGIN_TEST_ID.BUTTON}
           >
             {loading ? t("loadingLogin") : t("login")}
           </button>

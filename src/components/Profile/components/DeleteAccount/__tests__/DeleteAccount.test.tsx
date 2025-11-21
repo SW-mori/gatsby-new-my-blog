@@ -12,7 +12,7 @@ jest.mock("react-i18next", () => ({
       const translations: Record<string, string> = {
         deleteAccount: "アカウント削除",
         deleteWarning: "この操作は取り消せません",
-        deleteConfirmError: "DELETE と入力してください",
+        deleteConfirmError: "DELETEと入力してください",
         delete: "削除",
         deleting: "削除中...",
         deleted: "削除済み",
@@ -51,7 +51,7 @@ describe("DeleteAccount コンポーネント", () => {
     expect(screen.getByText("アカウント削除")).toBeInTheDocument();
     expect(screen.getByText("この操作は取り消せません")).toBeInTheDocument();
     expect(
-      screen.getByPlaceholderText("Type DELETE to confirm")
+      screen.getByPlaceholderText("DELETEと入力してください。")
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "削除" })).toBeInTheDocument();
   });
@@ -59,13 +59,16 @@ describe("DeleteAccount コンポーネント", () => {
   it("DELETE と入力しない場合はエラーを表示する", async () => {
     render(<DeleteAccount />);
 
-    fireEvent.change(screen.getByPlaceholderText("Type DELETE to confirm"), {
-      target: { value: "WRONG" },
-    });
+    fireEvent.change(
+      screen.getByPlaceholderText("DELETEと入力してください。"),
+      {
+        target: { value: "WRONG" },
+      }
+    );
     fireEvent.click(screen.getByRole("button", { name: "削除" }));
 
     expect(
-      await screen.findByText("DELETE と入力してください")
+      await screen.findByText("DELETEと入力してください")
     ).toBeInTheDocument();
   });
 
@@ -74,9 +77,12 @@ describe("DeleteAccount コンポーネント", () => {
 
     render(<DeleteAccount />);
 
-    fireEvent.change(screen.getByPlaceholderText("Type DELETE to confirm"), {
-      target: { value: "DELETE" },
-    });
+    fireEvent.change(
+      screen.getByPlaceholderText("DELETEと入力してください。"),
+      {
+        target: { value: "DELETE" },
+      }
+    );
     fireEvent.click(screen.getByRole("button", { name: "削除" }));
 
     expect(screen.getByRole("button")).toHaveTextContent("削除中...");
@@ -92,9 +98,12 @@ describe("DeleteAccount コンポーネント", () => {
 
     render(<DeleteAccount />);
 
-    fireEvent.change(screen.getByPlaceholderText("Type DELETE to confirm"), {
-      target: { value: "DELETE" },
-    });
+    fireEvent.change(
+      screen.getByPlaceholderText("DELETEと入力してください。"),
+      {
+        target: { value: "DELETE" },
+      }
+    );
     fireEvent.click(screen.getByRole("button", { name: "削除" }));
 
     await waitFor(() => {
@@ -118,9 +127,12 @@ describe("DeleteAccount コンポーネント", () => {
 
     render(<DeleteAccount />);
 
-    fireEvent.change(screen.getByPlaceholderText("Type DELETE to confirm"), {
-      target: { value: "DELETE" },
-    });
+    fireEvent.change(
+      screen.getByPlaceholderText("DELETEと入力してください。"),
+      {
+        target: { value: "DELETE" },
+      }
+    );
     fireEvent.click(screen.getByRole("button", { name: "削除" }));
 
     expect(screen.getByRole("button")).toBeDisabled();
@@ -138,9 +150,12 @@ describe("DeleteAccount コンポーネント", () => {
 
     render(<DeleteAccount />);
 
-    fireEvent.change(screen.getByPlaceholderText("Type DELETE to confirm"), {
-      target: { value: "DELETE" },
-    });
+    fireEvent.change(
+      screen.getByPlaceholderText("DELETEと入力してください。"),
+      {
+        target: { value: "DELETE" },
+      }
+    );
     fireEvent.click(screen.getByRole("button", { name: "削除" }));
 
     await waitFor(() => {
