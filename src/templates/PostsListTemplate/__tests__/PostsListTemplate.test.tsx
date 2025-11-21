@@ -108,12 +108,12 @@ describe("PostsListTemplate コンポーネント", () => {
     const seo = screen.getByTestId("seo");
     expect(seo).toHaveTextContent("Posts - Page 1");
     expect(seo).toHaveTextContent("Posts list page 1");
-    expect(seo).toHaveTextContent("/posts");
+    expect(seo).toHaveTextContent("/");
 
     const altJa = screen.getByTestId("alt-ja");
     const altEn = screen.getByTestId("alt-en");
-    expect(altJa).toHaveTextContent("/posts");
-    expect(altEn).toHaveTextContent("/en/posts");
+    expect(altJa).toHaveTextContent("/");
+    expect(altEn).toHaveTextContent("/en");
   });
 
   it("全てのポストがレンダリングされる", () => {

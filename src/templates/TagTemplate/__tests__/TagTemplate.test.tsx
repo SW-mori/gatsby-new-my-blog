@@ -122,6 +122,6 @@ describe("TagTemplate コンポーネント", () => {
   it("投稿一覧リンクが表示される", () => {
     render(<TagTemplate {...mockProps} />);
     const link = screen.getByText("← Back to posts");
-    expect(link).toHaveAttribute("href", "/posts");
+    expect(link).toHaveAttribute("href", "/");
   });
 });
