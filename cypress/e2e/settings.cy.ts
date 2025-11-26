@@ -35,6 +35,11 @@ describe("Testing for settings page", () => {
     cy.get(`[data-testid="${SETTINGS_TEST_ID.BUTTON.PROFILE}"]`).click();
     cy.contains("保存しました！");
     cy.contains("プロフィールを更新しました。");
+    cy.get(`[data-testid="${SETTINGS_TEST_ID.BUTTON.DELETE}"]`).click();
+    cy.contains("プロフィールを更新しました。");
+    cy.get(`[data-testid="${SETTINGS_TEST_ID.BUTTON.DELETE}"]`).should(
+      "not.exist"
+    );
   });
 
   it("Password Update", () => {
