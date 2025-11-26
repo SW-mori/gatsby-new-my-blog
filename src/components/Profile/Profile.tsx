@@ -63,6 +63,7 @@ export const Profile: FC = () => {
                   disabled={
                     deleting || uploading || status === PROFILE_STATUS.SAVING
                   }
+                  data-testid={SETTINGS_TEST_ID.BUTTON.DELETE}
                 >
                   {deleting ? t("deleting") : t("removePhoto")}
                 </button>
