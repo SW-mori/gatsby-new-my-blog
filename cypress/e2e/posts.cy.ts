@@ -43,7 +43,7 @@ describe("Testing for posts page", () => {
       .and("include", "https://www.linkedin.com");
   });
 
-  it("Testing whether the share link is correct", () => {
+  it("Testing the inquiry process", () => {
     cy.get(`[data-testid="${POSTS_TEST_ID.INPUT("name")}"]`)
       .clear()
       .type("test");
@@ -56,4 +56,6 @@ describe("Testing for posts page", () => {
     cy.get(`[data-testid="${POSTS_TEST_ID.BUTTON}"]`).click();
     cy.contains("送信に失敗しました。もう一度お試しください。");
   });
+
+  // Testing comment submissions is not possible because a dedicated form is used.
 });
